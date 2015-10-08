@@ -9,15 +9,20 @@ import com.brianstempin.vindiniumclient.dto.Move;
 import com.google.api.client.http.*;
 import com.google.api.client.http.apache.ApacheHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.testing.http.MockHttpContent;
+import com.google.api.client.util.Key;
 import com.google.gson.Gson;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.net.URLEncoder;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
 
 public class AdvancedBotRunner implements Callable<GameState> {
     private static final HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
@@ -34,11 +39,33 @@ public class AdvancedBotRunner implements Callable<GameState> {
     private final ApiKey apiKey;
     private final GenericUrl gameUrl;
     private final AdvancedBot bot;
+    private final GenericUrl slackUrl;
 
-    public AdvancedBotRunner(ApiKey apiKey, GenericUrl gameUrl, AdvancedBot bot) {
+    public AdvancedBotRunner(GenericUrl slackUrl, ApiKey apiKey, GenericUrl gameUrl, AdvancedBot bot) {
         this.apiKey = apiKey;
         this.gameUrl = gameUrl;
         this.bot = bot;
+        this.slackUrl = slackUrl;
+    }
+
+    public class Payload{
+        @Key
+        private final HttpContent payload;
+
+        public Payload(String payload) {
+            this.payload = new JsonHttpContent(JSON_FACTORY, new PayloadText(payload));
+        }
+
+        public HttpContent getPayload() { return this.payload; }
+    }
+
+    public class PayloadText{
+        @Key
+        private final String text;
+
+        public PayloadText(String text) { this.text = text; }
+
+        public String getText() { return this.text; }
     }
 
     @Override
@@ -57,6 +84,14 @@ public class AdvancedBotRunner implements Callable<GameState> {
             request.setReadTimeout(0); // Wait forever to be assigned to a game
             response = request.execute();
             gameState = response.parseAs(GameState.class);
+
+            // Slack integration.
+            String url = URLEncoder.encode(gameState.getViewUrl(), "UTF-8");
+            content = new ByteArrayContent("application/x-www-form-urlencoded", ("payload={\"text\": \"<" + url + ">\"}").getBytes());
+            request = REQUEST_FACTORY.buildPostRequest(slackUrl, content);
+            request.setReadTimeout(0);
+            request.execute();
+            // URL console output.
             logger.info("Game URL: {}", gameState.getViewUrl());
 
             advancedGameState = new AdvancedGameState(gameState);

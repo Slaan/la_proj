@@ -30,10 +30,11 @@ public class Main {
 
     public static void main(String args[]) throws Exception {
 
-        final String key = args[0];
-        final String arena = args[1];
-        final String botType = args[2];
-        final String botClass = args[3];
+        final GenericUrl slackUrl = new GenericUrl(args[0]);
+        final String key = args[1];
+        final String arena = args[2];
+        final String botType = args[3];
+        final String botClass = args[4];
 
         final GenericUrl gameUrl;
 
@@ -47,30 +48,30 @@ public class Main {
 
         switch(botType) {
             case "simple":
-                runSimpleBot(key, gameUrl, botClass);
+                runSimpleBot(slackUrl, key, gameUrl, botClass);
                 break;
             case "advanced":
-                runAdvancedBot(key, gameUrl, botClass);
+                runAdvancedBot(slackUrl, key, gameUrl, botClass);
                 break;
             default:
                 throw new RuntimeException("The bot type must be simple or advanced and must match the type of the bot.");
         }
     }
 
-    private static void runAdvancedBot(String key, GenericUrl gameUrl, String botClass) throws Exception {
+    private static void runAdvancedBot(GenericUrl slackUrl, String key, GenericUrl gameUrl, String botClass) throws Exception {
         Class<?> clazz = Class.forName(botClass);
         Class<? extends AdvancedBot> botClazz = clazz.asSubclass(AdvancedBot.class);
         AdvancedBot bot = botClazz.newInstance();
         ApiKey apiKey = new ApiKey(key);
-        AdvancedBotRunner runner = new AdvancedBotRunner(apiKey, gameUrl, bot);
+        AdvancedBotRunner runner = new AdvancedBotRunner(slackUrl, apiKey, gameUrl, bot);
         runner.call();
     }
-    private static void runSimpleBot(String key, GenericUrl gameUrl, String botClass) throws Exception {
+    private static void runSimpleBot(GenericUrl slackUrl, String key, GenericUrl gameUrl, String botClass) throws Exception {
         Class<?> clazz = Class.forName(botClass);
         Class<? extends SimpleBot> botClazz = clazz.asSubclass(SimpleBot.class);
         SimpleBot bot = botClazz.newInstance();
         ApiKey apiKey = new ApiKey(key);
-        SimpleBotRunner runner = new SimpleBotRunner(apiKey, gameUrl, bot);
+        SimpleBotRunner runner = new SimpleBotRunner(slackUrl, apiKey, gameUrl, bot);
         runner.call();
     }
 

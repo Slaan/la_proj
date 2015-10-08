@@ -29,11 +29,13 @@ public class SimpleBotRunner implements Callable<GameState> {
     private final ApiKey apiKey;
     private final GenericUrl gameUrl;
     private final SimpleBot bot;
+    private final GenericUrl slackUrl;
 
-    public SimpleBotRunner(ApiKey apiKey, GenericUrl gameUrl, SimpleBot bot) {
+    public SimpleBotRunner(GenericUrl slackUrl, ApiKey apiKey, GenericUrl gameUrl, SimpleBot bot) {
         this.apiKey = apiKey;
         this.gameUrl = gameUrl;
         this.bot = bot;
+        this.slackUrl = slackUrl;
     }
 
     @Override
@@ -51,6 +53,11 @@ public class SimpleBotRunner implements Callable<GameState> {
             request.setReadTimeout(0); // Wait forever to be assigned to a game
             response = request.execute();
             gameState = response.parseAs(GameState.class);
+
+            content = new UrlEncodedContent("payload={\"text\"=\"" + gameState.getViewUrl() + "\"}");
+            request = REQUEST_FACTORY.buildPostRequest(slackUrl, content);
+            request.setReadTimeout(0);
+            request.execute();
             logger.info("Game URL: {}", gameState.getViewUrl());
 
             // Game loop
