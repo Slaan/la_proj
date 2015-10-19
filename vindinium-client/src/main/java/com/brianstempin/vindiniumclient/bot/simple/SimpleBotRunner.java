@@ -26,7 +26,7 @@ public class SimpleBotRunner implements Callable<GameState> {
                     request.setParser(new JsonObjectParser(JSON_FACTORY));
                 }
             });
-    private static final int TURNS_MAX = 20;
+    private static final int TURNS_MAX = 120;
     private static final Logger logger = LogManager.getLogger(SimpleBotRunner.class);
 
     private final ApiKey apiKey;
