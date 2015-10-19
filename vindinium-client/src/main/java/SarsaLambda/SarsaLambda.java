@@ -41,6 +41,10 @@ public class SarsaLambda {
     }
 
     public GStateAction sarsaStep(GState currentGState, int reward){
+        if (lastGStateAction == null) {
+            return sarsaInit(currentGState);
+        }
+
         GStateAction currentGStateAction = currentGState.getGStateActionForExplorationRate(epsilon);
 
         sarsaQueue.updateGStateActions(reward + (gamma * currentGStateAction.getQValue()) - lastGStateAction.getQValue(),alpha,lambda);

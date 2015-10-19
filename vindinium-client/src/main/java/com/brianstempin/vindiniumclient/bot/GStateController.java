@@ -6,6 +6,7 @@ import com.brianstempin.vindiniumclient.Action;
 import com.brianstempin.vindiniumclient.bot.Map;
 import com.brianstempin.vindiniumclient.dto.GameState;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -17,9 +18,11 @@ public class GStateController {
 	private final int ID_SHIFT_TILE = 3;
 	private final int ID_SHIFT_DIRECTION = 3;
     private GameController gameController;
+    private java.util.Map<Integer, GState> uberGuteDatenbankMitDatenhaltungBam;
 
     public GStateController(GameController gameController) {
         this.gameController = gameController;
+        uberGuteDatenbankMitDatenhaltungBam = new HashMap<>();
     }
 
     /**
@@ -37,13 +40,16 @@ public class GStateController {
     
     private GState getGStateFromgStateId(int gStateId) {
     	// TODO: Add Database-Lookup.
-    	
-    	List<GStateAction> gStateActions = new ArrayList<>();
-    	gStateActions.add(new GStateAction(BotMove.NORTH, DEFAULT_QVALUE));
-    	gStateActions.add(new GStateAction(BotMove.EAST, DEFAULT_QVALUE));
-    	gStateActions.add(new GStateAction(BotMove.SOUTH, DEFAULT_QVALUE));
-    	gStateActions.add(new GStateAction(BotMove.WEST, DEFAULT_QVALUE));
-    	return new GState(gStateId, gStateActions);
+        if (uberGuteDatenbankMitDatenhaltungBam.containsKey(gStateId)) {
+            return uberGuteDatenbankMitDatenhaltungBam.get(gStateId);
+        } else {
+            List<GStateAction> gStateActions = new ArrayList<>();
+            gStateActions.add(new GStateAction(BotMove.NORTH, DEFAULT_QVALUE));
+            gStateActions.add(new GStateAction(BotMove.EAST, DEFAULT_QVALUE));
+            gStateActions.add(new GStateAction(BotMove.SOUTH, DEFAULT_QVALUE));
+            gStateActions.add(new GStateAction(BotMove.WEST, DEFAULT_QVALUE));
+            return new GState(gStateId, gStateActions);
+        }
     }
     
     private int generateGStateId(GameState gs, Map map) {
