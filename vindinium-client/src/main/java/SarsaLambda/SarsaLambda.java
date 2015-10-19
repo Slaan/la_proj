@@ -1,17 +1,20 @@
 package SarsaLambda;
 
+import com.brianstempin.vindiniumclient.dto.GameState;
+
 /**
  * Created by beckf on 17.10.2015.
  */
-public class SarsaLambda extends Thread {
+public class SarsaLambda {
 
     private int alpha; //Lerning Rate
     private int epsilon; //Exploration Rate
     private int gamma; //Discount factor
     private int lambda; //Eligibility trace decay rate
+
+    private GStateAction lastGStateAction;
+
     private SarsaQueue sarsaQueue;
-    private SarsaMemory<GState> gStateMemory;
-    private SarsaMemory<GStateAction> gStateActionMemory;
 
     public SarsaLambda(int alpha, int epsilon, int gamma, int lambda, int queueLength, SarsaMemory<GState> gStateMemory, SarsaMemory<GStateAction> gStateActionMemory){
         this.alpha = alpha;
@@ -19,30 +22,24 @@ public class SarsaLambda extends Thread {
         this.gamma = gamma;
         this.lambda = lambda;
         this.sarsaQueue = new SarsaQueue(queueLength);
-        this.gStateMemory = gStateMemory;
-        this.gStateActionMemory = gStateActionMemory;
     }
 
+    public GStateAction sarsaInit(GState currentGState){
+        GStateAction currentGStateAction = currentGState.getGStateActionForExplorationRate(epsilon);
 
-    @Override
-    public void run() {
-        try {
-            GState currentGState = gStateMemory.get();
-            GStateAction currentgStateAction = currentGState.getGStateActionForExplorationRate(epsilon);
-            while(!isInterrupted()) {
-                gStateActionMemory.put(currentgStateAction);
-                sarsaQueue.putGStateAction(currentgStateAction);
+        lastGStateAction = currentGStateAction;
 
-                GState newGState = gStateMemory.get();
-                GStateAction newGStateAction = currentGState.getGStateActionForExplorationRate(epsilon);
+        return currentGStateAction;
+    }
 
-                sarsaQueue.updateGStateActions(newGState.getReward() + (gamma * newGStateAction.getQValue()) - currentgStateAction.getQValue(),alpha,lambda);
+    public GStateAction sarsaStep(GState currentGState, int reward){
+        GStateAction currentGStateAction = currentGState.getGStateActionForExplorationRate(epsilon);
 
-                currentGState = newGState;
-                currentgStateAction = newGStateAction;
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        sarsaQueue.updateGStateActions(reward + (gamma * currentGStateAction.getQValue()) - lastGStateAction.getQValue(),alpha,lambda);
+
+        lastGStateAction = currentGStateAction;
+
+        sarsaQueue.putGStateAction(currentGStateAction);
+        return currentGStateAction;
     }
 }

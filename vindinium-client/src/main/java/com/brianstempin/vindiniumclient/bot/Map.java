@@ -31,27 +31,27 @@ public class Map {
         taverns = new ArrayList<>();
         mines = new ArrayList<>();
 
-        for(int i=0; i<size; i++) {
+        for(int y=0; y<size; y++) {
             // y-axis
-            for(int j=0; j<size; j++) {
+            for(int x=0; x<size; x++) {
                 //x-axis
                 String tileString = tiles.substring(positionInTiles, positionInTiles+2);
                 if(tileString.equals("  ")) {
-                    result[j][i] = TileType.FREE;
+                    result[x][y] = TileType.FREE;
                 } else if(tileString.equals("[]")) {
-                    result[j][i] = TileType.TAVERN;
-                    GameState.Position tavernpos = new GameState.Position(j,i);
+                    result[x][y] = TileType.TAVERN;
+                    GameState.Position tavernpos = new GameState.Position(x,y);
                     taverns.add(tavernpos);
                 } else if (tileString.substring(0,1).equals("$")) {
                     if (tileString.substring(1,2).equals(""+heroNumber)) {
-                        result[j][i] = TileType.BLOCKED;
+                        result[x][y] = TileType.BLOCKED;
                     } else {
-                        result[j][i] = TileType.MINE;
-                        GameState.Position minepos = new GameState.Position(j,i);
+                        result[x][y] = TileType.MINE;
+                        GameState.Position minepos = new GameState.Position(x,y);
                         mines.add(minepos);
                     }
                 } else {
-                    result[j][i] = TileType.BLOCKED;
+                    result[x][y] = TileType.BLOCKED;
                 }
                 positionInTiles+=2;
             }
