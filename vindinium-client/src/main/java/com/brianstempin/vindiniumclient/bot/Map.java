@@ -66,7 +66,6 @@ public class Map {
         int curClosestTavernDist = Integer.MAX_VALUE;
 
         for(GameState.Position minePos : mines) {
-            System.out.println("x = " + minePos.getX() + ", y = " + minePos.getY());
             int mineDist = distanceBetweenPositions(minePos, heropos);
             if (mineDist<curClosestMineDist) {
                 closestMinePos = minePos;
@@ -75,7 +74,6 @@ public class Map {
         }
 
         for(GameState.Position tavernPos : taverns) {
-            System.out.println("x = " + tavernPos.getX() + ", y = " + tavernPos.getY());
             int tavernDist = distanceBetweenPositions(tavernPos, heropos);
             if (tavernDist<curClosestTavernDist) {
                 closestTavernPos = tavernPos;

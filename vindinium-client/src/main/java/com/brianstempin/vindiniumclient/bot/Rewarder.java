@@ -1,17 +1,23 @@
 package com.brianstempin.vindiniumclient.bot;
 
-import com.brianstempin.vindiniumclient.bot.GameController;
 
 /**
  * Created by octavian on 19.10.15.
  */
 public class Rewarder {
-    private int reward;
 
-    public Rewarder(GameController gameController) {
+    private SimplifiedGState formerState;
+
+    public Rewarder(SimplifiedGState gameState) {
+        formerState = gameState;
     }
 
-    public int getReward() {
+    public int calculateReward(SimplifiedGState gameState) {
+        int reward=0;
+
+
+
+        formerState = gameState;
         return reward;
     }
 }
