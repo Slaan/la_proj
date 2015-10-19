@@ -22,10 +22,10 @@ public class SarsaQueue {
         }
     }
 
-    public void updateGStateActions(int delta, int alpha, int lambda){
+    public void updateGStateActions(double delta, double alpha, double lambda){
         int pos = 0;
         for(GStateAction gStateAction : gStateActionsQueue){
-            gStateAction.updateQValue(delta * alpha * (lambda ^ pos));
+            gStateAction.updateQValue(delta * alpha * Math.pow(lambda,pos));
             pos++;
         }
     }

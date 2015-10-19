@@ -7,16 +7,24 @@ import com.brianstempin.vindiniumclient.dto.GameState;
  */
 public class SarsaLambda {
 
-    private int alpha; //Lerning Rate
-    private int epsilon; //Exploration Rate
-    private int gamma; //Discount factor
-    private int lambda; //Eligibility trace decay rate
+    private double alpha; //Lerning Rate
+    private double epsilon; //Exploration Rate
+    private double gamma; //Discount factor
+    private double lambda; //Eligibility trace decay rate
 
     private GStateAction lastGStateAction;
 
     private SarsaQueue sarsaQueue;
 
-    public SarsaLambda(int alpha, int epsilon, int gamma, int lambda, int queueLength, SarsaMemory<GState> gStateMemory, SarsaMemory<GStateAction> gStateActionMemory){
+    /**
+     *
+     * @param alpha Lerning Rate
+     * @param epsilon Exploration Rate
+     * @param gamma Discount factor
+     * @param lambda Eligibility trace decay rate
+     * @param queueLength How many steps back should a reward influence. (How much is the Fish)
+     */
+    public SarsaLambda(double alpha, double epsilon, double gamma, double lambda, int queueLength){
         this.alpha = alpha;
         this.epsilon = epsilon;
         this.gamma = gamma;

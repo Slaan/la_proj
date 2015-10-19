@@ -39,11 +39,11 @@ public class GStateController {
     	// TODO: Add Database-Lookup.
     	
     	List<GStateAction> gStateActions = new ArrayList<>();
-    	gStateActions.add(new GStateAction(Action.UP, DEFAULT_QVALUE));
-    	gStateActions.add(new GStateAction(Action.RIGHT, DEFAULT_QVALUE));
-    	gStateActions.add(new GStateAction(Action.DOWN, DEFAULT_QVALUE));
-    	gStateActions.add(new GStateAction(Action.LEFT, DEFAULT_QVALUE));
-    	return new GState(gStateId, 0, gStateActions);
+    	gStateActions.add(new GStateAction(BotMove.NORTH, DEFAULT_QVALUE));
+    	gStateActions.add(new GStateAction(BotMove.EAST, DEFAULT_QVALUE));
+    	gStateActions.add(new GStateAction(BotMove.SOUTH, DEFAULT_QVALUE));
+    	gStateActions.add(new GStateAction(BotMove.WEST, DEFAULT_QVALUE));
+    	return new GState(gStateId, gStateActions);
     }
     
     private int generateGStateId(GameState gs, Map map) {

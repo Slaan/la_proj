@@ -120,7 +120,7 @@ public class Map {
     public int distanceBetweenPositions(GameState.Position pos1, GameState.Position pos2) {
         return (Math.abs(pos1.getX()-pos2.getX()) + Math.abs(pos1.getY()-pos2.getY()));
     }
-    
+
     public TileType getTileFromDirection(GameState.Position heroPosition, DirectionType dir) {
         switch (dir) {
             case NORTH:

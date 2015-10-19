@@ -7,24 +7,16 @@ import java.util.List;
  */
 public class GState {
     private int gStateId;
-    private int reward;
     private List<GStateAction> actions;
 
 
-    public GState(int gStateId, int reward, List<GStateAction> actions){
+    public GState(int gStateId, List<GStateAction> actions){
         this.gStateId = gStateId;
-        this.reward = reward;
         this.actions = actions;
     }
 
-	/**
-	  * @Depracted: Use GameController.getActiveReward instead.
-	  **/
-    public int getReward(){
-        return reward;
-    }
 
-    public GStateAction getGStateActionForExplorationRate(int epsilon){
+    public GStateAction getGStateActionForExplorationRate(double epsilon){
         if((epsilon * 100) > (Math.random() * 100 + 1)){
             return actions.get((int)Math.random() * actions.size());
         } else {

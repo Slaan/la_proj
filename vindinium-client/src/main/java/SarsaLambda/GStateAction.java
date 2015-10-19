@@ -1,24 +1,27 @@
 package SarsaLambda;
 
 import com.brianstempin.vindiniumclient.Action;
+import com.brianstempin.vindiniumclient.bot.BotMove;
 
 /**
  * Created by beckf on 17.10.2015.
  */
 public class GStateAction {
-    private Action action;
-    private int qValue;
+    private BotMove action;
+    private double qValue;
 
-    public GStateAction(Action action, int qValue){
+    public GStateAction(BotMove action, double qValue){
         this.action = action;
         this.qValue = qValue;
     }
 
-    public int getQValue(){
+    public double getQValue(){
         return qValue;
     }
 
-    public void updateQValue(int additionQValue){
+    public void updateQValue(double additionQValue){
         qValue += additionQValue;
     }
+
+    public BotMove getAction() { return action; }
 }
