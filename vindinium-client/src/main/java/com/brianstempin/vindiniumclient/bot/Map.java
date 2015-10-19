@@ -120,6 +120,21 @@ public class Map {
     public int distanceBetweenPositions(GameState.Position pos1, GameState.Position pos2) {
         return (Math.abs(pos1.getX()-pos2.getX()) + Math.abs(pos1.getY()-pos2.getY()));
     }
+    
+    public TileType getTileFromDirection(GameState.Position heroPosition, DirectionType dir) {
+        switch (dir) {
+            case NORTH:
+                return currentMap[heroPosition.getX()    ][heroPosition.getY() + 1];
+            case EAST:
+                return currentMap[heroPosition.getX() + 1][heroPosition.getY()    ];
+            case SOUTH:
+                return currentMap[heroPosition.getX()    ][heroPosition.getY() - 1];
+            case WEST:
+                return currentMap[heroPosition.getX() - 1][heroPosition.getY()    ];
+            default:
+                throw new RuntimeException("recieved a non supported direction.");
+        }
+    }
 
     public TileType[][] getCurrentMap() {
         return currentMap;

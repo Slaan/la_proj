@@ -6,12 +6,10 @@ import com.brianstempin.vindiniumclient.Action;
  * Created by beckf on 17.10.2015.
  */
 public class GStateAction {
-    private int gStateId;
     private Action action;
     private int qValue;
 
-    public GStateAction(int gStateId, Action action, int qValue){
-        this.gStateId = gStateId;
+    public GStateAction(Action action, int qValue){
         this.action = action;
         this.qValue = qValue;
     }

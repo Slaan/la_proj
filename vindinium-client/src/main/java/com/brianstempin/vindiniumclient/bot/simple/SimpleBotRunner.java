@@ -12,6 +12,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.net.URLEncoder;
 import java.util.concurrent.Callable;
 
 public class SimpleBotRunner implements Callable<GameState> {
@@ -58,6 +59,13 @@ public class SimpleBotRunner implements Callable<GameState> {
             request = REQUEST_FACTORY.buildPostRequest(slackUrl, content);
             request.setReadTimeout(0);
             request.execute();
+            // Slack integration.
+            String url = URLEncoder.encode(gameState.getViewUrl(), "UTF-8");
+            content = new ByteArrayContent("application/x-www-form-urlencoded", ("payload={\"text\": \"<" + url + ">\"}").getBytes());
+            request = REQUEST_FACTORY.buildPostRequest(slackUrl, content);
+            request.setReadTimeout(0);
+            request.execute();
+            // URL console output.
             logger.info("Game URL: {}", gameState.getViewUrl());
 
             // Game loop

@@ -17,6 +17,9 @@ public class GState {
         this.actions = actions;
     }
 
+	/**
+	  * @Depracted: Use GameController.getActiveReward instead.
+	  **/
     public int getReward(){
         return reward;
     }
