@@ -3,6 +3,7 @@ package com.brianstempin.vindiniumclient.bot;
 import com.brianstempin.vindiniumclient.dto.GameState;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Daniel Hofmeister on 18.10.2015.
@@ -13,8 +14,8 @@ public class Map {
     private DirectionType nearestMineDirection;
     private DirectionType nearestTavernDirection;
 
-    private ArrayList<GameState.Position> mines;
-    private ArrayList<GameState.Position> taverns;
+    private List<GameState.Position> mines;
+    private List<GameState.Position> taverns;
 
     public Map(GameState gameState) {
         currentMap = parseMap(gameState);
@@ -145,4 +146,8 @@ public class Map {
     public DirectionType getNearestTavernDirection() {
         return nearestTavernDirection;
     }
+
+    public List<GameState.Position> getMines() { return mines; }
+
+    public List<GameState.Position> getTaverns() { return taverns; }
 }
