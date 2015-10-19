@@ -16,7 +16,7 @@ public class Bender implements SimpleBot {
     SarsaLambda sarsaLambda;
     GameController gameController;
     GStateController gStateController;
-    Rewarder rewarder;
+    //Rewarder rewarder;
 
     /**
      * Method that plays each move
@@ -27,7 +27,7 @@ public class Bender implements SimpleBot {
     public BotMove move(GameState gameState) {
         gameController.setActiveGameState(gameState);
         GState state = gStateController.getActiveGState();
-        GStateAction action = sarsaLambda.sarsaStep(state, rewarder.getReward());
+        GStateAction action = sarsaLambda.sarsaStep(state, -1); // TODO add this malicius reward calculator.
         return action.getAction();
     }
 
@@ -37,7 +37,7 @@ public class Bender implements SimpleBot {
     public void setup() {
         sarsaLambda = new SarsaLambda(1, 0.1, 0.9, 0.9, 10);
         gameController = new GameController();
-        rewarder = new Rewarder(gameController);
+        //rewarder = new Rewarder(gameController);
         gStateController = new GStateController(gameController);
     }
 

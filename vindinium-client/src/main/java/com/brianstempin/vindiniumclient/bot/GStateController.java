@@ -43,12 +43,13 @@ public class GStateController {
         if (uberGuteDatenbankMitDatenhaltungBam.containsKey(gStateId)) {
             return uberGuteDatenbankMitDatenhaltungBam.get(gStateId);
         } else {
-            List<GStateAction> gStateActions = new ArrayList<>();
-            gStateActions.add(new GStateAction(BotMove.NORTH, DEFAULT_QVALUE));
-            gStateActions.add(new GStateAction(BotMove.EAST, DEFAULT_QVALUE));
-            gStateActions.add(new GStateAction(BotMove.SOUTH, DEFAULT_QVALUE));
-            gStateActions.add(new GStateAction(BotMove.WEST, DEFAULT_QVALUE));
-            return new GState(gStateId, gStateActions);
+            GState state = new GState(gStateId);
+            state.addAction(BotMove.NORTH, DEFAULT_QVALUE);
+            state.addAction(BotMove.EAST, DEFAULT_QVALUE);
+            state.addAction(BotMove.SOUTH, DEFAULT_QVALUE);
+            state.addAction(BotMove.WEST, DEFAULT_QVALUE);
+            uberGuteDatenbankMitDatenhaltungBam.put(gStateId, state);
+            return state;
         }
     }
     
