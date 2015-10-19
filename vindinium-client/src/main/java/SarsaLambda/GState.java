@@ -1,5 +1,8 @@
 package SarsaLambda;
 
+import com.brianstempin.vindiniumclient.bot.BotMove;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,18 +13,33 @@ public class GState {
     private List<GStateAction> actions;
 
 
-    public GState(int gStateId, List<GStateAction> actions){
+    public GState(int gStateId){
         this.gStateId = gStateId;
-        this.actions = actions;
+        this.actions = new ArrayList<>();
     }
 
+    public void addAction(BotMove action, double qValue) {
+        actions.add(new GStateAction(action, qValue));
+    }
 
     public GStateAction getGStateActionForExplorationRate(double epsilon){
-        if((epsilon * 100) > (Math.random() * 100 + 1)){
-            return actions.get((int)Math.random() * actions.size());
-        } else {
-            return getBestGStateAction();
+
+        // Uncomment me if you want to see the world learn.
+        System.out.println("A: " + this.toString());
+        for (GStateAction action : actions) {
+            System.out.println("A: " + action);
         }
+
+        GStateAction action;
+        if((epsilon * 100) > (Math.random() * 100 + 1)){
+            System.out.println("A: I'm exploring.");
+            action = actions.get((int)Math.random() * actions.size());
+        } else {
+            System.out.println("A: I'm getting best Action.");
+            action = getBestGStateAction();
+        }
+        System.out.println("A: using: " + action.toString());
+        return action;
     }
 
     private GStateAction getBestGStateAction(){
@@ -32,5 +50,9 @@ public class GState {
             }
         }
         return best;
+    }
+
+    @Override public String toString() {
+        return this.getClass().getName() + "<" + super.toString() + ": " + gStateId + ">";
     }
 }

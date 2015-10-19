@@ -4,6 +4,7 @@ import com.brianstempin.vindiniumclient.bot.BotMove;
 import com.brianstempin.vindiniumclient.dto.ApiKey;
 import com.brianstempin.vindiniumclient.dto.GameState;
 import com.brianstempin.vindiniumclient.dto.Move;
+import com.brianstempin.vindiniumclient.dto.TurnApiKey;
 import com.google.api.client.http.*;
 import com.google.api.client.http.apache.ApacheHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -25,6 +26,7 @@ public class SimpleBotRunner implements Callable<GameState> {
                     request.setParser(new JsonObjectParser(JSON_FACTORY));
                 }
             });
+    private static final int TURNS_MAX = 20;
     private static final Logger logger = LogManager.getLogger(SimpleBotRunner.class);
 
     private final ApiKey apiKey;
@@ -33,7 +35,7 @@ public class SimpleBotRunner implements Callable<GameState> {
     private final GenericUrl slackUrl;
 
     public SimpleBotRunner(GenericUrl slackUrl, ApiKey apiKey, GenericUrl gameUrl, SimpleBot bot) {
-        this.apiKey = apiKey;
+        this.apiKey = new TurnApiKey(apiKey.getKey(), TURNS_MAX);
         this.gameUrl = gameUrl;
         this.bot = bot;
         this.slackUrl = slackUrl;
@@ -55,19 +57,17 @@ public class SimpleBotRunner implements Callable<GameState> {
             response = request.execute();
             gameState = response.parseAs(GameState.class);
 
-            content = new UrlEncodedContent("payload={\"text\"=\"" + gameState.getViewUrl() + "\"}");
-            request = REQUEST_FACTORY.buildPostRequest(slackUrl, content);
-            request.setReadTimeout(0);
-            request.execute();
             // Slack integration.
             String url = URLEncoder.encode(gameState.getViewUrl(), "UTF-8");
             content = new ByteArrayContent("application/x-www-form-urlencoded", ("payload={\"text\": \"<" + url + ">\"}").getBytes());
+            logger.info("Sending to Slack with URL: " + slackUrl);
             request = REQUEST_FACTORY.buildPostRequest(slackUrl, content);
             request.setReadTimeout(0);
             request.execute();
             // URL console output.
             logger.info("Game URL: {}", gameState.getViewUrl());
 
+            bot.setup();
             // Game loop
             while (!gameState.getGame().isFinished() && !gameState.getHero().isCrashed()) {
                 logger.info("Taking turn " + gameState.getGame().getTurn());

@@ -19,9 +19,11 @@ public class GStateAction {
         return qValue;
     }
 
-    public void updateQValue(double additionQValue){
-        qValue += additionQValue;
-    }
+    public void updateQValue(double additionQValue){ qValue += additionQValue; }
 
     public BotMove getAction() { return action; }
+
+    @Override public String toString() {
+        return this.getClass().getName() + "<" + action.toString() + ": " + qValue + ">";
+    }
 }

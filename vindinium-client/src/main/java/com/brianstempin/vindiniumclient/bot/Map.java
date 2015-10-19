@@ -122,12 +122,16 @@ public class Map {
     public TileType getTileFromDirection(GameState.Position heroPosition, DirectionType dir) {
         switch (dir) {
             case NORTH:
-                return currentMap[heroPosition.getX()    ][heroPosition.getY() + 1];
+                if (heroPosition.getY() < 1) { return TileType.BLOCKED; }
+                return currentMap[heroPosition.getX()    ][heroPosition.getY() - 1];
             case EAST:
+                if (heroPosition.getX() + 1 > currentMap.length) { return TileType.BLOCKED; }
                 return currentMap[heroPosition.getX() + 1][heroPosition.getY()    ];
             case SOUTH:
-                return currentMap[heroPosition.getX()    ][heroPosition.getY() - 1];
+                if (heroPosition.getY() + 1 > currentMap[0].length) { return TileType.BLOCKED; }
+                return currentMap[heroPosition.getX()    ][heroPosition.getY() + 1];
             case WEST:
+                if (heroPosition.getX() < 1) { return TileType.BLOCKED; }
                 return currentMap[heroPosition.getX() - 1][heroPosition.getY()    ];
             default:
                 throw new RuntimeException("recieved a non supported direction.");
