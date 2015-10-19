@@ -26,7 +26,7 @@ public class SarsaQueue {
         int pos = gStateActionsQueue.size()-1;
         for(GStateAction gStateAction : gStateActionsQueue){
             gStateAction.updateQValue(delta * alpha * Math.pow(lambda,pos));
-            System.out.println("A: " + gStateAction + " " + delta * alpha * Math.pow(lambda,pos));
+            //System.out.println("A: " + gStateAction + " " + delta * alpha * Math.pow(lambda,pos));
             pos--;
         }
     }

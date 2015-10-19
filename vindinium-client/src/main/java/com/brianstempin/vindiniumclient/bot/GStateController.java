@@ -44,10 +44,10 @@ public class GStateController {
             return uberGuteDatenbankMitDatenhaltungBam.get(gStateId);
         } else {
             GState state = new GState(gStateId);
-            state.addAction(BotMove.NORTH, DEFAULT_QVALUE);
-            state.addAction(BotMove.EAST, DEFAULT_QVALUE);
-            state.addAction(BotMove.SOUTH, DEFAULT_QVALUE);
-            state.addAction(BotMove.WEST, DEFAULT_QVALUE);
+            state.addAction("", BotMove.NORTH, DEFAULT_QVALUE);
+            state.addAction("", BotMove.EAST, DEFAULT_QVALUE);
+            state.addAction("", BotMove.SOUTH, DEFAULT_QVALUE);
+            state.addAction("", BotMove.WEST, DEFAULT_QVALUE);
             uberGuteDatenbankMitDatenhaltungBam.put(gStateId, state);
             return state;
         }

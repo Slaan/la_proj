@@ -18,8 +18,8 @@ public class GState {
         this.actions = new ArrayList<>();
     }
 
-    public void addAction(BotMove action, double qValue) {
-        actions.add(new GStateAction(action, qValue));
+    public void addAction(String description, BotMove action, double qValue) {
+        actions.add(new GStateAction(description, action, qValue));
     }
 
     public GStateAction getGStateActionForExplorationRate(double epsilon){

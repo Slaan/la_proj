@@ -24,6 +24,8 @@ public class Rewarder {
             return 0;
         }
 
+        reward = TURNREWARD;
+
         currentState = state;
 
         if (checkForDeath()) {
@@ -93,6 +95,6 @@ public class Rewarder {
     }
 
     private boolean checkForBlockedMove() {
-        return ((!checkForTavern())&&(!checkForMine())&&(formerState.getCurrentPos()==currentState.getCurrentPos()));
+        return ((!checkForTavern())&&(!checkForMine())&&(formerState.getCurrentPos().equals(currentState.getCurrentPos())));
     }
 }

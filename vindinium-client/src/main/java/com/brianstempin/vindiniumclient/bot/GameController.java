@@ -15,8 +15,4 @@ public class GameController {
 	public GameState getActiveGameState() {
 		return activeGameState;
 	}
-	
-	public double getActiveReward() {
-		return 0d;
-	}
 }

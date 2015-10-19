@@ -7,10 +7,12 @@ import com.brianstempin.vindiniumclient.bot.BotMove;
  * Created by beckf on 17.10.2015.
  */
 public class GStateAction {
+    private String description;
     private BotMove action;
     private double qValue;
 
-    public GStateAction(BotMove action, double qValue){
+    public GStateAction(String description, BotMove action, double qValue){
+        this.description = description;
         this.action = action;
         this.qValue = qValue;
     }
@@ -24,6 +26,6 @@ public class GStateAction {
     public BotMove getAction() { return action; }
 
     @Override public String toString() {
-        return this.getClass().getName() + "<" + action.toString() + ": " + qValue + ">";
+        return this.getClass().getName() + "<Feld ist:\"" + description + "\" - " + action.toString() + ": " + qValue + ">";
     }
 }
