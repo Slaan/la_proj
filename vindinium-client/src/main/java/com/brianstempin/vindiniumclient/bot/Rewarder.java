@@ -66,9 +66,11 @@ public class Rewarder {
     private boolean tavernNear() {
         int x = formerState.getCurrentPos().getX();
         int y = formerState.getCurrentPos().getY();
-        TileType[][] map = formerState.getMap().getCurrentMap();
-        if ((map[x+1][y]==TileType.TAVERN)|| (map[x-1][y]==TileType.TAVERN) ||
-                (map[x][y+1]==TileType.TAVERN) || (map[x][y-1]==TileType.TAVERN)) {
+        Map map = formerState.getMap();
+        if ((map.getTileFromDirection(formerState.getCurrentPos(),DirectionType.EAST))==TileType.TAVERN ||
+                (map.getTileFromDirection(formerState.getCurrentPos(),DirectionType.NORTH))==TileType.TAVERN ||
+                (map.getTileFromDirection(formerState.getCurrentPos(),DirectionType.WEST))==TileType.TAVERN ||
+                (map.getTileFromDirection(formerState.getCurrentPos(),DirectionType.SOUTH))==TileType.TAVERN) {
             return true;
         }
         return false;
