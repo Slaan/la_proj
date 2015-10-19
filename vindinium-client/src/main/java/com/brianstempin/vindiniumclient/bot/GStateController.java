@@ -55,7 +55,7 @@ public class GStateController {
     
     private int generateGStateId(GameState gs, Map map) {
     	int id = 0;
-    	// TODO: Generate ID from gs and map.
+    	// Generate ID from gs and map.
     	id = iDShift(id, map.getTileFromDirection(gs.getHero().getPos(), DirectionType.NORTH).getValue(), ID_SHIFT_TILE);
     	id = iDShift(id, map.getTileFromDirection(gs.getHero().getPos(), DirectionType.EAST).getValue(), ID_SHIFT_TILE);
     	id = iDShift(id, map.getTileFromDirection(gs.getHero().getPos(), DirectionType.SOUTH).getValue(), ID_SHIFT_TILE);
@@ -67,8 +67,8 @@ public class GStateController {
     }
     
     private int iDShift(int id, int add, int shift) {
+        id <<= shift;
     	id += add;
-    	id <<= shift;
     	return id;
     }
 }
