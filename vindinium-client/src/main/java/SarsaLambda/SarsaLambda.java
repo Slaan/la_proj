@@ -1,7 +1,5 @@
 package SarsaLambda;
 
-import com.brianstempin.vindiniumclient.dto.GameState;
-
 /**
  * Created by beckf on 17.10.2015.
  */
@@ -24,12 +22,13 @@ public class SarsaLambda {
      * @param lambda Eligibility trace decay rate
      * @param queueLength How many steps back should a reward influence. (How much is the Fish)
      */
-    public SarsaLambda(double alpha, double epsilon, double gamma, double lambda, int queueLength){
+    public SarsaLambda(GState currentGState, double alpha, double epsilon, double gamma, double lambda, int queueLength){
         this.alpha = alpha;
         this.epsilon = epsilon;
         this.gamma = gamma;
         this.lambda = lambda;
         this.sarsaQueue = new SarsaQueue(queueLength);
+        sarsaInit(currentGState);
     }
 
     public GStateAction sarsaInit(GState currentGState){
@@ -42,10 +41,6 @@ public class SarsaLambda {
     }
 
     public GStateAction sarsaStep(GState currentGState, int reward){
-        if (lastGStateAction == null) {
-            return sarsaInit(currentGState);
-        }
-
         GStateAction currentGStateAction = currentGState.getGStateActionForExplorationRate(epsilon);
         System.out.println("A: delta: " + reward +" "+ (gamma * currentGStateAction.getQValue()) +" "+ lastGStateAction.getQValue());
         sarsaQueue.updateGStateActions(reward + (gamma * currentGStateAction.getQValue()) - lastGStateAction.getQValue(),alpha,lambda);

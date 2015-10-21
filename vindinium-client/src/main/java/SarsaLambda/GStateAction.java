@@ -1,7 +1,6 @@
 package SarsaLambda;
 
-import com.brianstempin.vindiniumclient.Action;
-import com.brianstempin.vindiniumclient.bot.BotMove;
+import bot.BotMove;
 
 /**
  * Created by beckf on 17.10.2015.

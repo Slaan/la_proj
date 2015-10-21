@@ -1,6 +1,6 @@
 package SarsaLambda;
 
-import com.brianstempin.vindiniumclient.bot.BotMove;
+import bot.BotMove;
 
 import java.util.ArrayList;
 import java.util.List;
