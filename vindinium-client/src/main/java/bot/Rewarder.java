@@ -16,11 +16,12 @@ public class Rewarder {
     private final int BLOCKEDOBJREWARD = -10;
     private int reward=TURNREWARD;
 
-    public Rewarder(SimplifiedGState formerState) {
-        this.formerState = formerState;
-    }
-
     public int calculateReward(SimplifiedGState state) {
+        if (formerState == null) {
+            formerState = state;
+            return 0;
+        }
+
         reward = TURNREWARD;
 
         currentState = state;

@@ -1,12 +1,9 @@
 package bot;
 
-import bot.advanced.AdvancedGameState;
-import bot.advanced.murderbot.AdvancedMurderBot;
 import bot.dto.GameState;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class BotUtils {
 
@@ -31,27 +28,5 @@ public class BotUtils {
         } else {
             return BotMove.STAY;
         }
-    }
-
-    /**
-     * Returns a list of the enemies with radius squares of your hero
-     * @param gameState
-     * @param searchResults
-     * @param radius
-     * @return
-     */
-    public static List<GameState.Hero> getHeroesAround(AdvancedGameState gameState,
-                                                           Map<GameState.Position, AdvancedMurderBot.DijkstraResult> searchResults,
-                                                       int radius) {
-        List<GameState.Hero> heroes = new LinkedList<>();
-
-        for(GameState.Hero currentHero : gameState.getHeroesByPosition().values()) {
-            GameState.Position currentHeroPosition = currentHero.getPos();
-            if(searchResults.get(currentHeroPosition).getDistance() <= radius
-                    && currentHero.getId() != gameState.getMe().getId())
-                heroes.add(currentHero);
-        }
-
-        return heroes;
     }
 }

@@ -1,6 +1,10 @@
-package bot;
+package SarsaLambda;
 
-import SarsaLambda.GState;
+import SarsaLambda.SarsaState;
+import bot.BotMove;
+import bot.DirectionType;
+import bot.GameController;
+import bot.Map;
 import bot.dto.GameState;
 
 import java.util.HashMap;
@@ -8,14 +12,14 @@ import java.util.HashMap;
 /**
  * Creates and organizes GStates for the given game.
  */
-public class GStateController {
+public class SarsaStateController {
 	private final int DEFAULT_QVALUE = 0;
 	private final int ID_SHIFT_TILE = 3;
 	private final int ID_SHIFT_DIRECTION = 3;
     private GameController gameController;
-    private java.util.Map<Integer, GState> uberGuteDatenbankMitDatenhaltungBam;
+    private java.util.Map<Integer, SarsaState> uberGuteDatenbankMitDatenhaltungBam;
 
-    public GStateController(GameController gameController) {
+    public SarsaStateController(GameController gameController) {
         this.gameController = gameController;
         uberGuteDatenbankMitDatenhaltungBam = new HashMap<>();
     }
@@ -24,7 +28,7 @@ public class GStateController {
      * Gets the GState that is representing the active state of the game.
      * @return
      */
-    public GState getActiveGState() {
+    public SarsaState getActiveGState() {
         GameState gs = gameController.getActiveGameState();
         Map map = new Map(gs);
         Integer gStateId = generateGStateId(gs, map);
@@ -33,12 +37,12 @@ public class GStateController {
         return getGStateFromgStateId(gStateId);
     }
     
-    private GState getGStateFromgStateId(int gStateId) {
+    private SarsaState getGStateFromgStateId(int gStateId) {
     	// TODO: Add Database-Lookup.
         if (uberGuteDatenbankMitDatenhaltungBam.containsKey(gStateId)) {
             return uberGuteDatenbankMitDatenhaltungBam.get(gStateId);
         } else {
-            GState state = new GState(gStateId);
+            SarsaState state = new SarsaState(gStateId);
             state.addAction("", BotMove.NORTH, DEFAULT_QVALUE);
             state.addAction("", BotMove.EAST, DEFAULT_QVALUE);
             state.addAction("", BotMove.SOUTH, DEFAULT_QVALUE);

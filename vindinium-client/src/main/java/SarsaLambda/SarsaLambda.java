@@ -10,7 +10,7 @@ public class SarsaLambda {
     private double gamma; //Discount factor
     private double lambda; //Eligibility trace decay rate
 
-    private GStateAction lastGStateAction;
+    private SarsaStateAction lastSarsaStateAction;
 
     private SarsaQueue sarsaQueue;
 
@@ -22,32 +22,38 @@ public class SarsaLambda {
      * @param lambda Eligibility trace decay rate
      * @param queueLength How many steps back should a reward influence. (How much is the Fish)
      */
-    public SarsaLambda(GState currentGState, double alpha, double epsilon, double gamma, double lambda, int queueLength){
+    public SarsaLambda(double alpha, double epsilon, double gamma, double lambda, int queueLength){
         this.alpha = alpha;
         this.epsilon = epsilon;
         this.gamma = gamma;
         this.lambda = lambda;
         this.sarsaQueue = new SarsaQueue(queueLength);
-        sarsaInit(currentGState);
     }
 
-    public GStateAction sarsaInit(GState currentGState){
-        GStateAction currentGStateAction = currentGState.getGStateActionForExplorationRate(epsilon);
+    public SarsaStateAction sarsaInit(SarsaState currentSarsaState){
+        SarsaStateAction currentSarsaStateAction = currentSarsaState.getGStateActionForExplorationRate(epsilon);
 
-        lastGStateAction = currentGStateAction;
+        lastSarsaStateAction = currentSarsaStateAction;
 
-        sarsaQueue.putGStateAction(currentGStateAction);
-        return currentGStateAction;
+        sarsaQueue.putGStateAction(currentSarsaStateAction);
+        return currentSarsaStateAction;
     }
 
-    public GStateAction sarsaStep(GState currentGState, int reward){
-        GStateAction currentGStateAction = currentGState.getGStateActionForExplorationRate(epsilon);
-        System.out.println("A: delta: " + reward +" "+ (gamma * currentGStateAction.getQValue()) +" "+ lastGStateAction.getQValue());
-        sarsaQueue.updateGStateActions(reward + (gamma * currentGStateAction.getQValue()) - lastGStateAction.getQValue(),alpha,lambda);
+    public SarsaStateAction sarsaStep(SarsaState currentSarsaState, int reward){
+        if (lastSarsaStateAction == null) {
+            return sarsaInit(currentSarsaState);
+        }
 
-        lastGStateAction = currentGStateAction;
 
-        sarsaQueue.putGStateAction(currentGStateAction);
-        return currentGStateAction;
+        SarsaStateAction currentSarsaStateAction = currentSarsaState.getGStateActionForExplorationRate(epsilon);
+        System.out.println("A: delta: " + reward +" "+ (gamma * currentSarsaStateAction.getQValue()) +" "+ lastSarsaStateAction
+            .getQValue());
+        sarsaQueue.updateGStateActions(reward + (gamma * currentSarsaStateAction.getQValue()) - lastSarsaStateAction
+            .getQValue(),alpha,lambda);
+
+        lastSarsaStateAction = currentSarsaStateAction;
+
+        sarsaQueue.putGStateAction(currentSarsaStateAction);
+        return currentSarsaStateAction;
     }
 }

@@ -8,29 +8,29 @@ import java.util.List;
 /**
  * Created by beckf on 17.10.2015.
  */
-public class GState {
+public class SarsaState {
     private int gStateId;
-    private List<GStateAction> actions;
+    private List<SarsaStateAction> actions;
 
 
-    public GState(int gStateId){
+    public SarsaState(int gStateId){
         this.gStateId = gStateId;
         this.actions = new ArrayList<>();
     }
 
     public void addAction(String description, BotMove action, double qValue) {
-        actions.add(new GStateAction(description, action, qValue));
+        actions.add(new SarsaStateAction(description, action, qValue));
     }
 
-    public GStateAction getGStateActionForExplorationRate(double epsilon){
+    public SarsaStateAction getGStateActionForExplorationRate(double epsilon){
 
         // Uncomment me if you want to see the world learn.
         System.out.println("A: " + this.toString());
-        for (GStateAction action : actions) {
+        for (SarsaStateAction action : actions) {
             System.out.println("A: " + action);
         }
 
-        GStateAction action;
+        SarsaStateAction action;
         if((epsilon * 100) > (Math.random() * 100 + 1)){
             System.out.println("A: I'm exploring.");
             action = actions.get((int)Math.random() * actions.size());
@@ -42,9 +42,9 @@ public class GState {
         return action;
     }
 
-    private GStateAction getBestGStateAction(){
-        GStateAction best = actions.get(0);
-        for(GStateAction gstateAction : actions){
+    private SarsaStateAction getBestGStateAction(){
+        SarsaStateAction best = actions.get(0);
+        for(SarsaStateAction gstateAction : actions){
             if(best.getQValue() < gstateAction.getQValue()){
                 best = gstateAction;
             }

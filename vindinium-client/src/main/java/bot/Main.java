@@ -1,5 +1,6 @@
 package bot;
 
+import bot.dto.TurnApiKey;
 import bot.simple.Bender;
 import bot.simple.SimpleBot;
 import bot.simple.SimpleBotRunner;
@@ -16,6 +17,7 @@ import org.apache.logging.log4j.Logger;
  * CLI program for launching a bot
  */
 public class Main {
+    private static final int TURNS_DEFAULT = 20;
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = new GsonFactory();
     private static final Gson gson = new Gson();
@@ -27,18 +29,26 @@ public class Main {
         final GenericUrl slackUrl = new GenericUrl(args[0]);
         final String key = args[1];
         final String arena = args[2];
+        final int turns;
+        if (args.length >= 4) {
+            turns = Integer.parseInt(args[3]);
+        } else {
+            turns = TURNS_DEFAULT;
+        }
 
         final GenericUrl gameUrl;
+        final ApiKey apiKey;
 
-        if ("TRAINING".equals(arena))
+        if ("TRAINING".equals(arena)) {
             gameUrl = VindiniumUrl.getTrainingUrl();
-        else if ("COMPETITION".equals(arena))
+            apiKey = new TurnApiKey(key, turns);
+        } else if ("COMPETITION".equals(arena)) {
             gameUrl = VindiniumUrl.getCompetitionUrl();
-        else
-            gameUrl = new VindiniumUrl(arena);
+            apiKey = new ApiKey(key);
+        } else
+            throw new RuntimeException("You have to set arena to TRAINING or COMPETITION.");
 
         SimpleBot bot = new Bender();
-        ApiKey apiKey = new ApiKey(key);
         SimpleBotRunner runner = new SimpleBotRunner(slackUrl, apiKey, gameUrl, bot);
         runner.call();
     }

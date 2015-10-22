@@ -25,7 +25,7 @@ public interface SimpleBot {
     /**
      * Called before the game is started
      */
-    public void setup(GameState gameState);
+    public void setup();
 
     /**
      * Called after the game

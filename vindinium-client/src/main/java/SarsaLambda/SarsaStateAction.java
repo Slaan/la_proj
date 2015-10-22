@@ -5,12 +5,12 @@ import bot.BotMove;
 /**
  * Created by beckf on 17.10.2015.
  */
-public class GStateAction {
+public class SarsaStateAction {
     private String description;
     private BotMove action;
     private double qValue;
 
-    public GStateAction(String description, BotMove action, double qValue){
+    public SarsaStateAction(String description, BotMove action, double qValue){
         this.description = description;
         this.action = action;
         this.qValue = qValue;
