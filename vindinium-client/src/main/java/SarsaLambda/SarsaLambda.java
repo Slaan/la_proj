@@ -1,7 +1,5 @@
 package SarsaLambda;
 
-import com.brianstempin.vindiniumclient.dto.GameState;
-
 /**
  * Created by beckf on 17.10.2015.
  */
@@ -12,7 +10,7 @@ public class SarsaLambda {
     private double gamma; //Discount factor
     private double lambda; //Eligibility trace decay rate
 
-    private GStateAction lastGStateAction;
+    private SarsaStateAction lastSarsaStateAction;
 
     private SarsaQueue sarsaQueue;
 
@@ -32,27 +30,30 @@ public class SarsaLambda {
         this.sarsaQueue = new SarsaQueue(queueLength);
     }
 
-    public GStateAction sarsaInit(GState currentGState){
-        GStateAction currentGStateAction = currentGState.getGStateActionForExplorationRate(epsilon);
+    public SarsaStateAction sarsaInit(SarsaState currentSarsaState){
+        SarsaStateAction currentSarsaStateAction = currentSarsaState.getGStateActionForExplorationRate(epsilon);
 
-        lastGStateAction = currentGStateAction;
+        lastSarsaStateAction = currentSarsaStateAction;
 
-        sarsaQueue.putGStateAction(currentGStateAction);
-        return currentGStateAction;
+        sarsaQueue.putGStateAction(currentSarsaStateAction);
+        return currentSarsaStateAction;
     }
 
-    public GStateAction sarsaStep(GState currentGState, int reward){
-        if (lastGStateAction == null) {
-            return sarsaInit(currentGState);
+    public SarsaStateAction sarsaStep(SarsaState currentSarsaState, int reward){
+        if (lastSarsaStateAction == null) {
+            return sarsaInit(currentSarsaState);
         }
 
-        GStateAction currentGStateAction = currentGState.getGStateActionForExplorationRate(epsilon);
-        System.out.println("A: delta: " + reward +" "+ (gamma * currentGStateAction.getQValue()) +" "+ lastGStateAction.getQValue());
-        sarsaQueue.updateGStateActions(reward + (gamma * currentGStateAction.getQValue()) - lastGStateAction.getQValue(),alpha,lambda);
 
-        lastGStateAction = currentGStateAction;
+        SarsaStateAction currentSarsaStateAction = currentSarsaState.getGStateActionForExplorationRate(epsilon);
+        System.out.println("A: delta: " + reward +" "+ (gamma * currentSarsaStateAction.getQValue()) +" "+ lastSarsaStateAction
+            .getQValue());
+        sarsaQueue.updateGStateActions(reward + (gamma * currentSarsaStateAction.getQValue()) - lastSarsaStateAction
+            .getQValue(),alpha,lambda);
 
-        sarsaQueue.putGStateAction(currentGStateAction);
-        return currentGStateAction;
+        lastSarsaStateAction = currentSarsaStateAction;
+
+        sarsaQueue.putGStateAction(currentSarsaStateAction);
+        return currentSarsaStateAction;
     }
 }
