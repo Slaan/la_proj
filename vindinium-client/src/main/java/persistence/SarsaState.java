@@ -1,5 +1,6 @@
 package persistence;
 
+import SarsaLambda.SarsaStateController;
 import bot.BotMove;
 
 import javax.persistence.*;
@@ -44,7 +45,7 @@ public class SarsaState {
     public SarsaStateAction getGStateActionForExplorationRate(double epsilon){
 
         // Uncomment me if you want to see the world learn.
-        System.out.println("A: " + this.toString());
+        System.out.println(this.toString());
         for (SarsaStateAction action : actions) {
             System.out.println("A: " + action);
         }
@@ -72,6 +73,7 @@ public class SarsaState {
     }
 
     @Override public String toString() {
-        return this.getClass().getName() + "<" + super.toString() + ": " + gStateId + ">";
+        //return this.getClass().getName() + "<" + super.toString() + ": " + gStateId + ">";
+        return SarsaStateController.explainState(this);
     }
 }

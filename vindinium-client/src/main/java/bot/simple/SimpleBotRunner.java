@@ -35,12 +35,14 @@ public class SimpleBotRunner implements Callable<GameState> {
     private final GenericUrl gameUrl;
     private final SimpleBot bot;
     private final GenericUrl slackUrl;
+    private final String user;
 
-    public SimpleBotRunner(GenericUrl slackUrl, ApiKey apiKey, GenericUrl gameUrl, SimpleBot bot) {
+    public SimpleBotRunner(GenericUrl slackUrl, ApiKey apiKey, GenericUrl gameUrl, SimpleBot bot, String user) {
         this.apiKey = apiKey;
         this.gameUrl = gameUrl;
         this.bot = bot;
         this.slackUrl = slackUrl;
+        this.user = user;
     }
 
     @Override
@@ -61,13 +63,6 @@ public class SimpleBotRunner implements Callable<GameState> {
             response = request.execute();
             gameState = response.parseAs(GameState.class);
 
-            // Slack integration.
-            String url = URLEncoder.encode(gameState.getViewUrl(), "UTF-8");
-            content = new ByteArrayContent("application/x-www-form-urlencoded", ("payload={\"text\": \"<" + url + ">\"}").getBytes());
-            logger.info("Sending to Slack with URL: " + slackUrl);
-            request = REQUEST_FACTORY.buildPostRequest(slackUrl, content);
-            request.setReadTimeout(0);
-            request.execute();
             // URL console output.
             logger.info("Game URL: {}", gameState.getViewUrl());
 
@@ -84,6 +79,28 @@ public class SimpleBotRunner implements Callable<GameState> {
 
                 gameState = turnResponse.parseAs(GameState.class);
             }
+
+            boolean isWinner = true;
+            GameState.Hero benderHero = gameState.getHero();
+            for (GameState.Hero hero : gameState.getGame().getHeroes()) {
+                if (hero == benderHero)
+                    continue;
+                if (hero.getGold() >= benderHero.getGold())
+                    isWinner = false;
+            }
+
+            // Slack integration.
+            String url = URLEncoder.encode(gameState.getViewUrl(), "UTF-8");
+            String msg = String.format(
+                "payload={\"text\": \"<%s> - %s (gestartet von: %s)\"}",
+                url,
+                isWinner ? "Gewonnen. War ja klar." : "Verloren, die anderen cheaten. Ganz klar!",
+                user);
+            content = new ByteArrayContent("application/x-www-form-urlencoded", msg.getBytes());
+            logger.info("Sending to Slack with URL: " + slackUrl);
+            request = REQUEST_FACTORY.buildPostRequest(slackUrl, content);
+            request.setReadTimeout(0);
+            request.execute();
 
         } catch (Exception e) {
             logger.error("Error during game play", e);

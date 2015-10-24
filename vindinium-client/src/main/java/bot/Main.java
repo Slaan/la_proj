@@ -29,14 +29,15 @@ public class Main {
 
     public static void main(String args[]) throws Exception {
 
-        final GenericUrl slackUrl = new GenericUrl(args[0]);
-        final String key = args[1];
-        final String dBUser = args[2];
-        final String dBPassword = args[3];
-        final String arena = args[4];
+        final String user = args[0];
+        final GenericUrl slackUrl = new GenericUrl(args[1]);
+        final String key = args[2];
+        final String dBUser = args[3];
+        final String dBPassword = args[4];
+        final String arena = args[5];
         final int turns;
-        if (args.length >= 6) {
-            turns = Integer.parseInt(args[5]);
+        if (args.length >= 7) {
+            turns = Integer.parseInt(args[6]);
         } else {
             turns = TURNS_DEFAULT;
         }
@@ -58,7 +59,7 @@ public class Main {
         ManageSarsaState manageSarsaState = new ManageSarsaState(sessionBuilder.getFactory(), manageSarsaStateAction);
 
         SimpleBot bot = new Bender(manageSarsaState);
-        SimpleBotRunner runner = new SimpleBotRunner(slackUrl, apiKey, gameUrl, bot);
+        SimpleBotRunner runner = new SimpleBotRunner(slackUrl, apiKey, gameUrl, bot, user);
         runner.call();
     }
 
