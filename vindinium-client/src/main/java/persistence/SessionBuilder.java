@@ -3,6 +3,8 @@ package persistence;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
+import java.util.logging.Level;
+
 /**
  * Created by beckf on 24.10.2015.
  */
@@ -11,6 +13,7 @@ public class SessionBuilder {
 
     public SessionBuilder(String dBUser, String dBPassword){
         try{
+            java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
             factory = new AnnotationConfiguration().
                     configure().
                     setProperty("hibernate.connection.username",dBUser).
