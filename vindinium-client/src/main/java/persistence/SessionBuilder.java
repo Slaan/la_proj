@@ -9,10 +9,12 @@ import org.hibernate.cfg.AnnotationConfiguration;
 public class SessionBuilder {
     private final SessionFactory factory;
 
-    public SessionBuilder(){
+    public SessionBuilder(String dBUser, String dBPassword){
         try{
             factory = new AnnotationConfiguration().
                     configure().
+                    setProperty("hibernate.connection.username",dBUser).
+                    setProperty("hibernate.connection.password",dBPassword).
                     addAnnotatedClass(SarsaState.class).
                     addAnnotatedClass(SarsaStateAction.class).
                     buildSessionFactory();

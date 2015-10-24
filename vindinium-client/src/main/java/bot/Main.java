@@ -12,6 +12,9 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import persistence.ManageSarsaState;
+import persistence.ManageSarsaStateAction;
+import persistence.SessionBuilder;
 
 /**
  * CLI program for launching a bot
@@ -28,10 +31,12 @@ public class Main {
 
         final GenericUrl slackUrl = new GenericUrl(args[0]);
         final String key = args[1];
-        final String arena = args[2];
+        final String dBUser = args[2];
+        final String dBPassword = args[3];
+        final String arena = args[4];
         final int turns;
-        if (args.length >= 4) {
-            turns = Integer.parseInt(args[3]);
+        if (args.length >= 6) {
+            turns = Integer.parseInt(args[5]);
         } else {
             turns = TURNS_DEFAULT;
         }
@@ -48,7 +53,11 @@ public class Main {
         } else
             throw new RuntimeException("You have to set arena to TRAINING or COMPETITION.");
 
-        SimpleBot bot = new Bender();
+        SessionBuilder sessionBuilder = new SessionBuilder(dBUser, dBPassword);
+        ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(sessionBuilder.getFactory());
+        ManageSarsaState manageSarsaState = new ManageSarsaState(sessionBuilder.getFactory(), manageSarsaStateAction);
+
+        SimpleBot bot = new Bender(manageSarsaState);
         SimpleBotRunner runner = new SimpleBotRunner(slackUrl, apiKey, gameUrl, bot);
         runner.call();
     }

@@ -9,11 +9,17 @@ import persistence.*;
  * Created by octavian on 19.10.15.
  */
 public class Bender implements SimpleBot {
+
     SarsaLambda sarsaLambda;
     GameController gameController;
     SarsaStateController sarsaStateController;
     Rewarder rewarder;
 
+    ManageSarsaState manageSarsaState;
+
+    public Bender(ManageSarsaState manageSarsaState){
+        this.manageSarsaState = manageSarsaState;
+    }
     /**
      * Method that plays each move
      *
@@ -33,10 +39,6 @@ public class Bender implements SimpleBot {
      * Called before the game is started
      */
     public void setup() {
-        SessionBuilder sessionBuilder = new SessionBuilder();
-        ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(sessionBuilder.getFactory());
-        ManageSarsaState manageSarsaState = new ManageSarsaState(sessionBuilder.getFactory(), manageSarsaStateAction);
-
         gameController = new GameController();
         sarsaStateController = new SarsaStateController(gameController, manageSarsaState);
         rewarder = new Rewarder();
