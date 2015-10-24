@@ -83,7 +83,7 @@ public class SimpleBotRunner implements Callable<GameState> {
             boolean isWinner = true;
             GameState.Hero benderHero = gameState.getHero();
             for (GameState.Hero hero : gameState.getGame().getHeroes()) {
-                if (hero == benderHero)
+                if (hero.getId() == benderHero.getId())
                     continue;
                 if (hero.getGold() >= benderHero.getGold())
                     isWinner = false;
