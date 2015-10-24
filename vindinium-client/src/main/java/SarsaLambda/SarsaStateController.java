@@ -5,8 +5,6 @@ import persistence.ManageSarsaState;
 import persistence.SarsaState;
 import bot.dto.GameState;
 
-import java.util.HashMap;
-
 /**
  * Creates and organizes GStates for the given game.
  */
@@ -42,20 +40,6 @@ public class SarsaStateController {
     
     private SarsaState getGStateFromgStateId(int gStateId) {
         return manageSarsaState.getSarsaState(gStateId);
-
-        /*
-        if (uberGuteDatenbankMitDatenhaltungBam.containsKey(gStateId)) {
-            return uberGuteDatenbankMitDatenhaltungBam.get(gStateId);
-        } else {
-            SarsaState state = new SarsaState(gStateId);
-            state.addAction("", BotMove.NORTH, DEFAULT_QVALUE);
-            state.addAction("", BotMove.EAST, DEFAULT_QVALUE);
-            state.addAction("", BotMove.SOUTH, DEFAULT_QVALUE);
-            state.addAction("", BotMove.WEST, DEFAULT_QVALUE);
-            uberGuteDatenbankMitDatenhaltungBam.put(gStateId, state);
-            return state;
-        }
-        */
     }
 
     public static String explainState(SarsaState state) {
@@ -68,6 +52,8 @@ public class SarsaStateController {
         TileType south = TileType.fromValue(id.unShift(ID_SHIFT_TILE));
         TileType east = TileType.fromValue(id.unShift(ID_SHIFT_TILE));
         TileType north = TileType.fromValue(id.unShift(ID_SHIFT_TILE));
+        if (id.getId() != 0)
+            throw new RuntimeException("Unshifted ID, there is still some information left: " + id.getId());
         return String.format(""
             + "  /-\\\t\tId: %1$d\n"
             + "  |%2$s|\t\tLife > 40: %6$B\n"
