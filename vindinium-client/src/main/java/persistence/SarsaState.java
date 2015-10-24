@@ -16,12 +16,14 @@ public class SarsaState {
     @Id
     @Column(name = "gStateId")
     private int gStateId;
+    @Column(name = "gStateComment")
+    private String gStateComment;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "state")
     private List<SarsaStateAction> actions;
 
     private SarsaState(){}
     protected SarsaState(int gStateId){
-        this.gStateId = gStateId;
+        this.setgStateId(gStateId);
     }
 
     public int getgStateId() {
@@ -33,6 +35,7 @@ public class SarsaState {
 
     public void setgStateId(int gStateId) {
         this.gStateId = gStateId;
+        this.gStateComment = this.toString();
     }
     public void setActions(List<SarsaStateAction> actions) {
         this.actions = actions;
