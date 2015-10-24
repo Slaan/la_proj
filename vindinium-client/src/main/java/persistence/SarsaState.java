@@ -18,10 +18,9 @@ public class SarsaState {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "state")
     private List<SarsaStateAction> actions;
 
-    public SarsaState(){}
+    private SarsaState(){}
     public SarsaState(int gStateId){
         this.gStateId = gStateId;
-        this.actions = new ArrayList<>();
     }
 
     public int getgStateId() {

@@ -67,8 +67,7 @@ public class ManageSarsaState {
         SarsaState retsarsaState = null;
         try{
             tx = session.beginTransaction();
-            SarsaState sarsaState = new SarsaState();
-            sarsaState.setgStateId(sarsaStateId);
+            SarsaState sarsaState = new SarsaState(sarsaStateId);
             session.save(sarsaState);
             tx.commit();
             retsarsaState = sarsaState;
