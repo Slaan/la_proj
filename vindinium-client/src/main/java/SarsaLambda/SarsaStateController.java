@@ -1,6 +1,7 @@
 package SarsaLambda;
 
-import SarsaLambda.SarsaState;
+import persistence.ManageSarsaState;
+import persistence.SarsaState;
 import bot.BotMove;
 import bot.DirectionType;
 import bot.GameController;
@@ -17,11 +18,12 @@ public class SarsaStateController {
 	private final int ID_SHIFT_TILE = 3;
 	private final int ID_SHIFT_DIRECTION = 3;
     private GameController gameController;
-    private java.util.Map<Integer, SarsaState> uberGuteDatenbankMitDatenhaltungBam;
 
-    public SarsaStateController(GameController gameController) {
+    private final ManageSarsaState manageSarsaState;
+
+    public SarsaStateController(GameController gameController, ManageSarsaState manageSarsaState) {
         this.gameController = gameController;
-        uberGuteDatenbankMitDatenhaltungBam = new HashMap<>();
+        this.manageSarsaState = manageSarsaState;
     }
 
     /**
@@ -36,9 +38,15 @@ public class SarsaStateController {
         
         return getGStateFromgStateId(gStateId);
     }
+
+    public void saveRound(){
+        manageSarsaState.updateSarsaStates();
+    }
     
     private SarsaState getGStateFromgStateId(int gStateId) {
-    	// TODO: Add Database-Lookup.
+        return manageSarsaState.getSarsaState(gStateId);
+
+        /*
         if (uberGuteDatenbankMitDatenhaltungBam.containsKey(gStateId)) {
             return uberGuteDatenbankMitDatenhaltungBam.get(gStateId);
         } else {
@@ -50,6 +58,7 @@ public class SarsaStateController {
             uberGuteDatenbankMitDatenhaltungBam.put(gStateId, state);
             return state;
         }
+        */
     }
     
     private int generateGStateId(GameState gs, Map map) {

@@ -12,6 +12,9 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.gson.GsonFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import persistence.ManageSarsaState;
+import persistence.ManageSarsaStateAction;
+import persistence.SessionBuilder;
 
 import java.net.URLEncoder;
 import java.util.concurrent.Callable;
@@ -48,6 +51,8 @@ public class SimpleBotRunner implements Callable<GameState> {
         GameState gameState = null;
 
         try {
+            bot.setup();
+
             // Initial request
             logger.info("Sending initial request...");
             content = new UrlEncodedContent(apiKey);
@@ -66,7 +71,6 @@ public class SimpleBotRunner implements Callable<GameState> {
             // URL console output.
             logger.info("Game URL: {}", gameState.getViewUrl());
 
-            bot.setup();
             // Game loop
             while (!gameState.getGame().isFinished() && !gameState.getHero().isCrashed()) {
                 logger.info("Taking turn " + gameState.getGame().getTurn());
@@ -86,6 +90,7 @@ public class SimpleBotRunner implements Callable<GameState> {
         }
 
         logger.info("Game over");
+        bot.shutdown();
         return gameState;
     }
 }

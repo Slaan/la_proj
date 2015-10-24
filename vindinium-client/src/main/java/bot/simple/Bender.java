@@ -3,6 +3,7 @@ package bot.simple;
 import SarsaLambda.*;
 import bot.*;
 import bot.dto.GameState;
+import persistence.*;
 
 /**
  * Created by octavian on 19.10.15.
@@ -32,8 +33,12 @@ public class Bender implements SimpleBot {
      * Called before the game is started
      */
     public void setup() {
+        SessionBuilder sessionBuilder = new SessionBuilder();
+        ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(sessionBuilder.getFactory());
+        ManageSarsaState manageSarsaState = new ManageSarsaState(sessionBuilder.getFactory(), manageSarsaStateAction);
+
         gameController = new GameController();
-        sarsaStateController = new SarsaStateController(gameController);
+        sarsaStateController = new SarsaStateController(gameController, manageSarsaState);
         rewarder = new Rewarder();
         sarsaLambda = new SarsaLambda(0.2, 0.1, 0.9, 0.9, 10);
     }
@@ -42,6 +47,6 @@ public class Bender implements SimpleBot {
      * Called after the game
      */
     public void shutdown() {
-
+        sarsaStateController.saveRound();
     }
 }

@@ -1,26 +1,46 @@
-package SarsaLambda;
+package persistence;
 
 import bot.BotMove;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by beckf on 17.10.2015.
  */
+@Entity
+@Table(name = "SarsaState")
 public class SarsaState {
+    @Id
+    @Column(name = "gStateId")
     private int gStateId;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "state")
     private List<SarsaStateAction> actions;
 
-
+    public SarsaState(){}
     public SarsaState(int gStateId){
         this.gStateId = gStateId;
         this.actions = new ArrayList<>();
     }
 
-    public void addAction(String description, BotMove action, double qValue) {
-        actions.add(new SarsaStateAction(description, action, qValue));
+    public int getgStateId() {
+        return gStateId;
     }
+    public List<SarsaStateAction> getActions() {
+        return actions;
+    }
+
+    public void setgStateId(int gStateId) {
+        this.gStateId = gStateId;
+    }
+    public void setActions(List<SarsaStateAction> actions) {
+        this.actions = actions;
+    }
+
+    //public void addAction(String description, BotMove action, double qValue) {
+    //    actions.add(new SarsaStateAction(description, action, qValue));
+    //}
 
     public SarsaStateAction getGStateActionForExplorationRate(double epsilon){
 
