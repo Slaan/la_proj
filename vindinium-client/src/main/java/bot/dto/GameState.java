@@ -273,12 +273,13 @@ public class GameState {
             this.y = y;
         }
 
+        // Der Server sendet den aktuellen X-Wert als Y und den aktuellen Y-Wert als X.
         public int getX() {
-            return x;
+            return y;
         }
 
         public int getY() {
-            return y;
+            return x;
         }
 
         @Override
@@ -299,6 +300,13 @@ public class GameState {
             int result = x;
             result = 31 * result + y;
             return result;
+        }
+
+        @Override public String toString() {
+            return "Position{" +
+                "x=" + getX() +
+                ", y=" + getY() +
+                '}';
         }
     }
 }
