@@ -23,7 +23,7 @@ public class SarsaStateAction {
     @Column(name = "qValue")
     private double qValue;
 
-    public SarsaStateAction(){}
+    private SarsaStateAction(){}
     public SarsaStateAction(SarsaState state, String description, BotMove action, double qValue){
         this.state = state;
         this.description = description;
