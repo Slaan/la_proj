@@ -24,7 +24,7 @@ public class SarsaStateAction {
     private double qValue;
 
     private SarsaStateAction(){}
-    public SarsaStateAction(SarsaState state, String description, BotMove action, double qValue){
+    protected SarsaStateAction(SarsaState state, String description, BotMove action, double qValue){
         this.state = state;
         this.description = description;
         this.action = action;

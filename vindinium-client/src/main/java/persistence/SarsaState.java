@@ -19,7 +19,7 @@ public class SarsaState {
     private List<SarsaStateAction> actions;
 
     private SarsaState(){}
-    public SarsaState(int gStateId){
+    protected SarsaState(int gStateId){
         this.gStateId = gStateId;
     }
 
