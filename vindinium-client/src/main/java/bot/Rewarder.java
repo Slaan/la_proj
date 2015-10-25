@@ -51,7 +51,7 @@ public class Rewarder {
                 currentState.getCurrentPos().equals(currentState.getSpawn()));
     }
 
-    private void calcDeathReward() { reward += DEATHREWARDPERMINE*formerState.getNoOfOurMines(); }
+    private void calcDeathReward() { reward += DEATHREWARDPERMINE*(formerState.getNoOfOurMines() + 1); }
 
     private boolean checkForTavern() {
         boolean result=false;
@@ -77,7 +77,7 @@ public class Rewarder {
     }
 
     private void calcTavernReward() {
-        reward += TAVERNREWARDSTART+((formerState.getLife()-currentState.getLife())*TAVERNREWARDSTART);
+        reward += TAVERNREWARDSTART+((currentState.getLife()-formerState.getLife())*TAVERNHEALPERLIFE);
     }
 
     private boolean checkForMine() {
