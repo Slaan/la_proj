@@ -51,37 +51,34 @@ public class MapTest {
 
     @Test
     public void getDirectionTest() {
-        String tiles = "####  $-    ####    $-  ####\n"
+        String tiles = (""
+            + "####  $-    ####    $-  ####\n"
             + "$-      ##        ##      $-\n"
             + "                            \n"
             + "$-##  ##[]##    ##[]##  ##$-\n"
-            + "##@1##                ##@4##\n"
+            + "$-@1[]                []@4##\n"
             + "      ##            ##      \n"
             + "$-        $-    $-        $-\n"
             + "$-        $-    $-        $-\n"
             + "      ##            ##      \n"
-            + "##@2##                ##@3##\n"
+            + "##@2[]                []@3##\n"
             + "$-##  ##[]##    ##[]##  ##$-\n"
             + "                            \n"
             + "$-      ##        ##      $-\n"
-            + "####  $-    ####    $-  ####".replace("\n", "");
-        GameState.Board board = new GameState.Board(tiles, 20);
+            + "####  $-    ####    $-  ####").replace("\n", "");
+        GameState.Board board = new GameState.Board(tiles, 14);
         GameState.Game game = new GameState.Game("id", 0, 0, null, board, false);
-        GameState.Position pos = new GameState.Position(4, 1);
+        GameState.Position pos = new GameState.Position(1, 4);
         GameState.Hero hero = new GameState.Hero(1, "dan", "0", 0, pos, 100, 0, 0, pos, false);
         GameState gs = new GameState(game, hero, "", "", "");
 
         Map map = new Map(gs);
-        System.out.println();
-        for (int x = 0; x < 20; x++) {
-            System.out.print(map.getCurrentMap()[x][6].getAbbreviation());
-        }
-        System.out.println();
-        assertEquals(TileType.FREE, map.getCurrentMap()[8][8]);
-        assertEquals(TileType.FREE, map.getTileFromDirection(pos, DirectionType.NORTH));
-        assertEquals(TileType.BLOCKED, map.getTileFromDirection(pos, DirectionType.EAST));
-        assertEquals(TileType.TAVERN, map.getTileFromDirection(pos, DirectionType.SOUTH));
-        assertEquals(TileType.FREE, map.getTileFromDirection(pos, DirectionType.WEST));
+        assertEquals(TileType.BLOCKED, map.getCurrentMap()[1][3]);
+        assertEquals(TileType.BLOCKED, map.getTileFromDirection(pos, DirectionType.NORTH));
+        assertEquals(TileType.TAVERN, map.getCurrentMap()[2][4]);
+        assertEquals(TileType.TAVERN, map.getTileFromDirection(pos, DirectionType.EAST));
+        assertEquals(TileType.FREE, map.getTileFromDirection(pos, DirectionType.SOUTH));
+        assertEquals(TileType.MINE, map.getTileFromDirection(pos, DirectionType.WEST));
     }
 
     @Test

@@ -269,8 +269,8 @@ public class GameState {
         }
 
         public Position(int x, int y) {
-            this.x = x;
-            this.y = y;
+            this.x = y;
+            this.y = x;
         }
 
         // Der Server sendet den aktuellen X-Wert als Y und den aktuellen Y-Wert als X.
