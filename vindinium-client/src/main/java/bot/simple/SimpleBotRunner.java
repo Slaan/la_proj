@@ -92,9 +92,9 @@ public class SimpleBotRunner implements Callable<GameState> {
             content = new ByteArrayContent("application/x-www-form-urlencoded", msg.getBytes());
             logger.info("Sending to Slack with URL: " + slackUrl);
             request = REQUEST_FACTORY.buildPostRequest(slackUrl, content);
-            request.setReadTimeout(5000);
-            request.setConnectTimeout(20000);
-            request.execute();
+            request.setReadTimeout(120000);
+            request.setConnectTimeout(120000);
+            request.executeAsync();
 
         } catch (Exception e) {
             logger.error("Error during game play", e);
