@@ -105,7 +105,7 @@ public class SimpleBotRunner implements Callable<GameState> {
     }
 
     public boolean isWinner(GameState gs) {
-        if (!gs.getGame().isFinished())
+        if (gs == null || !gs.getGame().isFinished())
             return false;
         boolean isWinner = true;
         GameState.Hero benderHero = gs.getHero();
