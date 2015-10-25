@@ -1,5 +1,6 @@
 package bot;
 
+import bot.dto.GameState;
 import bot.dto.TurnApiKey;
 import bot.simple.Bender;
 import bot.simple.SimpleBot;
@@ -76,25 +77,51 @@ public class Main {
         ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(sessionBuilder.getFactory());
         manageSarsaState = new ManageSarsaState(sessionBuilder.getFactory(), manageSarsaStateAction);
 
+        int winCount = 0;
+        int loseCount = 0;
+        int crashCount = 0;
         if (threadNumber == 0) {
             // For debug-purpuses only.
-            new MainThreads(this).run();
+            MainThreads thread = new MainThreads(this);
+            thread.run();
+            if (thread.isCrashed())
+                crashCount++;
+            else if (thread.isWinner())
+                winCount++;
+            else
+                loseCount++;
         } else {
             // Start the specified number of threads.
-            List<Thread> threads = new LinkedList<>();
+            List<MainThreads> threads = new LinkedList<>();
             for (int threadCount = 0; threadCount < threadNumber; threadCount++) {
-                Thread thread = new MainThreads(this);
+                MainThreads thread = new MainThreads(this);
                 thread.start();
                 threads.add(thread);
                 Thread.sleep(125);
             }
             // Wait for everyone to end.
-            for (Thread thread : threads) {
+            for (MainThreads thread : threads) {
                 thread.join();
+                if (thread.isCrashed())
+                    crashCount++;
+                else if (thread.isWinner())
+                    winCount++;
+                else
+                    loseCount++;
             }
         }
 
         manageSarsaState.updateSarsaStates();
+        System.out.println(String.format(""
+                + "Main ende.\n"
+                + "Gewonnen:\t%d\n"
+                + "Verloren:\t%d\n"
+                + "Gecrasht:\t%d\n"
+                + "WinRate:\t%d%% (ohne Crashes)\n",
+            winCount,
+            loseCount,
+            crashCount,
+            (int)(((double)winCount / (winCount + loseCount)) * 100)));
     }
 
     /**
@@ -119,6 +146,8 @@ public class Main {
 
     private static class MainThreads extends Thread {
         private Main main;
+        private boolean isWinner = false;
+        private boolean isCrashed = false;
 
         public MainThreads(Main main) {
             this.main = main;
@@ -128,10 +157,21 @@ public class Main {
             try {
                 SimpleBot bot = new Bender(main.manageSarsaState);
                 SimpleBotRunner runner = new SimpleBotRunner(main.slackUrl, main.apiKey, main.gameUrl, bot, main.user);
-                runner.call();
+                GameState gs = runner.call();
+                isWinner = runner.isWinner(gs);
+                isCrashed = gs.getHero().isCrashed() || !gs.getGame().isFinished();
             } catch (Exception e) {
                 e.printStackTrace();
+                isCrashed = true;
             }
+        }
+
+        public boolean isWinner() {
+            return isWinner;
+        }
+
+        public boolean isCrashed() {
+            return isCrashed;
         }
     }
 }

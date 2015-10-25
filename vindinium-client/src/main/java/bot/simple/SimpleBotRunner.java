@@ -80,21 +80,14 @@ public class SimpleBotRunner implements Callable<GameState> {
                 gameState = turnResponse.parseAs(GameState.class);
             }
 
-            boolean isWinner = true;
-            GameState.Hero benderHero = gameState.getHero();
-            for (GameState.Hero hero : gameState.getGame().getHeroes()) {
-                if (hero.getId() == benderHero.getId())
-                    continue;
-                if (hero.getGold() >= benderHero.getGold())
-                    isWinner = false;
-            }
+
 
             // Slack integration.
             String url = URLEncoder.encode(gameState.getViewUrl(), "UTF-8");
             String msg = String.format(
                 "payload={\"text\": \"<%s> - %s (gestartet von: %s)\"}",
                 url,
-                isWinner ? "Gewonnen. War ja klar." : "Verloren, die anderen cheaten. Ganz klar!",
+                isWinner(gameState) ? "Gewonnen. War ja klar." : "Verloren, die anderen cheaten. Ganz klar!",
                 user);
             content = new ByteArrayContent("application/x-www-form-urlencoded", msg.getBytes());
             logger.info("Sending to Slack with URL: " + slackUrl);
@@ -109,5 +102,19 @@ public class SimpleBotRunner implements Callable<GameState> {
         logger.info("Game over");
         bot.shutdown();
         return gameState;
+    }
+
+    public boolean isWinner(GameState gs) {
+        if (!gs.getGame().isFinished())
+            return false;
+        boolean isWinner = true;
+        GameState.Hero benderHero = gs.getHero();
+        for (GameState.Hero hero : gs.getGame().getHeroes()) {
+            if (hero.getId() == benderHero.getId())
+                continue;
+            if (hero.getGold() >= benderHero.getGold())
+                isWinner = false;
+        }
+        return isWinner;
     }
 }
