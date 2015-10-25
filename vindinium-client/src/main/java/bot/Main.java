@@ -185,7 +185,7 @@ public class Main {
                 SimpleBotRunner runner = new SimpleBotRunner(main.slackUrl, main.apiKey, main.gameUrl, bot, main.user);
                 GameState gs = runner.call();
                 isWinner = runner.isWinner(gs);
-                isCrashed = gs.getHero().isCrashed() || !gs.getGame().isFinished();
+                isCrashed = gs == null || gs.getHero().isCrashed() || !gs.getGame().isFinished();
             } catch (Exception e) {
                 e.printStackTrace();
                 isCrashed = true;
