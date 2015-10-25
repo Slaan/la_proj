@@ -17,6 +17,7 @@ import persistence.ManageSarsaState;
 import persistence.ManageSarsaStateAction;
 import persistence.SessionBuilder;
 
+import java.io.DataInputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -97,8 +98,31 @@ public class Main {
                 MainThreads thread = new MainThreads(this);
                 thread.start();
                 threads.add(thread);
-                Thread.sleep(125);
+                Thread.sleep(1250);
             }
+            // Learning... restart every Thread till you press a key.
+            DataInputStream dataInputStream = new DataInputStream(System.in);
+            while (dataInputStream.available() == 0) {
+                for (int i = 0; i < threads.size(); i++) {
+                    MainThreads thread = threads.get(i);
+                    if (!thread.isAlive()) {
+                        if (thread.isCrashed())
+                            crashCount++;
+                        else if (thread.isWinner())
+                            winCount++;
+                        else
+                            loseCount++;
+                        threads.remove(i);
+                        i--;
+
+                        thread = new MainThreads(this);
+                        thread.start();
+                        threads.add(thread);
+                    }
+                }
+            }
+            dataInputStream.close();
+            System.out.println("Waiting for threads to join.");
             // Wait for everyone to end.
             for (MainThreads thread : threads) {
                 thread.join();
@@ -129,7 +153,9 @@ public class Main {
      */
     public static class VindiniumUrl extends GenericUrl {
         private final static String TRAINING_URL = "http://vindinium.org/api/training";
-        private final static String COMPETITION_URL = "http://vindinium.org/api/arena";
+        private final static String COMPETITION_URL = "http://vindinium.org/api/arena";//*/
+        /*private final static String TRAINING_URL = "http://localhost:9000/api/training";
+        private final static String COMPETITION_URL = "http://localhost:9000/api/arena";//*/
 
         public VindiniumUrl(String encodedUrl) {
             super(encodedUrl);

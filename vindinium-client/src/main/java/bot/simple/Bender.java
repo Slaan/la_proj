@@ -42,7 +42,7 @@ public class Bender implements SimpleBot {
         gameController = new GameController();
         sarsaStateController = new SarsaStateController(gameController, manageSarsaState);
         rewarder = new Rewarder();
-        sarsaLambda = new SarsaLambda(0.2, 0.1, 0.9, 0.9, 10);
+        sarsaLambda = new SarsaLambda(0.3, 0.3, 0.9, 0.7, 15);
     }
 
     /**
