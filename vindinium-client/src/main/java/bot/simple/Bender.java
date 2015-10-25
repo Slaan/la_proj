@@ -48,7 +48,5 @@ public class Bender implements SimpleBot {
     /**
      * Called after the game
      */
-    public void shutdown() {
-        sarsaStateController.saveRound();
-    }
+    public void shutdown() {}
 }
