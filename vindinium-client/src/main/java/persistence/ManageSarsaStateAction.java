@@ -16,7 +16,7 @@ public class ManageSarsaStateAction {
         this.factory = factory;
     }
 
-    public SarsaStateAction getGStateAction(Integer gStateId){
+    public synchronized SarsaStateAction getGStateAction(Integer gStateId){
         Session session = factory.openSession();
         Transaction tx = null;
         SarsaStateAction sarsaStateAction = null;
@@ -32,7 +32,7 @@ public class ManageSarsaStateAction {
         return sarsaStateAction;
     }
 
-    public Integer addSarsaStateAction(SarsaState sarsaState, String description, BotMove action, double qValue){
+    public synchronized Integer addSarsaStateAction(SarsaState sarsaState, String description, BotMove action, double qValue){
         Session session = factory.openSession();
         Transaction tx = null;
         Integer sarsaStateActionID = null;
@@ -50,7 +50,7 @@ public class ManageSarsaStateAction {
         return sarsaStateActionID;
     }
 
-    public void updateGStateAction(SarsaStateAction sarsaStateAction){
+    public synchronized void updateGStateAction(SarsaStateAction sarsaStateAction){
         Session session = factory.openSession();
         Transaction tx = null;
         try{
@@ -63,5 +63,24 @@ public class ManageSarsaStateAction {
         }finally {
             session.close();
         }
+    }
+
+    public synchronized SarsaStateAction updateGStateActionforDiff(SarsaStateAction sarsaStateAction, SarsaStateAction oldSarsaStateAction){
+        Session session = factory.openSession();
+        Transaction tx = null;
+        SarsaStateAction momentanSarsaStateAction = null;
+        try{
+            tx = session.beginTransaction();
+            momentanSarsaStateAction = (SarsaStateAction)session.get(SarsaStateAction.class, sarsaStateAction.getSarsaStateActionID());
+            momentanSarsaStateAction.updateQValue(sarsaStateAction.getQValue()-oldSarsaStateAction.getQValue());
+            session.update(momentanSarsaStateAction);
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+        return momentanSarsaStateAction;
     }
 }

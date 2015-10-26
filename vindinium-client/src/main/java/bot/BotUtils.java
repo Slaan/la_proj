@@ -23,10 +23,11 @@ public class BotUtils {
             return BotMove.SOUTH;
         } else if (target.getY() < currentLocation.getY()) {
             return BotMove.WEST;
-        } else if (target.getY() > currentLocation.getY()) {
+        } else /*if (target.getY() > currentLocation.getY())*/ {
             return BotMove.EAST;
-        } else {
-            return BotMove.STAY;
         }
+        /*else {
+            return BotMove.STAY;
+        }*/
     }
 }

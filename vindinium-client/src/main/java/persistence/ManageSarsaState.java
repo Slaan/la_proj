@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -16,11 +17,13 @@ public class ManageSarsaState {
     private SessionFactory factory;
     private ManageSarsaStateAction manageSarsaStateAction;
     private Map<Integer, SarsaState> sarsaStateMap;
+    private Map<Integer, SarsaState> oldsarsaStateMap;
 
     public ManageSarsaState(SessionFactory factory, ManageSarsaStateAction manageSarsaStateAction){
         this.factory = factory;
         this.manageSarsaStateAction = manageSarsaStateAction;
-        this.sarsaStateMap = new HashMap<Integer, SarsaState>();
+        this.sarsaStateMap = new HashMap<>();
+        this.oldsarsaStateMap = new HashMap<>();
     }
 
 
@@ -46,20 +49,14 @@ public class ManageSarsaState {
         if (sarsaState == null) {
             // Create a new sarsaState.
             sarsaState = addSarsaState(sarsaStateId);
-            //TODO implement stay
-            //workound: don t use stay
-            boolean first = true;
             for (BotMove botMove : BotMove.values()) {
-                if(first){
-                    first = false;
-                    continue;
-                }
                 manageSarsaStateAction.addSarsaStateAction(sarsaState, "", botMove, 0);
             }
             sarsaState = getSarsaState(sarsaStateId);
         }
 
         sarsaStateMap.put(sarsaStateId, sarsaState);
+        oldsarsaStateMap.put(sarsaStateId, sarsaState.copy());
         return sarsaState;
     }
 
@@ -99,8 +96,12 @@ public class ManageSarsaState {
     synchronized public void updateSarsaStates(){
         for(Map.Entry<Integer, SarsaState> entry : sarsaStateMap.entrySet()){
             updateSarsaState(entry.getValue());
-            for (SarsaStateAction sarsaStateAction: entry.getValue().getActions()) {
-                manageSarsaStateAction.updateGStateAction(sarsaStateAction);
+
+            Iterator<SarsaStateAction> iterator = entry.getValue().getActions().iterator();
+            Iterator<SarsaStateAction> oldIterator = oldsarsaStateMap.get(entry.getKey()).getActions().iterator();
+
+            while(iterator.hasNext()){
+                manageSarsaStateAction.updateGStateActionforDiff(iterator.next(), oldIterator.next());
             }
         }
     }

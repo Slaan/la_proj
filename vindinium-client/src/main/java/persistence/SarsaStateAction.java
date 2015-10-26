@@ -41,7 +41,7 @@ public class SarsaStateAction {
         return description;
     }
     public BotMove getAction() { return action; }
-    public double getqValue() {
+    public double getQValue(){
         return qValue;
     }
 
@@ -61,8 +61,14 @@ public class SarsaStateAction {
         this.qValue = qValue;
     }
 
-    public double getQValue(){
-        return qValue;
+    public SarsaStateAction copy(SarsaState newSarsaState){
+        SarsaStateAction newSarsaStateAction = new SarsaStateAction();
+        newSarsaStateAction.setSarsaStateActionID(sarsaStateActionID);
+        newSarsaStateAction.setState(newSarsaState);
+        newSarsaStateAction.setDescription(description);
+        newSarsaStateAction.setAction(action);
+        newSarsaStateAction.setqValue(qValue);
+        return newSarsaStateAction;
     }
 
     public void updateQValue(double additionQValue){ qValue += additionQValue; }

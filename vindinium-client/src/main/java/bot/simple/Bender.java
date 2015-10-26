@@ -8,7 +8,7 @@ import persistence.*;
 /**
  * Created by octavian on 19.10.15.
  */
-public class Bender implements SimpleBot {
+public class Bender {
 
     SarsaLambda sarsaLambda;
     GameController gameController;
@@ -19,6 +19,10 @@ public class Bender implements SimpleBot {
 
     public Bender(ManageSarsaState manageSarsaState){
         this.manageSarsaState = manageSarsaState;
+        gameController = new GameController();
+        sarsaStateController = new SarsaStateController(gameController, manageSarsaState);
+        rewarder = new Rewarder();
+        sarsaLambda = new SarsaLambda(0.3, 0.3, 0.9, 0.7, 15);
     }
     /**
      * Method that plays each move
@@ -34,19 +38,4 @@ public class Bender implements SimpleBot {
             rewarder.calculateReward(simplifiedGState));
         return action.getAction();
     }
-
-    /**
-     * Called before the game is started
-     */
-    public void setup() {
-        gameController = new GameController();
-        sarsaStateController = new SarsaStateController(gameController, manageSarsaState);
-        rewarder = new Rewarder();
-        sarsaLambda = new SarsaLambda(0.3, 0.3, 0.9, 0.7, 15);
-    }
-
-    /**
-     * Called after the game
-     */
-    public void shutdown() {}
 }

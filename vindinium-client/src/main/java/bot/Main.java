@@ -3,7 +3,6 @@ package bot;
 import bot.dto.GameState;
 import bot.dto.TurnApiKey;
 import bot.simple.Bender;
-import bot.simple.SimpleBot;
 import bot.simple.SimpleBotRunner;
 import bot.dto.ApiKey;
 import com.google.api.client.http.*;
@@ -181,7 +180,7 @@ public class Main {
 
         @Override public void run() {
             try {
-                SimpleBot bot = new Bender(main.manageSarsaState);
+                Bender bot = new Bender(main.manageSarsaState);
                 SimpleBotRunner runner = new SimpleBotRunner(main.slackUrl, main.apiKey, main.gameUrl, bot, main.user);
                 GameState gs = runner.call();
                 isWinner = runner.isWinner(gs);

@@ -7,7 +7,7 @@ package bot;
  * allowing the framework to generate a Move response with it.
  */
 public enum BotMove {
-    STAY("Stay"), WEST("West"), EAST("East"), NORTH("North"), SOUTH("South");
+    WEST("West"), EAST("East"), NORTH("North"), SOUTH("South");
 
     private final String direction;
 

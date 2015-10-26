@@ -16,7 +16,9 @@ public class SessionBuilder {
             java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
             factory = new AnnotationConfiguration().
                     configure().
-                    setProperty("hibernate.connection.username",dBUser).
+                    setProperty("hibernate.connection.url", "jdbc:mysql://localhost/bender0").
+                    setProperty("hibernate.hbm2ddl.auto", "update").
+                    setProperty("hibernate.connection.username", dBUser).
                     setProperty("hibernate.connection.password",dBPassword).
                     addAnnotatedClass(SarsaState.class).
                     addAnnotatedClass(SarsaStateAction.class).

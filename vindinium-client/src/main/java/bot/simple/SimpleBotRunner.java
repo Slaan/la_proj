@@ -33,11 +33,11 @@ public class SimpleBotRunner implements Callable<GameState> {
 
     private final ApiKey apiKey;
     private final GenericUrl gameUrl;
-    private final SimpleBot bot;
+    private final Bender bot;
     private final GenericUrl slackUrl;
     private final String user;
 
-    public SimpleBotRunner(GenericUrl slackUrl, ApiKey apiKey, GenericUrl gameUrl, SimpleBot bot, String user) {
+    public SimpleBotRunner(GenericUrl slackUrl, ApiKey apiKey, GenericUrl gameUrl, Bender bot, String user) {
         this.apiKey = apiKey;
         this.gameUrl = gameUrl;
         this.bot = bot;
@@ -53,7 +53,6 @@ public class SimpleBotRunner implements Callable<GameState> {
         GameState gameState = null;
 
         try {
-            bot.setup();
 
             // Initial request
             logger.info("Sending initial request...");
@@ -101,7 +100,6 @@ public class SimpleBotRunner implements Callable<GameState> {
         }
 
         logger.info("Game over");
-        bot.shutdown();
         return gameState;
     }
 
