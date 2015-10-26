@@ -82,6 +82,45 @@ public class MapTest {
     }
 
     @Test
+    public void getDirectionExtremeTest() {
+        String tiles = (""
+            + "####  $-    ####    $-  ####\n"
+            + "$-      ##        ##      $-\n"
+            + "                            \n"
+            + "$-##  ##[]##    ##[]##  ##$-\n"
+            + "$-@1[]                []@4##\n"
+            + "      ##            ##      \n"
+            + "$-        $-    $-        $-\n"
+            + "$-        $-    $-        $-\n"
+            + "      ##            ##      \n"
+            + "##@2[]                []@3##\n"
+            + "$-##  ##[]##    ##[]##  ##$-\n"
+            + "                            \n"
+            + "$-      ##        ##      $-\n"
+            + "####  $-    ####    $-  ####").replace("\n", "");
+        GameState.Board board = new GameState.Board(tiles, 14);
+        GameState.Game game = new GameState.Game("id", 0, 0, null, board, false);
+        GameState.Position pos = new GameState.Position(0, 0);
+
+        GameState.Hero hero = new GameState.Hero(1, "dan", "0", 0, pos, 100, 0, 0, pos, false);
+        GameState gs = new GameState(game, hero, "", "", "");
+
+        Map map = new Map(gs);
+        assertEquals(TileType.BLOCKED, map.getTileFromDirection(pos, DirectionType.NORTH));
+        assertEquals(TileType.BLOCKED, map.getTileFromDirection(pos, DirectionType.WEST));
+
+        pos = new GameState.Position(13, 13);
+        assertEquals(TileType.BLOCKED, map.getTileFromDirection(pos, DirectionType.EAST));
+        assertEquals(TileType.BLOCKED, map.getTileFromDirection(pos, DirectionType.SOUTH));
+
+        pos = new GameState.Position(12, 12);
+        assertEquals(TileType.MINE, map.getTileFromDirection(pos, DirectionType.EAST));
+
+        pos = new GameState.Position(10, 12);
+        assertEquals(TileType.MINE, map.getTileFromDirection(pos, DirectionType.SOUTH));
+    }
+
+    @Test
     public void calcDirectionTest() {
         Map map = new Map(gameState);
         assertEquals(DirectionType.WEST,map.getNearestMineDirection());

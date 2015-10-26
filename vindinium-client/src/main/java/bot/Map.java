@@ -126,10 +126,10 @@ public class Map {
                 if (heroPosition.getY() < 1) { return TileType.BLOCKED; }
                 return currentMap[heroPosition.getX()    ][heroPosition.getY() - 1];
             case EAST:
-                if (heroPosition.getX() + 1 > currentMap.length) { return TileType.BLOCKED; }
+                if (heroPosition.getX() >= currentMap.length - 1) { return TileType.BLOCKED; }
                 return currentMap[heroPosition.getX() + 1][heroPosition.getY()    ];
             case SOUTH:
-                if (heroPosition.getY() + 1 > currentMap[0].length) { return TileType.BLOCKED; }
+                if (heroPosition.getY() >= currentMap[0].length - 1) { return TileType.BLOCKED; }
                 return currentMap[heroPosition.getX()    ][heroPosition.getY() + 1];
             case WEST:
                 if (heroPosition.getX() < 1) { return TileType.BLOCKED; }
