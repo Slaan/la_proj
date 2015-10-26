@@ -15,10 +15,12 @@ public class Bender {
     SarsaStateController sarsaStateController;
     Rewarder rewarder;
 
-    ManageSarsaState manageSarsaState;
+    private ManageSarsaState manageSarsaState;
+    private GameLog gameLog;
 
-    public Bender(ManageSarsaState manageSarsaState){
+    public Bender(ManageSarsaState manageSarsaState, GameLog gameLog){
         this.manageSarsaState = manageSarsaState;
+        this.gameLog = gameLog;
         gameController = new GameController();
         sarsaStateController = new SarsaStateController(gameController, manageSarsaState);
         rewarder = new Rewarder();

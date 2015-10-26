@@ -12,14 +12,13 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.gson.GsonFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import persistence.ManageSarsaState;
-import persistence.ManageSarsaStateAction;
-import persistence.SessionBuilder;
+import persistence.*;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.concurrent.Callable;
 
-public class SimpleBotRunner implements Callable<GameState> {
+public class SimpleBotRunner extends Thread {
     private static final HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
     private static final JsonFactory JSON_FACTORY = new GsonFactory();
     private static final HttpRequestFactory REQUEST_FACTORY =
@@ -33,74 +32,99 @@ public class SimpleBotRunner implements Callable<GameState> {
 
     private final ApiKey apiKey;
     private final GenericUrl gameUrl;
-    private final Bender bot;
     private final GenericUrl slackUrl;
     private final String user;
+    private final String dBUser;
+    private final String dBPassword;
+    private final SharedBuffer<String> slackBuffer;
+    private final SharedBuffer<GameLog> gameLogBuffer;
 
-    public SimpleBotRunner(GenericUrl slackUrl, ApiKey apiKey, GenericUrl gameUrl, Bender bot, String user) {
+    public SimpleBotRunner(GenericUrl slackUrl, ApiKey apiKey, GenericUrl gameUrl, String user, String dBUser, String dBPassword, SharedBuffer<String> slackBuffer, SharedBuffer<GameLog> gameLogBuffer) {
         this.apiKey = apiKey;
         this.gameUrl = gameUrl;
-        this.bot = bot;
         this.slackUrl = slackUrl;
         this.user = user;
+        this.dBUser = dBUser;
+        this.dBPassword = dBPassword;
+        this.slackBuffer = slackBuffer;
+        this.gameLogBuffer = gameLogBuffer;
     }
 
     @Override
-    public GameState call() throws Exception {
+    public void run() {
         HttpContent content;
         HttpRequest request;
         HttpResponse response;
         GameState gameState = null;
 
-        try {
+        while(!interrupted()) {
+            SessionBuilder sessionBuilder = new SessionBuilder(dBUser, dBPassword);
+            ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(sessionBuilder.getFactory());
+            ManageSarsaState manageSarsaState = new ManageSarsaState(sessionBuilder.getFactory(), manageSarsaStateAction);
 
-            // Initial request
-            logger.info("Sending initial request...");
-            content = new UrlEncodedContent(apiKey);
-            request = REQUEST_FACTORY.buildPostRequest(gameUrl, content);
-            request.setReadTimeout(0); // Wait forever to be assigned to a game
-            response = request.execute();
-            gameState = response.parseAs(GameState.class);
-
-            // URL console output.
-            logger.info("Game URL: {}", gameState.getViewUrl());
-
-            // Game loop
-            while (!gameState.getGame().isFinished() && !gameState.getHero().isCrashed()) {
-                logger.info("Taking turn " + gameState.getGame().getTurn());
-                BotMove direction = bot.move(gameState);
-                Move move = new Move(apiKey.getKey(), direction.toString());
+            GameLog gameLog = new GameLog();
+            Bender bender = new Bender(manageSarsaState, gameLog);
 
 
-                HttpContent turn = new UrlEncodedContent(move);
-                HttpRequest turnRequest = REQUEST_FACTORY.buildPostRequest(new GenericUrl(gameState.getPlayUrl()), turn);
-                HttpResponse turnResponse = turnRequest.execute();
+            try {
 
-                gameState = turnResponse.parseAs(GameState.class);
+                // Initial request
+                logger.info("Sending initial request...");
+                content = new UrlEncodedContent(apiKey);
+                request = REQUEST_FACTORY.buildPostRequest(gameUrl, content);
+                request.setReadTimeout(0); // Wait forever to be assigned to a game
+                response = request.execute();
+                gameState = response.parseAs(GameState.class);
+
+                // URL console output.
+                logger.info("Game URL: {}", gameState.getViewUrl());
+
+                // Game loop
+                while (!gameState.getGame().isFinished() && !gameState.getHero().isCrashed()) {
+                    logger.info("Taking turn " + gameState.getGame().getTurn());
+                    BotMove direction = bender.move(gameState);
+                    Move move = new Move(apiKey.getKey(), direction.toString());
+
+
+                    HttpContent turn = new UrlEncodedContent(move);
+                    HttpRequest turnRequest = REQUEST_FACTORY.buildPostRequest(new GenericUrl(gameState.getPlayUrl()), turn);
+                    HttpResponse turnResponse = turnRequest.execute();
+
+                    gameState = turnResponse.parseAs(GameState.class);
+                }
+                String url = URLEncoder.encode(gameState.getViewUrl(), "UTF-8");
+                String msg = String.format(
+                        "payload={\"text\": \"<%s> - %s (gestartet von: %s)\"}",
+                        url,
+                        isWinner(gameState) ? "Gewonnen. War ja klar." : "Verloren, die anderen cheaten. Ganz klar!",
+                        user);
+                slackBuffer.addEntity(msg);
+            } catch (IOException e) {
+                logger.error("Error during game play", e);
             }
+/*
+                // Slack integration.
+                String url = URLEncoder.encode(gameState.getViewUrl(), "UTF-8");
+                String msg = String.format(
+                        "payload={\"text\": \"<%s> - %s (gestartet von: %s)\"}",
+                        url,
+                        isWinner(gameState) ? "Gewonnen. War ja klar." : "Verloren, die anderen cheaten. Ganz klar!",
+                        user);
+                content = new ByteArrayContent("application/x-www-form-urlencoded", msg.getBytes());
+                logger.info("Sending to Slack with URL: " + slackUrl);
+                request = REQUEST_FACTORY.buildPostRequest(slackUrl, content);
+                request.setReadTimeout(120000);
+                request.setConnectTimeout(120000);
+                request.executeAsync();
+*/
 
 
 
-            // Slack integration.
-            String url = URLEncoder.encode(gameState.getViewUrl(), "UTF-8");
-            String msg = String.format(
-                "payload={\"text\": \"<%s> - %s (gestartet von: %s)\"}",
-                url,
-                isWinner(gameState) ? "Gewonnen. War ja klar." : "Verloren, die anderen cheaten. Ganz klar!",
-                user);
-            content = new ByteArrayContent("application/x-www-form-urlencoded", msg.getBytes());
-            logger.info("Sending to Slack with URL: " + slackUrl);
-            request = REQUEST_FACTORY.buildPostRequest(slackUrl, content);
-            request.setReadTimeout(120000);
-            request.setConnectTimeout(120000);
-            request.executeAsync();
-
-        } catch (Exception e) {
-            logger.error("Error during game play", e);
+            gameLog.setWin(isWinner(gameState));
+            gameLogBuffer.addEntity(gameLog);
+            manageSarsaState.updateSarsaStates();
+            logger.info("Game over");
         }
-
-        logger.info("Game over");
-        return gameState;
     }
 
     public boolean isWinner(GameState gs) {

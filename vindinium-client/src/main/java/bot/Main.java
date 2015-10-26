@@ -12,11 +12,11 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import persistence.ManageSarsaState;
-import persistence.ManageSarsaStateAction;
-import persistence.SessionBuilder;
+import persistence.*;
 
 import java.io.DataInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -24,30 +24,27 @@ import java.util.Random;
 /**
  * CLI program for launching a bot
  */
-public class Main {
-    private static final int TURNS_DEFAULT = 20;
-    private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    private static final JsonFactory JSON_FACTORY = new GsonFactory();
-    private static final Gson gson = new Gson();
-    private static final Logger logger = LogManager.getLogger(Main.class);
-    private static final Logger gameStateLogger = LogManager.getLogger("gameStateLogger");
+public class Main extends Thread{
+    private static  int TURNS_DEFAULT = 20;
+    private static  HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
+    private static  JsonFactory JSON_FACTORY = new GsonFactory();
+    private static  Gson gson = new Gson();
+    private static  Logger logger = LogManager.getLogger(Main.class);
+    private static  Logger gameStateLogger = LogManager.getLogger("gameStateLogger");
 
-    private final String user;
-    private final GenericUrl slackUrl;
-    private final String key;
-    private final String dBUser;
-    private final String dBPassword;
-    private final String arena;
-    private final int turns;
-    private final GenericUrl gameUrl;
-    private final ApiKey apiKey;
-    private final ManageSarsaState manageSarsaState;
+    private String user;
+    private GenericUrl slackUrl;
+    private String key;
+    private String dBUser;
+    private String dBPassword;
+    private String arena;
+    private int turns;
+    private int threadNumber;
+    private GenericUrl gameUrl;
+    private ApiKey apiKey;
+    private ManageSarsaState manageSarsaState;
 
-    public static void main(String args[]) throws Exception {
-        new Main(args);
-    }
-
-    private Main(String args[]) throws Exception {
+    private Main(String args[]){
         user = args[0];
         slackUrl = new GenericUrl(args[1]);
         key = args[2];
@@ -59,7 +56,7 @@ public class Main {
         } else {
             turns = TURNS_DEFAULT;
         }
-        int threadNumber = 0;
+        threadNumber = 0;
         if (args.length > 7) {
             threadNumber = Integer.parseInt(args[7]);
         }
@@ -72,10 +69,54 @@ public class Main {
             apiKey = new ApiKey(key);
         } else
             throw new RuntimeException("You have to set arena to TRAINING or COMPETITION.");
+    }
 
-        SessionBuilder sessionBuilder = new SessionBuilder(dBUser, dBPassword);
-        ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(sessionBuilder.getFactory());
-        manageSarsaState = new ManageSarsaState(sessionBuilder.getFactory(), manageSarsaStateAction);
+
+    public static void main(String args[]){
+        Main main = new Main(args);
+        main.run();
+    }
+
+
+    @Override
+    public void run(){
+        try {
+            SharedBuffer<String> slackBuffer= new SharedBuffer<>();
+            List<SimpleBotRunner> runners = new ArrayList<>();
+            SharedBuffer<GameLog> gameLogBuffer = new SharedBuffer<>();
+            for(int i = 0; i<threadNumber; i++) {
+                runners.add(new SimpleBotRunner(slackUrl, apiKey, gameUrl, user, dBUser, dBPassword, slackBuffer, gameLogBuffer));
+            }
+
+            for(SimpleBotRunner runner: runners){
+                runner.start();
+                sleep(1250);
+            }
+
+            DataInputStream dataInputStream = new DataInputStream(System.in);
+            while (dataInputStream.available() == 0) {            }
+
+            for(SimpleBotRunner runner: runners){
+                runner.interrupt();
+            }
+
+            for(SimpleBotRunner runner: runners){
+                runner.join();
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+ /*   private Main() throws Exception {
+
+
+
+
+
 
         int winCount = 0;
         int loseCount = 0;
@@ -99,6 +140,8 @@ public class Main {
                 threads.add(thread);
                 Thread.sleep(1250);
             }
+
+
             // Learning... restart every Thread till you press a key.
             DataInputStream dataInputStream = new DataInputStream(System.in);
             while (dataInputStream.available() == 0) {
@@ -146,7 +189,7 @@ public class Main {
             crashCount,
             (int)(((double)winCount / (winCount + loseCount)) * 100)));
     }
-
+*/
     /**
      * Represents the endpoint URL
      */
@@ -169,7 +212,7 @@ public class Main {
         }
     }
 
-    private static class MainThreads extends Thread {
+ /*   private static class MainThreads extends Thread {
         private Main main;
         private boolean isWinner = false;
         private boolean isCrashed = false;
@@ -181,7 +224,7 @@ public class Main {
         @Override public void run() {
             try {
                 Bender bot = new Bender(main.manageSarsaState);
-                SimpleBotRunner runner = new SimpleBotRunner(main.slackUrl, main.apiKey, main.gameUrl, bot, main.user);
+
                 GameState gs = runner.call();
                 isWinner = runner.isWinner(gs);
                 isCrashed = gs == null || gs.getHero().isCrashed() || !gs.getGame().isFinished();
@@ -198,5 +241,5 @@ public class Main {
         public boolean isCrashed() {
             return isCrashed;
         }
-    }
+    } */
 }
