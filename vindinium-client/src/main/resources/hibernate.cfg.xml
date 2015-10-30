@@ -10,11 +10,5 @@
         <property name="hibernate.connection.driver_class">
             com.mysql.jdbc.Driver
         </property>
-
-        <property name="hibernate.connection.url">
-            jdbc:mysql://localhost/bendertest
-        </property>
-
-        <property name="hibernate.hbm2ddl.auto">update</property>
     </session-factory>
 </hibernate-configuration>
