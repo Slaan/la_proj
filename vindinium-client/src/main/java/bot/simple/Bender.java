@@ -15,16 +15,14 @@ public class Bender {
     SarsaStateController sarsaStateController;
     Rewarder rewarder;
 
-    private ManageSarsaState manageSarsaState;
     private GameLog gameLog;
 
     public Bender(ManageSarsaState manageSarsaState, GameLog gameLog){
-        this.manageSarsaState = manageSarsaState;
         this.gameLog = gameLog;
         gameController = new GameController();
         sarsaStateController = new SarsaStateController(gameController, manageSarsaState);
         rewarder = new Rewarder();
-        sarsaLambda = new SarsaLambda(0.3, 0.3, 0.9, 0.7, 15);
+        sarsaLambda = new SarsaLambda();
     }
     /**
      * Method that plays each move

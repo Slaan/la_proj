@@ -1,5 +1,9 @@
 package bot;
 
+import bot.dto.ApiKey;
+import bot.dto.TurnApiKey;
+import com.google.api.client.http.GenericUrl;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,8 +17,9 @@ public class Config {
     static String name;
     static int NoOfRounds;
     static int NoOfThreads;
-    static String APIKey;
-    static String SlackULR;
+    static ApiKey APIKey;
+    static GenericUrl SlackURL;
+    static GenericUrl GameURL;
     static String DBUser;
     static String DBPassword;
     static String Mode;
@@ -25,6 +30,8 @@ public class Config {
     static int QueueLength;
     static InputStream inputstream=null;
 
+    private final static String TRAINING_URL = "http://vindinium.org/api/training";
+    private final static String COMPETITION_URL = "http://vindinium.org/api/arena";
 
     private Config() {}
 
@@ -40,11 +47,18 @@ public class Config {
             name = prop.getProperty("name");
             NoOfRounds = Integer.parseInt(prop.getProperty("rounds"));
             NoOfThreads = Integer.parseInt(prop.getProperty("threads"));
-            APIKey = prop.getProperty("apikey");
-            SlackULR = prop.getProperty("slackurl");
+            SlackURL = new GenericUrl(prop.getProperty("slackurl"));
             DBUser = prop.getProperty("dbuser");
             DBPassword = prop.getProperty("dbpassword");
             Mode = prop.getProperty("modus");
+            if ("COMPETITION".equals(Mode)) {
+                GameURL = new GenericUrl(COMPETITION_URL);
+                APIKey = new ApiKey(prop.getProperty("apikey"));
+            }
+            else{
+                GameURL = new GenericUrl(TRAINING_URL);
+                APIKey = new TurnApiKey(prop.getProperty("apikey"), NoOfRounds);
+            }
             LearningRate = Double.parseDouble(prop.getProperty("learningrate"));
             ExplorationRate = Double.parseDouble(prop.getProperty("explorationrate"));
             DiscountFactor = Double.parseDouble(prop.getProperty("discountfactor"));
@@ -71,9 +85,11 @@ public class Config {
 
     public static int getNoOfThreads() {return NoOfThreads;}
 
-    public static String getAPIKey() {return APIKey;}
+    public static ApiKey getAPIKey() {return APIKey;}
 
-    public static String getSlackULR() {return SlackULR;}
+    public static GenericUrl getSlackULR() {return SlackURL;}
+
+    public static GenericUrl getGameURL() {return GameURL;}
 
     public static String getDBUser() {return DBUser;}
 

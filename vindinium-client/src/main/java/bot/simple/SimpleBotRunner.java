@@ -1,6 +1,7 @@
 package bot.simple;
 
 import bot.BotMove;
+import bot.Config;
 import bot.dto.ApiKey;
 import bot.dto.GameState;
 import bot.dto.Move;
@@ -12,6 +13,7 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.gson.GsonFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.SessionFactory;
 import persistence.*;
 
 import java.io.IOException;
@@ -32,20 +34,15 @@ public class SimpleBotRunner extends Thread {
 
     private final ApiKey apiKey;
     private final GenericUrl gameUrl;
-    private final GenericUrl slackUrl;
     private final String user;
-    private final String dBUser;
-    private final String dBPassword;
+
     private final SharedBuffer<String> slackBuffer;
     private final SharedBuffer<GameLog> gameLogBuffer;
 
-    public SimpleBotRunner(GenericUrl slackUrl, ApiKey apiKey, GenericUrl gameUrl, String user, String dBUser, String dBPassword, SharedBuffer<String> slackBuffer, SharedBuffer<GameLog> gameLogBuffer) {
-        this.apiKey = apiKey;
-        this.gameUrl = gameUrl;
-        this.slackUrl = slackUrl;
-        this.user = user;
-        this.dBUser = dBUser;
-        this.dBPassword = dBPassword;
+    public SimpleBotRunner(SharedBuffer<String> slackBuffer, SharedBuffer<GameLog> gameLogBuffer) {
+        this.apiKey = Config.getAPIKey();
+        this.gameUrl = Config.getGameURL();
+        this.user = Config.getName();
         this.slackBuffer = slackBuffer;
         this.gameLogBuffer = gameLogBuffer;
     }
@@ -58,9 +55,9 @@ public class SimpleBotRunner extends Thread {
         GameState gameState = null;
 
         while(!interrupted()) {
-            SessionBuilder sessionBuilder = new SessionBuilder(dBUser, dBPassword);
-            ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(sessionBuilder.getFactory());
-            ManageSarsaState manageSarsaState = new ManageSarsaState(sessionBuilder.getFactory(), manageSarsaStateAction);
+            SessionFactory factory = SessionBuilder.generateSessionFactory();
+            ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(factory);
+            ManageSarsaState manageSarsaState = new ManageSarsaState(factory, manageSarsaStateAction);
 
             GameLog gameLog = new GameLog();
             Bender bender = new Bender(manageSarsaState, gameLog);

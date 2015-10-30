@@ -1,5 +1,6 @@
 package SarsaLambda;
 
+import bot.Config;
 import persistence.SarsaState;
 import persistence.SarsaStateAction;
 
@@ -17,20 +18,12 @@ public class SarsaLambda {
 
     private SarsaQueue sarsaQueue;
 
-    /**
-     *
-     * @param alpha Lerning Rate
-     * @param epsilon Exploration Rate
-     * @param gamma Discount factor
-     * @param lambda Eligibility trace decay rate
-     * @param queueLength How many steps back should a reward influence. (How much is the Fish)
-     */
-    public SarsaLambda(double alpha, double epsilon, double gamma, double lambda, int queueLength){
-        this.alpha = alpha;
-        this.epsilon = epsilon;
-        this.gamma = gamma;
-        this.lambda = lambda;
-        this.sarsaQueue = new SarsaQueue(queueLength);
+    public SarsaLambda(){
+        this.alpha = Config.getLearningRate();
+        this.epsilon = Config.getExplorationRate();
+        this.gamma = Config.getDiscountFactor();
+        this.lambda = Config.getLambda();
+        this.sarsaQueue = new SarsaQueue(Config.getQueueLenght());
     }
 
     public SarsaStateAction sarsaInit(SarsaState currentSarsaState){

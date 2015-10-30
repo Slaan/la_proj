@@ -25,55 +25,19 @@ import java.util.Random;
  * CLI program for launching a bot
  */
 public class Main extends Thread{
-    private static  int TURNS_DEFAULT = 20;
-    private static  HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    private static  JsonFactory JSON_FACTORY = new GsonFactory();
-    private static  Gson gson = new Gson();
+
     private static  Logger logger = LogManager.getLogger(Main.class);
     private static  Logger gameStateLogger = LogManager.getLogger("gameStateLogger");
 
-    private String user;
-    private GenericUrl slackUrl;
-    private String key;
-    private String dBUser;
-    private String dBPassword;
-    private String arena;
-    private int turns;
-    private int threadNumber;
-    private GenericUrl gameUrl;
-    private ApiKey apiKey;
+
     private ManageSarsaState manageSarsaState;
 
-    private Main(String args[]){
-        user = args[0];
-        slackUrl = new GenericUrl(args[1]);
-        key = args[2];
-        dBUser = args[3];
-        dBPassword = args[4];
-        arena = args[5];
-        if (args.length > 6) {
-            turns = Integer.parseInt(args[6]);
-        } else {
-            turns = TURNS_DEFAULT;
-        }
-        threadNumber = 0;
-        if (args.length > 7) {
-            threadNumber = Integer.parseInt(args[7]);
-        }
-
-        if ("TRAINING".equals(arena)) {
-            gameUrl = VindiniumUrl.getTrainingUrl();
-            apiKey = new TurnApiKey(key, turns);
-        } else if ("COMPETITION".equals(arena)) {
-            gameUrl = VindiniumUrl.getCompetitionUrl();
-            apiKey = new ApiKey(key);
-        } else
-            throw new RuntimeException("You have to set arena to TRAINING or COMPETITION.");
-    }
-
+    private Main(){}
 
     public static void main(String args[]){
-        Main main = new Main(args);
+        Config.init();
+        SessionBuilder.generateSessionFactory();
+        Main main = new Main();
         main.run();
     }
 
@@ -84,8 +48,8 @@ public class Main extends Thread{
             SharedBuffer<String> slackBuffer= new SharedBuffer<>();
             List<SimpleBotRunner> runners = new ArrayList<>();
             SharedBuffer<GameLog> gameLogBuffer = new SharedBuffer<>();
-            for(int i = 0; i<threadNumber; i++) {
-                runners.add(new SimpleBotRunner(slackUrl, apiKey, gameUrl, user, dBUser, dBPassword, slackBuffer, gameLogBuffer));
+            for(int i = 0; i<Config.getNoOfThreads(); i++) {
+                runners.add(new SimpleBotRunner(slackBuffer, gameLogBuffer));
             }
 
             for(SimpleBotRunner runner: runners){
@@ -111,12 +75,10 @@ public class Main extends Thread{
         }
     }
 
+
+
+
  /*   private Main() throws Exception {
-
-
-
-
-
 
         int winCount = 0;
         int loseCount = 0;
@@ -190,27 +152,7 @@ public class Main extends Thread{
             (int)(((double)winCount / (winCount + loseCount)) * 100)));
     }
 */
-    /**
-     * Represents the endpoint URL
-     */
-    public static class VindiniumUrl extends GenericUrl {
-        private final static String TRAINING_URL = "http://vindinium.org/api/training";
-        private final static String COMPETITION_URL = "http://vindinium.org/api/arena";//*/
-        /*private final static String TRAINING_URL = "http://localhost:9000/api/training";
-        private final static String COMPETITION_URL = "http://localhost:9000/api/arena";//*/
 
-        public VindiniumUrl(String encodedUrl) {
-            super(encodedUrl);
-        }
-
-        public static VindiniumUrl getCompetitionUrl() {
-            return new VindiniumUrl(COMPETITION_URL);
-        }
-
-        public static VindiniumUrl getTrainingUrl() {
-            return new VindiniumUrl(TRAINING_URL);
-        }
-    }
 
  /*   private static class MainThreads extends Thread {
         private Main main;
