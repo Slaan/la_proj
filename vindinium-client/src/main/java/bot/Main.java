@@ -12,6 +12,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.SessionFactory;
 import persistence.*;
 
 import java.io.DataInputStream;
@@ -48,9 +49,12 @@ public class Main extends Thread{
             SharedBuffer<String> slackBuffer= new SharedBuffer<>();
             List<SimpleBotRunner> runners = new ArrayList<>();
             SharedBuffer<GameLog> gameLogBuffer = new SharedBuffer<>();
-            ManageGameLog manageGameLog = new ManageGameLog(SessionBuilder.generateSessionFactory());
+            SessionFactory factory = SessionBuilder.generateSessionFactory();
+            ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(factory);
+            ManageSarsaState manageSarsaState = new ManageSarsaState(factory, manageSarsaStateAction);
+            ManageGameLog manageGameLog = new ManageGameLog(factory);
             for(int i = 0; i<Config.getNoOfThreads(); i++) {
-                runners.add(new SimpleBotRunner(manageGameLog, slackBuffer, gameLogBuffer));
+                runners.add(new SimpleBotRunner(manageSarsaState, manageGameLog, slackBuffer, gameLogBuffer));
             }
 
             for(SimpleBotRunner runner: runners){
