@@ -36,13 +36,15 @@ public class SimpleBotRunner extends Thread {
     private final GenericUrl gameUrl;
     private final String user;
 
+    private final ManageGameLog manageGameLog;
     private final SharedBuffer<String> slackBuffer;
     private final SharedBuffer<GameLog> gameLogBuffer;
 
-    public SimpleBotRunner(SharedBuffer<String> slackBuffer, SharedBuffer<GameLog> gameLogBuffer) {
+    public SimpleBotRunner(ManageGameLog manageGameLog, SharedBuffer<String> slackBuffer, SharedBuffer<GameLog> gameLogBuffer) {
         this.apiKey = Config.getAPIKey();
         this.gameUrl = Config.getGameURL();
         this.user = Config.getName();
+        this.manageGameLog = manageGameLog;
         this.slackBuffer = slackBuffer;
         this.gameLogBuffer = gameLogBuffer;
     }
@@ -53,13 +55,14 @@ public class SimpleBotRunner extends Thread {
         HttpRequest request;
         HttpResponse response;
         GameState gameState = null;
+        SessionFactory factory = SessionBuilder.generateSessionFactory();
+        ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(factory);
+        ManageSarsaState manageSarsaState = new ManageSarsaState(factory, manageSarsaStateAction);
 
         while(!interrupted()) {
-            SessionFactory factory = SessionBuilder.generateSessionFactory();
-            ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(factory);
-            ManageSarsaState manageSarsaState = new ManageSarsaState(factory, manageSarsaStateAction);
 
-            GameLog gameLog = new GameLog();
+
+            GameLog gameLog = manageGameLog.getGameLog();
             Bender bender = new Bender(manageSarsaState, gameLog);
 
 
@@ -120,6 +123,7 @@ public class SimpleBotRunner extends Thread {
             gameLog.setWin(isWinner(gameState));
             gameLogBuffer.addEntity(gameLog);
             manageSarsaState.updateSarsaStates();
+            manageGameLog.addGameLog(gameLog);
             logger.info("Game over");
         }
     }

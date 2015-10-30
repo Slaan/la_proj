@@ -23,6 +23,7 @@ public class SessionBuilder {
                     setProperty("hibernate.connection.password", Config.getDBPassword()).
                     addAnnotatedClass(SarsaState.class).
                     addAnnotatedClass(SarsaStateAction.class).
+                    addAnnotatedClass(GameLog.class).
                     buildSessionFactory();
         }catch (Throwable ex) {
             System.err.println("Failed to create sessionFactory object." + ex);

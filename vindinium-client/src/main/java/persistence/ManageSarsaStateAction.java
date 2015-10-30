@@ -32,7 +32,7 @@ public class ManageSarsaStateAction {
         return sarsaStateAction;
     }
 
-    public synchronized Integer addSarsaStateAction(SarsaState sarsaState, String description, BotMove action, double qValue){
+    protected synchronized Integer addSarsaStateAction(SarsaState sarsaState, String description, BotMove action, double qValue){
         Session session = factory.openSession();
         Transaction tx = null;
         Integer sarsaStateActionID = null;
@@ -50,7 +50,7 @@ public class ManageSarsaStateAction {
         return sarsaStateActionID;
     }
 
-    public synchronized void updateGStateAction(SarsaStateAction sarsaStateAction){
+    protected synchronized void updateGStateAction(SarsaStateAction sarsaStateAction){
         Session session = factory.openSession();
         Transaction tx = null;
         try{

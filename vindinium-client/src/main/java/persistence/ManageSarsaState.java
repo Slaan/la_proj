@@ -104,5 +104,7 @@ public class ManageSarsaState {
                 manageSarsaStateAction.updateGStateActionforDiff(iterator.next(), oldIterator.next());
             }
         }
+        sarsaStateMap.clear();
+        oldsarsaStateMap.clear();
     }
 }

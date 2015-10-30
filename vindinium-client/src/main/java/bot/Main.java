@@ -48,8 +48,9 @@ public class Main extends Thread{
             SharedBuffer<String> slackBuffer= new SharedBuffer<>();
             List<SimpleBotRunner> runners = new ArrayList<>();
             SharedBuffer<GameLog> gameLogBuffer = new SharedBuffer<>();
+            ManageGameLog manageGameLog = new ManageGameLog(SessionBuilder.generateSessionFactory());
             for(int i = 0; i<Config.getNoOfThreads(); i++) {
-                runners.add(new SimpleBotRunner(slackBuffer, gameLogBuffer));
+                runners.add(new SimpleBotRunner(manageGameLog, slackBuffer, gameLogBuffer));
             }
 
             for(SimpleBotRunner runner: runners){

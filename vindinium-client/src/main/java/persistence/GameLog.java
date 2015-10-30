@@ -1,27 +1,32 @@
 package persistence;
 
+import javax.persistence.*;
+
 /**
  * Created by slaan on 26.10.15.
  */
+@Entity
+@Table(name = "GameLog")
 public class GameLog {
-
+    @Id @GeneratedValue
+    @Column(name = "gameID")
     public int gameID;
-
+    @Column(name = "win")
     public boolean win;
-
+    @Column(name = "rounds")
     public int rounds;
-
+    @Column(name = "tavern")
     public int tavern;
-
+    @Column(name = "mine")
     public int mine;
-
+    @Column(name = "deaths")
     public int deaths;
-
+    @Column(name = "kills")
     public int kills;
-
+    @Column(name = "blockedWay")
     public int blockedWay;
 
-    public GameLog(){
+    protected GameLog(){
         this.win = false;
         this.rounds = 0;
         this.tavern = 0;
