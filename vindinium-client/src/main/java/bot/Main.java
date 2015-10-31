@@ -50,11 +50,9 @@ public class Main extends Thread{
             List<SimpleBotRunner> runners = new ArrayList<>();
             SharedBuffer<GameLog> gameLogBuffer = new SharedBuffer<>();
             SessionFactory factory = SessionBuilder.generateSessionFactory();
-            ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(factory);
-            ManageSarsaState manageSarsaState = new ManageSarsaState(factory, manageSarsaStateAction);
             ManageGameLog manageGameLog = new ManageGameLog(factory);
             for(int i = 0; i<Config.getNoOfThreads(); i++) {
-                runners.add(new SimpleBotRunner(manageSarsaState, manageGameLog, slackBuffer, gameLogBuffer));
+                runners.add(new SimpleBotRunner(manageGameLog, slackBuffer, gameLogBuffer));
             }
 
             for(SimpleBotRunner runner: runners){

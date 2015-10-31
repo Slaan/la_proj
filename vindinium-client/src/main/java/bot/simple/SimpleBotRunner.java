@@ -39,16 +39,14 @@ public class SimpleBotRunner extends Thread {
     private final ManageGameLog manageGameLog;
     private final SharedBuffer<String> slackBuffer;
     private final SharedBuffer<GameLog> gameLogBuffer;
-    private ManageSarsaState manageSarsaState;
 
-    public SimpleBotRunner(ManageSarsaState manageSarsaState, ManageGameLog manageGameLog, SharedBuffer<String> slackBuffer, SharedBuffer<GameLog> gameLogBuffer) {
+    public SimpleBotRunner(ManageGameLog manageGameLog, SharedBuffer<String> slackBuffer, SharedBuffer<GameLog> gameLogBuffer) {
         this.apiKey = Config.getAPIKey();
         this.gameUrl = Config.getGameURL();
         this.user = Config.getName();
         this.manageGameLog = manageGameLog;
         this.slackBuffer = slackBuffer;
         this.gameLogBuffer = gameLogBuffer;
-        this.manageSarsaState = manageSarsaState;
     }
 
     @Override
@@ -59,7 +57,7 @@ public class SimpleBotRunner extends Thread {
         GameState gameState = null;
         SessionFactory factory = SessionBuilder.generateSessionFactory();
         ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(factory);
-        manageSarsaState = new ManageSarsaState(factory, manageSarsaStateAction);
+        ManageSarsaState manageSarsaState = new ManageSarsaState(factory, manageSarsaStateAction);
 
         while(!interrupted()) {
 
