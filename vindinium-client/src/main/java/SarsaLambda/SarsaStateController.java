@@ -39,7 +39,7 @@ public class SarsaStateController {
     }
     
     private SarsaState getGStateFromgStateId(int gStateId) {
-        return manageSarsaState.getSarsaState(gStateId);
+        return manageSarsaState.getSarsaStateOfId(gStateId);
     }
 
     public static String explainState(SarsaState state) {

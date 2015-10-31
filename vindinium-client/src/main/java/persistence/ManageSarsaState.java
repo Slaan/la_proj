@@ -27,13 +27,22 @@ public class ManageSarsaState {
     }
 
 
-    synchronized public SarsaState getSarsaState(Integer sarsaStateId){
-        SarsaState sarsaState = null;
+    synchronized public SarsaState getSarsaStateOfId(Integer sarsaStateId){
         // Object is already available.
         if(sarsaStateMap.containsKey(sarsaStateId)){
             return sarsaStateMap.get(sarsaStateId);
         }
 
+        // Create a new sarsaState.
+        SarsaState sarsaState = addSarsaState(sarsaStateId);
+
+        sarsaStateMap.put(sarsaStateId, sarsaState);
+        oldsarsaStateMap.put(sarsaStateId, sarsaState.copy());
+        return sarsaState;
+    }
+
+    public synchronized SarsaState getSarsaState(Integer sarsaStateId){
+        SarsaState sarsaState = null;
         Session session = factory.openSession();
         Transaction tx = null;
         try {
@@ -44,38 +53,33 @@ public class ManageSarsaState {
             e.printStackTrace();
         } finally {
             session.close();
+            return sarsaState;
         }
+    }
 
-        if (sarsaState == null) {
-            // Create a new sarsaState.
-            sarsaState = addSarsaState(sarsaStateId);
+    public synchronized SarsaState addSarsaState(Integer sarsaStateId){
+        SarsaState sarsaState = getSarsaState(sarsaStateId);
+        Session session = factory.openSession();
+        Transaction tx = null;
+        if(sarsaState == null) {
+            try {
+                tx = session.beginTransaction();
+                sarsaState = new SarsaState(sarsaStateId);
+                session.save(sarsaState);
+                tx.commit();
+            } catch (HibernateException e) {
+                if (tx != null) tx.rollback();
+                e.printStackTrace();
+            } finally {
+                session.close();
+            }
             for (BotMove botMove : BotMove.values()) {
                 manageSarsaStateAction.addSarsaStateAction(sarsaState, "", botMove, 0);
             }
-            sarsaState = getSarsaState(sarsaStateId);
-        }
+            sarsaState = getSarsaStateOfId(sarsaStateId);
 
-        sarsaStateMap.put(sarsaStateId, sarsaState);
-        oldsarsaStateMap.put(sarsaStateId, sarsaState.copy());
+        }
         return sarsaState;
-    }
-
-    private SarsaState addSarsaState(Integer sarsaStateId){
-        Session session = factory.openSession();
-        Transaction tx = null;
-        try{
-            tx = session.beginTransaction();
-            SarsaState sarsaState = new SarsaState(sarsaStateId);
-            session.save(sarsaState);
-            tx.commit();
-            return sarsaState;
-        }catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
-            e.printStackTrace();
-            return null;
-        }finally {
-            session.close();
-        }
     }
 
     private void updateSarsaState(SarsaState sarsaState){

@@ -39,7 +39,7 @@ public class SimpleBotRunner extends Thread {
     private final ManageGameLog manageGameLog;
     private final SharedBuffer<String> slackBuffer;
     private final SharedBuffer<GameLog> gameLogBuffer;
-    private final ManageSarsaState manageSarsaState;
+    private ManageSarsaState manageSarsaState;
 
     public SimpleBotRunner(ManageSarsaState manageSarsaState, ManageGameLog manageGameLog, SharedBuffer<String> slackBuffer, SharedBuffer<GameLog> gameLogBuffer) {
         this.apiKey = Config.getAPIKey();
@@ -57,7 +57,9 @@ public class SimpleBotRunner extends Thread {
         HttpRequest request;
         HttpResponse response;
         GameState gameState = null;
-
+        SessionFactory factory = SessionBuilder.generateSessionFactory();
+        ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(factory);
+        manageSarsaState = new ManageSarsaState(factory, manageSarsaStateAction);
 
         while(!interrupted()) {
 
