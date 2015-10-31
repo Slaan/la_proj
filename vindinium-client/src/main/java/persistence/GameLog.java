@@ -11,6 +11,8 @@ public class GameLog {
     @Id @GeneratedValue
     @Column(name = "gameID")
     public int gameID;
+    @Column(name = "gameURL")
+    private String gameURL;
     @Column(name = "win")
     public boolean win;
     @Column(name = "rounds")
@@ -27,6 +29,7 @@ public class GameLog {
     public int blockedWay;
 
     protected GameLog(){
+        this.gameURL ="";
         this.win = false;
         this.rounds = 0;
         this.tavern = 0;
@@ -43,6 +46,10 @@ public class GameLog {
     public void setGameID(int gameID) {
         this.gameID = gameID;
     }
+
+    public String getGameURL() { return gameURL; }
+
+    public void setGameURL(String gameURL){ this.gameURL = gameURL; }
 
     public boolean isWin() {
         return win;
@@ -68,6 +75,8 @@ public class GameLog {
         this.tavern = tavern;
     }
 
+    public void addTavern() { tavern++; }
+
     public int getMine() {
         return mine;
     }
@@ -75,6 +84,8 @@ public class GameLog {
     public void setMine(int mine) {
         this.mine = mine;
     }
+
+    public void addMine() { mine++; }
 
     public int getDeaths() {
         return deaths;
@@ -84,6 +95,8 @@ public class GameLog {
         this.deaths = deaths;
     }
 
+    public void addDeath() { deaths++; }
+
     public int getKills() {
         return kills;
     }
@@ -92,6 +105,8 @@ public class GameLog {
         this.kills = kills;
     }
 
+    public void addKill() { kills++; }
+
     public int getBlockedWay() {
         return blockedWay;
     }
@@ -99,4 +114,6 @@ public class GameLog {
     public void setBlockedWay(int blockedWay) {
         this.blockedWay = blockedWay;
     }
+
+    public void addBlockedWay() { blockedWay++; }
 }

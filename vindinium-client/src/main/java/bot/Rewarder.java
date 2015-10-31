@@ -1,11 +1,15 @@
 package bot;
 
 
+import bot.dto.GameState;
+import persistence.GameLog;
+
 /**
  * Created by octavian on 19.10.15.
  */
 public class Rewarder {
 
+    private final GameLog gameLog;
     private SimplifiedGState formerState;
     private SimplifiedGState currentState;
     private final int TURNREWARD = -1;
@@ -15,6 +19,10 @@ public class Rewarder {
     private final int MINEREWARD = 50;
     private final int BLOCKEDOBJREWARD = -10;
     private int reward=TURNREWARD;
+
+    public Rewarder(GameLog gameLog){
+        this.gameLog = gameLog;
+    }
 
     public int calculateReward(SimplifiedGState state) {
         if (formerState == null) {
@@ -27,18 +35,22 @@ public class Rewarder {
         currentState = state;
 
         if (checkForDeath()) {
+            gameLog.addDeath();
             calcDeathReward();
         }
 
         if (checkForTavern()) {
+            gameLog.addTavern();
             calcTavernReward();
         }
 
         if (checkForMine()) {
+            gameLog.addMine();
             calcMineReward();
         }
 
         if (checkForBlockedMove()) {
+            gameLog.addBlockedWay();
             calcBlockedReward();
         }
 

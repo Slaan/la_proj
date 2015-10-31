@@ -21,7 +21,7 @@ public class Bender {
         this.gameLog = gameLog;
         gameController = new GameController();
         sarsaStateController = new SarsaStateController(gameController, manageSarsaState);
-        rewarder = new Rewarder();
+        rewarder = new Rewarder(gameLog);
         sarsaLambda = new SarsaLambda();
     }
     /**

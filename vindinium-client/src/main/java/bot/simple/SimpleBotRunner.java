@@ -77,6 +77,7 @@ public class SimpleBotRunner extends Thread {
 
                 // URL console output.
                 logger.info("Game URL: {}", gameState.getViewUrl());
+                gameLog.setGameURL(gameState.getViewUrl());
 
                 // Game loop
                 while (!gameState.getGame().isFinished() && !gameState.getHero().isCrashed()) {
