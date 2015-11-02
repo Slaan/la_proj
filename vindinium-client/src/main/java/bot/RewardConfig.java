@@ -23,9 +23,21 @@ public class RewardConfig {
     static int killPerMine;
     static int killPerMineDiscount;
 
+    static int lowerLifeBoundry;
+    static int upperLifeboundry;
+    static int lowerMineBoundryTotal;
+    static int upperMineBoundryTotal;
+    static int lowerMineBoundryPercentage;
+    static int upperMineBoundryPercentage;
+    static int enemyLifeMore;
+    static int enemyLifeLess;
+    static int distantClose;
+    static int distantFar;
+
+
     public static void init() {
         Properties prop = new Properties();
-        String propFileName = "res/mainconfig.properties";
+        String propFileName = "res/mainConfig.properties";
 
         try {
             inputstream = new FileInputStream(propFileName);
@@ -96,5 +108,53 @@ public class RewardConfig {
 
     public static int getKillPerMineDiscount() {
         return killPerMineDiscount;
+    }
+
+    public static InputStream getInputstream() {
+        return inputstream;
+    }
+
+    public static int getTavernDefault() {
+        return tavernDefault;
+    }
+
+    public static int getLowerLifeBoundry() {
+        return lowerLifeBoundry;
+    }
+
+    public static int getUpperLifeboundry() {
+        return upperLifeboundry;
+    }
+
+    public static int getLowerMineBoundryTotal() {
+        return lowerMineBoundryTotal;
+    }
+
+    public static int getUpperMineBoundryTotal() {
+        return upperMineBoundryTotal;
+    }
+
+    public static int getLowerMineBoundryPercentage() {
+        return lowerMineBoundryPercentage;
+    }
+
+    public static int getUpperMineBoundryPercentage() {
+        return upperMineBoundryPercentage;
+    }
+
+    public static int getEnemyLifeMore() {
+        return enemyLifeMore;
+    }
+
+    public static int getEnemyLifeLess() {
+        return enemyLifeLess;
+    }
+
+    public static int getDistantClose() {
+        return distantClose;
+    }
+
+    public static int getDistantFar() {
+        return distantFar;
     }
 }

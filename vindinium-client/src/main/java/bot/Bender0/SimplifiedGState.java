@@ -15,8 +15,7 @@ public class SimplifiedGState implements ISimplifiedGState {
     private GameState.Position spawn;
     private GameState.Position currentPos;
 
-    public SimplifiedGState(GameState gameState) {
-
+    public SimplifiedGState() {
     }
 
     public void init(GameState gameState) {

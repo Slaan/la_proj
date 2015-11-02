@@ -1,5 +1,8 @@
 package bot.Bender;
 
+import bot.Bender1.SimpleHero;
+import bot.Bender1.SimpleMine;
+import bot.Bender1.SimpleTavern;
 import bot.dto.GameState;
 
 import java.util.ArrayList;
@@ -135,8 +138,23 @@ public class Map {
                 if (heroPosition.getX() < 1) { return TileType.BLOCKED; }
                 return currentMap[heroPosition.getX() - 1][heroPosition.getY()    ];
             default:
-                throw new RuntimeException("recieved a non supported direction.");
+                throw new RuntimeException("received a non supported direction.");
         }
+    }
+
+    public List<SimpleHero> getHeroes() {
+        //TODO
+        return null;
+    }
+
+    public SimpleTavern getClosestTavern() {
+        //TODO
+        return null;
+    }
+
+    public SimpleMine getClosestMine() {
+        //TODO
+        return null;
     }
 
     public TileType[][] getCurrentMap() {
