@@ -1,13 +1,16 @@
-package bot;
+package bot.Bender0;
 
 
-import bot.dto.GameState;
+import bot.DirectionType;
+import bot.IRewarder;
+import bot.Map;
+import bot.TileType;
 import persistence.GameLog;
 
 /**
  * Created by octavian on 19.10.15.
  */
-public class Rewarder {
+public class Rewarder implements IRewarder {
 
     private final GameLog gameLog;
     private SimplifiedGState formerState;
@@ -79,7 +82,7 @@ public class Rewarder {
         int x = formerState.getCurrentPos().getX();
         int y = formerState.getCurrentPos().getY();
         Map map = formerState.getMap();
-        if ((map.getTileFromDirection(formerState.getCurrentPos(),DirectionType.EAST))==TileType.TAVERN ||
+        if ((map.getTileFromDirection(formerState.getCurrentPos(), DirectionType.EAST))== TileType.TAVERN ||
                 (map.getTileFromDirection(formerState.getCurrentPos(),DirectionType.NORTH))==TileType.TAVERN ||
                 (map.getTileFromDirection(formerState.getCurrentPos(),DirectionType.WEST))==TileType.TAVERN ||
                 (map.getTileFromDirection(formerState.getCurrentPos(),DirectionType.SOUTH))==TileType.TAVERN) {

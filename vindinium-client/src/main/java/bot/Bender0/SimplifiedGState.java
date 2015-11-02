@@ -1,5 +1,6 @@
-package bot;
+package bot.Bender0;
 
+import bot.Map;
 import bot.dto.GameState;
 
 /**

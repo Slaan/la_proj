@@ -1,7 +1,6 @@
 package persistence;
 
-import SarsaLambda.SarsaStateController;
-import bot.BotMove;
+import bot.Bender0.SarsaStateController;
 
 import javax.persistence.*;
 import java.util.ArrayList;

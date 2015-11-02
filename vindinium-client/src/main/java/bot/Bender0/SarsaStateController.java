@@ -1,4 +1,4 @@
-package SarsaLambda;
+package bot.Bender0;
 
 import bot.*;
 import persistence.ManageSarsaState;

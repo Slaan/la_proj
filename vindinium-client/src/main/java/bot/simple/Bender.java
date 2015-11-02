@@ -2,6 +2,9 @@ package bot.simple;
 
 import SarsaLambda.*;
 import bot.*;
+import bot.Bender0.Rewarder;
+import bot.Bender0.SarsaStateController;
+import bot.Bender0.SimplifiedGState;
 import bot.dto.GameState;
 import persistence.*;
 
