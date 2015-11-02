@@ -1,12 +1,13 @@
 package bot.Bender0;
 
-import bot.Map;
+import bot.Bender.ISimplifiedGState;
+import bot.Bender.Map;
 import bot.dto.GameState;
 
 /**
  * Created by Daniel Hofmeister on 19.10.15.
  */
-public class SimplifiedGState {
+public class SimplifiedGState implements ISimplifiedGState {
 
     private int life;
     private int noOfOurMines;
@@ -15,6 +16,10 @@ public class SimplifiedGState {
     private GameState.Position currentPos;
 
     public SimplifiedGState(GameState gameState) {
+
+    }
+
+    public void init(GameState gameState) {
         map = new Map(gameState);
         life = gameState.getHero().getLife();
         noOfOurMines = gameState.getHero().getMineCount();

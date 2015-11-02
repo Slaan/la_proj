@@ -1,6 +1,6 @@
 package persistence;
 
-import bot.BotMove;
+import bot.Bender.BotMove;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

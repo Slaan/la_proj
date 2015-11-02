@@ -3,7 +3,6 @@ package SarsaLambda;
 import bot.Config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.Marker;
 import persistence.SarsaState;
 import persistence.SarsaStateAction;
 
@@ -46,7 +45,7 @@ public class SarsaLambda {
 
 
         SarsaStateAction currentSarsaStateAction = currentSarsaState.getGStateActionForExplorationRate(epsilon);
-        logger.debug("delta: " + reward +" "+ (gamma * currentSarsaStateAction.getQValue()) +" "+ lastSarsaStateAction.getQValue());
+        logger.debug("delta: " + reward + " " + (gamma * currentSarsaStateAction.getQValue()) + " " + lastSarsaStateAction.getQValue());
         sarsaQueue.updateGStateActions(reward + (gamma * currentSarsaStateAction.getQValue()) - lastSarsaStateAction
             .getQValue(),alpha,lambda);
 

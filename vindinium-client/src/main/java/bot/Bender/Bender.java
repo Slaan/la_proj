@@ -1,7 +1,7 @@
-package bot.simple;
+package bot.Bender;
 
 import SarsaLambda.*;
-import bot.*;
+import bot.Bender.BotMove;
 import bot.Bender0.Rewarder;
 import bot.Bender0.SarsaStateController;
 import bot.Bender0.SimplifiedGState;

@@ -1,6 +1,6 @@
 package bot;
 
-import bot.simple.BenderRunner;
+import bot.Bender.BenderRunner;
 import org.hibernate.SessionFactory;
 import persistence.*;
 

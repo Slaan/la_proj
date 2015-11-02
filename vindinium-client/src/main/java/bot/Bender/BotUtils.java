@@ -1,9 +1,6 @@
-package bot;
+package bot.Bender;
 
 import bot.dto.GameState;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class BotUtils {
 

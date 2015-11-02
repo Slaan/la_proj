@@ -1,6 +1,6 @@
 package persistence;
 
-import bot.BotMove;
+import bot.Bender.BotMove;
 
 import javax.persistence.*;
 

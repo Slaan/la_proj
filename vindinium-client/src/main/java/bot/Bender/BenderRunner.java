@@ -1,6 +1,5 @@
-package bot.simple;
+package bot.Bender;
 
-import bot.BotMove;
 import bot.Config;
 import bot.dto.ApiKey;
 import bot.dto.GameState;

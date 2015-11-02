@@ -1,4 +1,4 @@
-package bot;
+package bot.Bender;
 
 /**
  * Created by Daniel Hofmeister on 18.10.2015.

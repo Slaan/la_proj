@@ -1,4 +1,4 @@
-package bot;
+package bot.Bender;
 
 /**
  * This is the output of a SimpleBot.

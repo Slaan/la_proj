@@ -1,10 +1,10 @@
 package bot.Bender0;
 
 
-import bot.DirectionType;
-import bot.IRewarder;
-import bot.Map;
-import bot.TileType;
+import bot.Bender.DirectionType;
+import bot.Bender.IRewarder;
+import bot.Bender.Map;
+import bot.Bender.TileType;
 import persistence.GameLog;
 
 /**

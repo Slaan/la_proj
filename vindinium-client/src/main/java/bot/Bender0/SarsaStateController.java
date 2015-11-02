@@ -1,6 +1,8 @@
 package bot.Bender0;
 
-import bot.*;
+import bot.Bender.DirectionType;
+import bot.Bender.Map;
+import bot.Bender.TileType;
 import persistence.ManageSarsaState;
 import persistence.SarsaState;
 import bot.dto.GameState;

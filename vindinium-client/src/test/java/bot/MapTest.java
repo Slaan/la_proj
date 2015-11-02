@@ -1,11 +1,12 @@
 package bot;
 
+import bot.Bender.DirectionType;
+import bot.Bender.Map;
+import bot.Bender.TileType;
 import bot.dto.GameState;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
-import java.util.List;
 
 /**
  * Created by Daniel Hofmeister on 18.10.2015.

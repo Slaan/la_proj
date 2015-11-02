@@ -1,4 +1,4 @@
-package bot;
+package bot.Bender;
 
 import bot.Bender0.SimplifiedGState;
 
