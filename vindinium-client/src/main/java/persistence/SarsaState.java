@@ -1,5 +1,9 @@
 package persistence;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
 import bot.Bender0.SarsaStateController;
 
 import javax.persistence.*;
@@ -12,6 +16,11 @@ import java.util.List;
 @Entity
 @Table(name = "SarsaState")
 public class SarsaState {
+    private static final Logger logger = LogManager.getLogger(SarsaState.class);
+    private static final Marker markCurrent = MarkerManager.getMarker("STATE_CURRENT");
+    private static final Marker markAvailable = MarkerManager.getMarker("ACTION_AVAILABLE");
+    private static final Marker markChoose = MarkerManager.getMarker("ACTION_CHOOSE");
+
     @Id
     @Column(name = "gStateId")
     private int gStateId;
@@ -47,20 +56,20 @@ public class SarsaState {
     public SarsaStateAction getGStateActionForExplorationRate(double epsilon){
 
         // Uncomment me if you want to see the world learn.
-        System.out.println(this.toString());
+        logger.debug(markCurrent, this.toString());
         for (SarsaStateAction action : actions) {
-            System.out.println("A: " + action);
+            logger.debug(markAvailable, "Action available: " + action);
         }
 
         SarsaStateAction action;
         if((epsilon * 100) > (Math.random() * 100 + 1)){
-            System.out.println("A: I'm exploring.");
+            logger.debug(markChoose, "I'm exploring.");
             action = actions.get((int)Math.random() * actions.size());
         } else {
-            System.out.println("A: I'm getting best Action.");
+            logger.debug(markAvailable, "I'm getting best Action.");
             action = getBestGStateAction();
         }
-        System.out.println("A: using: " + action.toString());
+        logger.debug(markAvailable, "using: " + action.toString());
         return action;
     }
 
@@ -87,7 +96,6 @@ public class SarsaState {
     }
 
     @Override public String toString() {
-        //return this.getClass().getName() + "<" + super.toString() + ": " + gStateId + ">";
         return SarsaStateController.explainState(this);
     }
 }

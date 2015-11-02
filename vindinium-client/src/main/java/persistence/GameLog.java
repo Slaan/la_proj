@@ -10,23 +10,23 @@ import javax.persistence.*;
 public class GameLog {
     @Id @GeneratedValue
     @Column(name = "gameID")
-    public int gameID;
+    private int gameID;
     @Column(name = "gameURL")
     private String gameURL;
     @Column(name = "win")
-    public boolean win;
+    private boolean win;
     @Column(name = "rounds")
-    public int rounds;
+    private int rounds;
     @Column(name = "tavern")
-    public int tavern;
+    private int tavern;
     @Column(name = "mine")
-    public int mine;
+    private int mine;
     @Column(name = "deaths")
-    public int deaths;
+    private int deaths;
     @Column(name = "kills")
-    public int kills;
+    private int kills;
     @Column(name = "blockedWay")
-    public int blockedWay;
+    private int blockedWay;
 
     protected GameLog(){
         this.gameURL ="";

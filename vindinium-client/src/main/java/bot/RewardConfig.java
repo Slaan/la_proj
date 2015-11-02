@@ -45,6 +45,7 @@ public class RewardConfig {
 
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         } finally {
             if (inputstream!=null) {
                 try {

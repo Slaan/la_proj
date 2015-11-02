@@ -5,7 +5,6 @@ import bot.Config;
 import bot.dto.ApiKey;
 import bot.dto.GameState;
 import bot.dto.Move;
-import bot.dto.TurnApiKey;
 import com.google.api.client.http.*;
 import com.google.api.client.http.apache.ApacheHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -13,14 +12,12 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.gson.GsonFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.SessionFactory;
 import persistence.*;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.concurrent.Callable;
 
-public class SimpleBotRunner extends Thread {
+public class BenderRunner extends Thread {
     private static final HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
     private static final JsonFactory JSON_FACTORY = new GsonFactory();
     private static final HttpRequestFactory REQUEST_FACTORY =
@@ -30,7 +27,7 @@ public class SimpleBotRunner extends Thread {
                     request.setParser(new JsonObjectParser(JSON_FACTORY));
                 }
             });
-    private static final Logger logger = LogManager.getLogger(SimpleBotRunner.class);
+    private static final Logger logger = LogManager.getLogger(BenderRunner.class);
 
     private final ApiKey apiKey;
     private final GenericUrl gameUrl;
@@ -41,7 +38,8 @@ public class SimpleBotRunner extends Thread {
     private final SharedBuffer<GameLog> gameLogBuffer;
     private final ManageSarsaState manageSarsaState;
 
-    public SimpleBotRunner(ManageSarsaState manageSarsaState, ManageGameLog manageGameLog, SharedBuffer<String> slackBuffer, SharedBuffer<GameLog> gameLogBuffer) {
+    public BenderRunner(ManageSarsaState manageSarsaState, ManageGameLog manageGameLog,
+        SharedBuffer<String> slackBuffer, SharedBuffer<GameLog> gameLogBuffer) {
         this.apiKey = Config.getAPIKey();
         this.gameUrl = Config.getGameURL();
         this.user = Config.getName();
@@ -68,7 +66,7 @@ public class SimpleBotRunner extends Thread {
             try {
 
                 // Initial request
-                logger.info("Sending initial request...");
+                logger.debug("Sending initial request...");
                 content = new UrlEncodedContent(apiKey);
                 request = REQUEST_FACTORY.buildPostRequest(gameUrl, content);
                 request.setReadTimeout(0); // Wait forever to be assigned to a game
@@ -81,7 +79,7 @@ public class SimpleBotRunner extends Thread {
 
                 // Game loop
                 while (!gameState.getGame().isFinished() && !gameState.getHero().isCrashed()) {
-                    logger.info("Taking turn " + gameState.getGame().getTurn());
+                    logger.debug("Taking turn " + gameState.getGame().getTurn());
                     BotMove direction = bender.move(gameState);
                     Move move = new Move(apiKey.getKey(), direction.toString());
 
@@ -111,7 +109,7 @@ public class SimpleBotRunner extends Thread {
                         isWinner(gameState) ? "Gewonnen. War ja klar." : "Verloren, die anderen cheaten. Ganz klar!",
                         user);
                 content = new ByteArrayContent("application/x-www-form-urlencoded", msg.getBytes());
-                logger.info("Sending to Slack with URL: " + slackUrl);
+                logger.debug("Sending to Slack with URL: " + slackUrl);
                 request = REQUEST_FACTORY.buildPostRequest(slackUrl, content);
                 request.setReadTimeout(120000);
                 request.setConnectTimeout(120000);
@@ -124,7 +122,7 @@ public class SimpleBotRunner extends Thread {
             gameLogBuffer.addEntity(gameLog);
             manageSarsaState.updateSarsaStates();
             manageGameLog.addGameLog(gameLog);
-            logger.info("Game over");
+            logger.debug("Game over");
         }
     }
 

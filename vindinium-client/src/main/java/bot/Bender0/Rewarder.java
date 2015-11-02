@@ -61,14 +61,14 @@ public class Rewarder implements IRewarder {
         return reward;
     }
 
-    private boolean checkForDeath() {
+    public boolean checkForDeath() {
         return (formerState.getLife()<40 && currentState.getLife()>98 &&
                 currentState.getCurrentPos().equals(currentState.getSpawn()));
     }
 
     private void calcDeathReward() { reward += DEATHREWARDPERMINE*(formerState.getNoOfOurMines() + 1); }
 
-    private boolean checkForTavern() {
+    public boolean checkForTavern() {
         boolean result=false;
         int lifechange = currentState.getLife()-formerState.getLife();
         if (formerState.getCurrentPos().equals(currentState.getCurrentPos()) && tavernNear()
@@ -107,7 +107,7 @@ public class Rewarder implements IRewarder {
         reward += BLOCKEDOBJREWARD;
     }
 
-    private boolean checkForBlockedMove() {
+    public boolean checkForBlockedMove() {
         return ((!checkForTavern())&&(!checkForMine())&&(formerState.getCurrentPos().equals(currentState.getCurrentPos())));
     }
 }

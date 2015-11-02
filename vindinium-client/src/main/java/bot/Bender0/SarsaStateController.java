@@ -12,12 +12,10 @@ public class SarsaStateController {
 	private static final int DEFAULT_QVALUE = 0;
 	private static final int ID_SHIFT_TILE = 3;
 	private static final int ID_SHIFT_DIRECTION = 3;
-    private GameController gameController;
 
     private final ManageSarsaState manageSarsaState;
 
-    public SarsaStateController(GameController gameController, ManageSarsaState manageSarsaState) {
-        this.gameController = gameController;
+    public SarsaStateController(ManageSarsaState manageSarsaState) {
         this.manageSarsaState = manageSarsaState;
     }
 
@@ -25,8 +23,7 @@ public class SarsaStateController {
      * Gets the GState that is representing the active state of the game.
      * @return
      */
-    public SarsaState getActiveGState() {
-        GameState gs = gameController.getActiveGameState();
+    public SarsaState getSarsaState(GameState gs) {
         Map map = new Map(gs);
         Integer gStateId = generateGStateId(gs, map);
         

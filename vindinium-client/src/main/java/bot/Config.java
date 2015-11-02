@@ -3,6 +3,8 @@ package bot;
 import bot.dto.ApiKey;
 import bot.dto.TurnApiKey;
 import com.google.api.client.http.GenericUrl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.util.Properties;
  * Created by slaan on 26.10.15.
  */
 public class Config {
+    private static final Logger logger = LogManager.getLogger(Config.class);
 
     static String name;
     static int NoOfRounds;
@@ -67,6 +70,7 @@ public class Config {
 
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         } finally {
             if (inputstream!=null) {
                 try {

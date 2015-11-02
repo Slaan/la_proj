@@ -14,7 +14,6 @@ import persistence.*;
 public class Bender {
 
     SarsaLambda sarsaLambda;
-    GameController gameController;
     SarsaStateController sarsaStateController;
     Rewarder rewarder;
 
@@ -22,9 +21,8 @@ public class Bender {
 
     public Bender(ManageSarsaState manageSarsaState, GameLog gameLog){
         this.gameLog = gameLog;
-        gameController = new GameController();
-        sarsaStateController = new SarsaStateController(gameController, manageSarsaState);
         rewarder = new Rewarder(gameLog);
+        sarsaStateController = new SarsaStateController(manageSarsaState);
         sarsaLambda = new SarsaLambda();
     }
     /**
@@ -34,8 +32,7 @@ public class Bender {
      * @return the decided move
      */
     public BotMove move(GameState gameState) {
-        gameController.setActiveGameState(gameState);
-        SarsaState state = sarsaStateController.getActiveGState();
+        SarsaState state = sarsaStateController.getSarsaState(gameState);
         SimplifiedGState simplifiedGState = new SimplifiedGState(gameState);
         SarsaStateAction action = sarsaLambda.sarsaStep(state,
             rewarder.calculateReward(simplifiedGState));
