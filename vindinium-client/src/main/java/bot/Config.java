@@ -31,7 +31,6 @@ public class Config {
     static Double DiscountFactor;
     static Double Lamda;
     static int QueueLength;
-    static InputStream inputstream=null;
 
     private final static String TRAINING_URL = "http://vindinium.org/api/training";
     private final static String COMPETITION_URL = "http://vindinium.org/api/arena";
@@ -42,6 +41,8 @@ public class Config {
         Properties prop = new Properties();
         String propFileName = "res/mainconfig.properties";
 
+        InputStream inputstream = null;
+
         try {
             inputstream = new FileInputStream(propFileName);
 
@@ -49,6 +50,10 @@ public class Config {
 
             name = prop.getProperty("name");
             NoOfRounds = Integer.parseInt(prop.getProperty("rounds"));
+            if (NoOfRounds > 600) {
+                logger.warn("rounds is greater than 600 (" + NoOfRounds + ") it will be set to 600.");
+                NoOfRounds = 600;
+            }
             NoOfThreads = Integer.parseInt(prop.getProperty("threads"));
             SlackURL = new GenericUrl(prop.getProperty("slackurl"));
             DBUser = prop.getProperty("dbuser");

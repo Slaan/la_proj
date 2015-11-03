@@ -33,17 +33,14 @@ public class BenderRunner extends Thread {
     private final String user;
 
     private final ManageGameLog manageGameLog;
-    private final SharedBuffer<String> slackBuffer;
     private final SharedBuffer<GameLog> gameLogBuffer;
     private final ManageSarsaState manageSarsaState;
 
-    public BenderRunner(ManageSarsaState manageSarsaState, ManageGameLog manageGameLog,
-        SharedBuffer<String> slackBuffer, SharedBuffer<GameLog> gameLogBuffer) {
+    public BenderRunner(ManageSarsaState manageSarsaState, ManageGameLog manageGameLog, SharedBuffer<GameLog> gameLogBuffer) {
         this.apiKey = Config.getAPIKey();
         this.gameUrl = Config.getGameURL();
         this.user = Config.getName();
         this.manageGameLog = manageGameLog;
-        this.slackBuffer = slackBuffer;
         this.gameLogBuffer = gameLogBuffer;
         this.manageSarsaState = manageSarsaState;
     }
@@ -88,14 +85,8 @@ public class BenderRunner extends Thread {
                     HttpResponse turnResponse = turnRequest.execute();
 
                     gameState = turnResponse.parseAs(GameState.class);
+                    gameLog.addRound();
                 }
-                String url = URLEncoder.encode(gameState.getViewUrl(), "UTF-8");
-                String msg = String.format(
-                        "payload={\"text\": \"<%s> - %s (gestartet von: %s)\"}",
-                        url,
-                        isWinner(gameState) ? "Gewonnen. War ja klar." : "Verloren, die anderen cheaten. Ganz klar!",
-                        user);
-                slackBuffer.addEntity(msg);
             } catch (IOException e) {
                 logger.error("Error during game play", e);
             }

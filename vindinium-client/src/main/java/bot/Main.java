@@ -25,17 +25,18 @@ public class Main extends Thread{
     @Override
     public void run(){
         try {
-            SharedBuffer<String> slackBuffer= new SharedBuffer<>();
             List<BenderRunner> runners = new ArrayList<>();
             SharedBuffer<GameLog> gameLogBuffer = new SharedBuffer<>();
+            SlackThread slackThread = new SlackThread(gameLogBuffer);
             SessionFactory factory = SessionBuilder.generateSessionFactory();
             ManageGameLog manageGameLog = new ManageGameLog(factory);
             ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(factory);
             ManageSarsaState manageSarsaState = new ManageSarsaState(factory, manageSarsaStateAction);
             for(int i = 0; i<Config.getNoOfThreads(); i++) {
-                runners.add(new BenderRunner(manageSarsaState, manageGameLog, slackBuffer, gameLogBuffer));
+                runners.add(new BenderRunner(manageSarsaState, manageGameLog, gameLogBuffer));
             }
 
+            slackThread.start();
             for(BenderRunner runner: runners){
                 runner.start();
                 sleep(1250);
@@ -53,7 +54,10 @@ public class Main extends Thread{
             for(BenderRunner runner: runners){
                 runner.join();
             }
+            slackThread.interrupt();
+            slackThread.join();
 
+            System.out.println("Ihr habt Bender getötet, ihr Schweine!");
         } catch (Exception e) {
             e.printStackTrace();
         }

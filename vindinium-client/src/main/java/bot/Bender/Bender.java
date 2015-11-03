@@ -33,7 +33,8 @@ public class Bender {
      */
     public BotMove move(GameState gameState) {
         SarsaState state = sarsaStateController.getSarsaState(gameState);
-        SimplifiedGState simplifiedGState = new SimplifiedGState(gameState);
+        SimplifiedGState simplifiedGState = new SimplifiedGState();
+        simplifiedGState.init(gameState);
         SarsaStateAction action = sarsaLambda.sarsaStep(state,
             rewarder.calculateReward(simplifiedGState));
         return action.getAction();

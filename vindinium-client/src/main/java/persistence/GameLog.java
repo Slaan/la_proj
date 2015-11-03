@@ -67,6 +67,8 @@ public class GameLog {
         this.rounds = rounds;
     }
 
+    public void addRound() { this.rounds++; }
+
     public int getTavern() {
         return tavern;
     }

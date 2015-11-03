@@ -1,6 +1,7 @@
 package persistence;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -36,6 +37,17 @@ public class SharedBuffer<E> {
         E entity = buffer.get(0);
         buffer.remove(0);
         return entity;
+    }
+
+    /**
+     * Retrieves all Entitys in the Buffer
+     * @return List
+     * @throws InterruptedException
+     */
+    public synchronized List<E> getEntities() {
+        List<E> entitys = new ArrayList<>(buffer);
+        buffer.clear();
+        return entitys;
     }
 
     /**
