@@ -32,13 +32,13 @@ public class ManageSarsaStateAction {
         return sarsaStateAction;
     }
 
-    protected synchronized Integer addSarsaStateAction(SarsaState sarsaState, String description, BotMove action, double qValue){
+    protected synchronized Integer addSarsaStateAction(SarsaState sarsaState, String description, BotMove action){
         Session session = factory.openSession();
         Transaction tx = null;
         Integer sarsaStateActionID = null;
         try{
             tx = session.beginTransaction();
-            SarsaStateAction gStateAction = new SarsaStateAction(sarsaState, description, action, qValue);
+            SarsaStateAction gStateAction = new SarsaStateAction(sarsaState, description, action);
             sarsaStateActionID = (Integer) session.save(gStateAction);
             tx.commit();
         }catch (HibernateException e) {
@@ -73,6 +73,7 @@ public class ManageSarsaStateAction {
             tx = session.beginTransaction();
             momentanSarsaStateAction = (SarsaStateAction)session.get(SarsaStateAction.class, sarsaStateAction.getSarsaStateActionID());
             momentanSarsaStateAction.updateQValue(sarsaStateAction.getQValue()-oldSarsaStateAction.getQValue());
+            momentanSarsaStateAction.updateUsed((sarsaStateAction.getUsed()-oldSarsaStateAction.getUsed()));
             session.update(momentanSarsaStateAction);
             tx.commit();
         }catch (HibernateException e) {

@@ -22,13 +22,16 @@ public class SarsaStateAction {
     private BotMove action;
     @Column(name = "qValue")
     private double qValue;
+    @Column(name = "used")
+    private int used;
 
     private SarsaStateAction(){}
-    protected SarsaStateAction(SarsaState state, String description, BotMove action, double qValue){
+    protected SarsaStateAction(SarsaState state, String description, BotMove action){
         this.state = state;
         this.description = description;
         this.action = action;
-        this.qValue = qValue;
+        this.qValue = 0;
+        this.used = 0;
     }
 
     public int getSarsaStateActionID() {
@@ -44,6 +47,7 @@ public class SarsaStateAction {
     public double getQValue(){
         return qValue;
     }
+    public int getUsed() { return used; }
 
     public void setSarsaStateActionID(int sarsaStateActionID) {
         this.sarsaStateActionID = sarsaStateActionID;
@@ -60,6 +64,7 @@ public class SarsaStateAction {
     public void setqValue(double qValue) {
         this.qValue = qValue;
     }
+    public void setUsed(int used) {this.used = used; }
 
     public SarsaStateAction copy(SarsaState newSarsaState){
         SarsaStateAction newSarsaStateAction = new SarsaStateAction();
@@ -68,10 +73,14 @@ public class SarsaStateAction {
         newSarsaStateAction.setDescription(description);
         newSarsaStateAction.setAction(action);
         newSarsaStateAction.setqValue(qValue);
+        newSarsaStateAction.setUsed(used);
         return newSarsaStateAction;
     }
 
     public void updateQValue(double additionQValue){ qValue += additionQValue; }
+
+    public void addUse() { used++; }
+    public void updateUsed(int additonUsed) { used += additonUsed; }
 
     @Override public String toString() {
         return this.getClass().getName() + "<Feld ist:\"" + description + "\" - " + action.toString() + ": " + qValue + ">";

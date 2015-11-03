@@ -70,6 +70,7 @@ public class SarsaState {
             action = getBestGStateAction();
         }
         logger.debug(markAvailable, "using: " + action.toString());
+        action.addUse();
         return action;
     }
 

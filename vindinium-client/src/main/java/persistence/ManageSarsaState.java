@@ -74,7 +74,7 @@ public class ManageSarsaState {
                 session.close();
             }
             for (BotMove botMove : BotMove.values()) {
-                manageSarsaStateAction.addSarsaStateAction(sarsaState, "", botMove, 0);
+                manageSarsaStateAction.addSarsaStateAction(sarsaState, "", botMove);
             }
             sarsaState = getSarsaStateOfId(sarsaStateId);
 
