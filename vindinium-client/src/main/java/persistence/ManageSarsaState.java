@@ -1,6 +1,7 @@
 package persistence;
 
 import bot.Bender.BotMove;
+import bot.Bender0.SimplifiedGState;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -27,14 +28,19 @@ public class ManageSarsaState {
     }
 
 
-    synchronized public SarsaState getSarsaStateOfId(Integer sarsaStateId){
+    synchronized public SarsaState getSarsaStateOfId(SimplifiedGState simplifiedGState){
+        int sarsaStateId = simplifiedGState.generateGStateId();
         // Object is already available.
         if(sarsaStateMap.containsKey(sarsaStateId)){
             return sarsaStateMap.get(sarsaStateId);
         }
 
-        // Create a new sarsaState.
-        SarsaState sarsaState = addSarsaState(sarsaStateId);
+        // Get a sarsaState.
+        SarsaState sarsaState = getSarsaState(sarsaStateId);
+
+        if(sarsaState == null){
+            sarsaState = addSarsaState(simplifiedGState);
+        }
 
         sarsaStateMap.put(sarsaStateId, sarsaState);
         oldsarsaStateMap.put(sarsaStateId, sarsaState.copy());
@@ -57,27 +63,24 @@ public class ManageSarsaState {
         }
     }
 
-    public synchronized SarsaState addSarsaState(Integer sarsaStateId){
-        SarsaState sarsaState = getSarsaState(sarsaStateId);
+    public synchronized SarsaState addSarsaState(SimplifiedGState simplifiedGState){
+        int sarsaStateId = simplifiedGState.generateGStateId();
+        SarsaState sarsaState = null;
         Session session = factory.openSession();
         Transaction tx = null;
-        if(sarsaState == null) {
-            try {
-                tx = session.beginTransaction();
-                sarsaState = new SarsaState(sarsaStateId);
-                session.save(sarsaState);
-                tx.commit();
-            } catch (HibernateException e) {
-                if (tx != null) tx.rollback();
-                e.printStackTrace();
-            } finally {
-                session.close();
-            }
+        try {
+            tx = session.beginTransaction();
+            sarsaState = new SarsaState(sarsaStateId);
+            session.save(sarsaState);
+            tx.commit();
             for (BotMove botMove : BotMove.values()) {
                 manageSarsaStateAction.addSarsaStateAction(sarsaState, "", botMove);
             }
-            sarsaState = getSarsaStateOfId(sarsaStateId);
-
+        } catch (HibernateException e) {
+            if (tx != null) tx.rollback();
+        } finally {
+            sarsaState = getSarsaState(sarsaStateId);
+            session.close();
         }
         return sarsaState;
     }

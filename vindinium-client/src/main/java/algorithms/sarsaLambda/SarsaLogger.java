@@ -1,4 +1,4 @@
-package SarsaLambda;
+package algorithms.sarsaLambda;
 
 import persistence.SarsaState;
 import persistence.SarsaStateAction;

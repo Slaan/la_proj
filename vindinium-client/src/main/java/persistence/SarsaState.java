@@ -1,10 +1,10 @@
 package persistence;
 
+import bot.Bender0.SimplifiedGState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
-import bot.Bender0.SarsaStateController;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -97,6 +97,6 @@ public class SarsaState {
     }
 
     @Override public String toString() {
-        return SarsaStateController.explainState(this);
+        return SimplifiedGState.explainState(this);
     }
 }

@@ -1,4 +1,4 @@
-package SarsaLambda;
+package algorithms.sarsaLambda;
 
 import bot.Config;
 import org.apache.logging.log4j.LogManager;
