@@ -24,7 +24,8 @@ public class SessionBuilder {
                     addAnnotatedClass(SarsaState.class).
                     addAnnotatedClass(SarsaStateAction.class).
                     addAnnotatedClass(GameLog.class).
-                    buildSessionFactory();
+                    addAnnotatedClass(SarsaStateActionLog.class).
+            buildSessionFactory();
         }catch (Throwable ex) {
             System.err.println("Failed to create sessionFactory object." + ex);
             throw new ExceptionInInitializerError(ex);

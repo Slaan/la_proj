@@ -1,5 +1,7 @@
 package algorithms.sarsaLambda;
 
+import bot.Config;
+import persistence.ManageSarsaStateAction;
 import persistence.SarsaStateAction;
 
 import java.util.LinkedList;
@@ -11,9 +13,11 @@ import java.util.Queue;
 public class SarsaQueue {
     private Queue<SarsaStateAction> sarsaStateActionsQueue;
     private int queueLength;
+    private ManageSarsaStateAction manageSarsaStateAction;
 
-    public SarsaQueue(int queueLength){
-        this.queueLength = queueLength;
+    public SarsaQueue(ManageSarsaStateAction manageSarsaStateAction){
+        this.queueLength = Config.getQueueLenght();
+        this.manageSarsaStateAction = manageSarsaStateAction;
         sarsaStateActionsQueue = new LinkedList<>();
     }
 
@@ -28,6 +32,7 @@ public class SarsaQueue {
         int pos = sarsaStateActionsQueue.size()-1;
         for(SarsaStateAction sarsaStateAction : sarsaStateActionsQueue){
             sarsaStateAction.updateQValue(delta * alpha * Math.pow(lambda,pos));
+            manageSarsaStateAction.updateGStateAction(sarsaStateAction);
             pos--;
         }
     }

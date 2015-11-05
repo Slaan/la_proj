@@ -48,9 +48,8 @@ public class Main extends Thread{
             }
 
             for(BenderRunner runner: runners){
-                runner.interrupt();
+                runner.end();
             }
-
             for(BenderRunner runner: runners){
                 runner.join();
             }

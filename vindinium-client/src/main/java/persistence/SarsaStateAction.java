@@ -66,20 +66,9 @@ public class SarsaStateAction {
     }
     public void setUsed(int used) {this.used = used; }
 
-    public SarsaStateAction copy(SarsaState newSarsaState){
-        SarsaStateAction newSarsaStateAction = new SarsaStateAction();
-        newSarsaStateAction.setSarsaStateActionID(sarsaStateActionID);
-        newSarsaStateAction.setState(newSarsaState);
-        newSarsaStateAction.setDescription(description);
-        newSarsaStateAction.setAction(action);
-        newSarsaStateAction.setqValue(qValue);
-        newSarsaStateAction.setUsed(used);
-        return newSarsaStateAction;
-    }
+    public synchronized void updateQValue(double additionQValue){ qValue += additionQValue; }
 
-    public void updateQValue(double additionQValue){ qValue += additionQValue; }
-
-    public void addUse() { used++; }
+    public synchronized void addUse() { used++; }
     public void updateUsed(int additonUsed) { used += additonUsed; }
 
     @Override public String toString() {

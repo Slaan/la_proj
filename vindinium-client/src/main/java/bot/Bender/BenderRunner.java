@@ -36,6 +36,8 @@ public class BenderRunner extends Thread {
     private final SharedBuffer<GameLog> gameLogBuffer;
     private final ManageSarsaState manageSarsaState;
 
+    private boolean run = true;
+
     public BenderRunner(ManageSarsaState manageSarsaState, ManageGameLog manageGameLog, SharedBuffer<GameLog> gameLogBuffer) {
         this.apiKey = Config.getAPIKey();
         this.gameUrl = Config.getGameURL();
@@ -45,6 +47,8 @@ public class BenderRunner extends Thread {
         this.manageSarsaState = manageSarsaState;
     }
 
+    public void end() { run = false; }
+
     @Override
     public void run() {
         HttpContent content;
@@ -52,7 +56,7 @@ public class BenderRunner extends Thread {
         HttpResponse response;
         GameState gameState = null;
 
-        while(!interrupted()) {
+        while(run) {
 
 
             GameLog gameLog = manageGameLog.getGameLog();
@@ -110,7 +114,7 @@ public class BenderRunner extends Thread {
 
             gameLog.setWin(isWinner(gameState));
             gameLogBuffer.addEntity(gameLog);
-            manageSarsaState.updateSarsaStates();
+            //manageSarsaState.updateSarsaStates();
             manageGameLog.addGameLog(gameLog);
             logger.debug("Game over");
         }

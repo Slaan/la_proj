@@ -84,18 +84,6 @@ public class SarsaState {
         return best;
     }
 
-    protected SarsaState copy(){
-        SarsaState newSarsaState = new SarsaState();
-        newSarsaState.setgStateId(gStateId);
-        List<SarsaStateAction> newActions = new ArrayList<>();
-
-        for (SarsaStateAction action: actions){
-            newActions.add(action.copy(newSarsaState));
-        }
-        newSarsaState.setActions(newActions);
-        return newSarsaState;
-    }
-
     @Override public String toString() {
         return SimplifiedGState.explainState(this);
     }

@@ -16,22 +16,6 @@ public class ManageSarsaStateAction {
         this.factory = factory;
     }
 
-    public synchronized SarsaStateAction getGStateAction(Integer gStateId){
-        Session session = factory.openSession();
-        Transaction tx = null;
-        SarsaStateAction sarsaStateAction = null;
-        try{
-            tx = session.beginTransaction();
-            sarsaStateAction = (SarsaStateAction)session.get(SarsaStateAction.class, gStateId);
-        }catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
-            e.printStackTrace();
-        }finally {
-            session.close();
-        }
-        return sarsaStateAction;
-    }
-
     protected synchronized Integer addSarsaStateAction(SarsaState sarsaState, String description, BotMove action){
         Session session = factory.openSession();
         Transaction tx = null;
@@ -50,12 +34,21 @@ public class ManageSarsaStateAction {
         return sarsaStateActionID;
     }
 
-    protected synchronized void updateGStateAction(SarsaStateAction sarsaStateAction){
+    protected synchronized void addSarsaStateActionInSession(Session session, SarsaState sarsaState, String description, BotMove action){
+        SarsaStateAction sarsaStateAction = new SarsaStateAction(sarsaState, description, action);
+
+        SarsaStateActionLog sarsaStateActionLog = new SarsaStateActionLog(sarsaStateAction);
+        sarsaStateActionLog.setSarsaStateActionID((Integer) session.save(sarsaStateAction));
+        session.save(sarsaStateActionLog);
+    }
+
+    public synchronized void updateGStateAction(SarsaStateAction sarsaStateAction){
         Session session = factory.openSession();
         Transaction tx = null;
         try{
             tx = session.beginTransaction();
             session.update(sarsaStateAction);
+            session.save(new SarsaStateActionLog(sarsaStateAction));
             tx.commit();
         }catch (HibernateException e) {
             if (tx!=null) tx.rollback();
@@ -63,25 +56,5 @@ public class ManageSarsaStateAction {
         }finally {
             session.close();
         }
-    }
-
-    public synchronized SarsaStateAction updateGStateActionforDiff(SarsaStateAction sarsaStateAction, SarsaStateAction oldSarsaStateAction){
-        Session session = factory.openSession();
-        Transaction tx = null;
-        SarsaStateAction momentanSarsaStateAction = null;
-        try{
-            tx = session.beginTransaction();
-            momentanSarsaStateAction = (SarsaStateAction)session.get(SarsaStateAction.class, sarsaStateAction.getSarsaStateActionID());
-            momentanSarsaStateAction.updateQValue(sarsaStateAction.getQValue()-oldSarsaStateAction.getQValue());
-            momentanSarsaStateAction.updateUsed((sarsaStateAction.getUsed()-oldSarsaStateAction.getUsed()));
-            session.update(momentanSarsaStateAction);
-            tx.commit();
-        }catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
-            e.printStackTrace();
-        }finally {
-            session.close();
-        }
-        return momentanSarsaStateAction;
     }
 }

@@ -20,7 +20,7 @@ public class Bender {
         this.manageSarsaState = manageSarsaState;
         this.gameLog = gameLog;
         rewarder = new Rewarder(gameLog);
-        sarsaLambda = new SarsaLambda();
+        sarsaLambda = new SarsaLambda(manageSarsaState.getManageSarsaStateAction());
     }
     /**
      * Method that plays each move

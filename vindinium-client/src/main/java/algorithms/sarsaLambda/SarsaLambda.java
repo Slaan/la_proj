@@ -3,6 +3,7 @@ package algorithms.sarsaLambda;
 import bot.Config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import persistence.ManageSarsaStateAction;
 import persistence.SarsaState;
 import persistence.SarsaStateAction;
 
@@ -21,12 +22,12 @@ public class SarsaLambda {
 
     private SarsaQueue sarsaQueue;
 
-    public SarsaLambda(){
+    public SarsaLambda(ManageSarsaStateAction manageSarsaStateAction){
         this.alpha = Config.getLearningRate();
         this.epsilon = Config.getExplorationRate();
         this.gamma = Config.getDiscountFactor();
         this.lambda = Config.getLambda();
-        this.sarsaQueue = new SarsaQueue(Config.getQueueLenght());
+        this.sarsaQueue = new SarsaQueue(manageSarsaStateAction);
     }
 
     public SarsaStateAction sarsaInit(SarsaState currentSarsaState){
