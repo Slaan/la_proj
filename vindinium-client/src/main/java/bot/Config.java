@@ -31,6 +31,7 @@ public class Config {
     static Double DiscountFactor;
     static Double Lamda;
     static int QueueLength;
+    static boolean sarsaStateActionLogs;
 
     private final static String TRAINING_URL = "http://vindinium.org/api/training";
     private final static String COMPETITION_URL = "http://vindinium.org/api/arena";
@@ -72,6 +73,8 @@ public class Config {
             DiscountFactor = Double.parseDouble(prop.getProperty("discountfactor"));
             Lamda = Double.parseDouble(prop.getProperty("lamda"));
             QueueLength = Integer.parseInt(prop.getProperty("queuelength"));
+            sarsaStateActionLogs = Boolean.parseBoolean(prop.getProperty("sarsaStateActionLogs"));
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,4 +119,5 @@ public class Config {
 
     public static int getQueueLenght() {return QueueLength;}
 
+    public static boolean getSarsaStateActionLogs() { return sarsaStateActionLogs; }
 }

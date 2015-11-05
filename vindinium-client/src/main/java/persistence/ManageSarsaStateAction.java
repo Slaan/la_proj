@@ -11,9 +11,11 @@ import org.hibernate.Transaction;
  */
 public class ManageSarsaStateAction {
     private static SessionFactory factory;
+    private ManageSarsaStateActionLog manageSarsaStateActionLog;
 
-    public ManageSarsaStateAction(SessionFactory factory){
+    public ManageSarsaStateAction(SessionFactory factory, ManageSarsaStateActionLog manageSarsaStateActionLog){
         this.factory = factory;
+        this.manageSarsaStateActionLog = manageSarsaStateActionLog;
     }
 
     protected synchronized Integer addSarsaStateAction(SarsaState sarsaState, String description, BotMove action){
@@ -37,9 +39,9 @@ public class ManageSarsaStateAction {
     protected synchronized void addSarsaStateActionInSession(Session session, SarsaState sarsaState, String description, BotMove action){
         SarsaStateAction sarsaStateAction = new SarsaStateAction(sarsaState, description, action);
 
-        SarsaStateActionLog sarsaStateActionLog = new SarsaStateActionLog(sarsaStateAction);
-        sarsaStateActionLog.setSarsaStateActionID((Integer) session.save(sarsaStateAction));
-        session.save(sarsaStateActionLog);
+        Integer sarsaStateActionId = (Integer) session.save(sarsaStateAction);
+        sarsaStateAction.setSarsaStateActionID(sarsaStateActionId);
+        manageSarsaStateActionLog.addSarsaStateActionLogInSession(session, sarsaStateAction);
     }
 
     public synchronized void updateGStateAction(SarsaStateAction sarsaStateAction){
@@ -48,7 +50,7 @@ public class ManageSarsaStateAction {
         try{
             tx = session.beginTransaction();
             session.update(sarsaStateAction);
-            session.save(new SarsaStateActionLog(sarsaStateAction));
+            manageSarsaStateActionLog.addSarsaStateActionLogInSession(session, sarsaStateAction);
             tx.commit();
         }catch (HibernateException e) {
             if (tx!=null) tx.rollback();
