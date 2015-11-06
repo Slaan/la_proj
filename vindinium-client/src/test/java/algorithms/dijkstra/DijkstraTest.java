@@ -3,9 +3,13 @@ package algorithms.dijkstra;
 import bot.Bender.DirectionType;
 import bot.Bender.Map;
 import bot.Bender.TileType;
+import bot.Bender1.SimpleMine;
+import bot.Bender1.SimpleTavern;
 import bot.dto.GameState;
 import junit.framework.TestCase;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -39,7 +43,11 @@ public class DijkstraTest{
         GameState gs = new GameState(game, hero, "", "", "");
 
         Map map = new Map(gs);
-        Dijkstra dijkstra = new Dijkstra(map);
-        dijkstra.runDijkstraFrom(pos);
+        Dijkstra dijkstra = new Dijkstra(map, pos);
+        dijkstra.runDijkstraFrom();
+
+        SimpleMine simpleMine = new SimpleMine(DirectionType.WEST, 1);
+        assertEquals(simpleMine.getDirection(), dijkstra.getNearestMine().getDirection());
+        assertEquals(simpleMine.getDistance(), dijkstra.getNearestMine().getDistance());
     }
 }

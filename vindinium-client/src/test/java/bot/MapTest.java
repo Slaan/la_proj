@@ -127,4 +127,22 @@ public class MapTest {
         assertEquals(DirectionType.WEST,map.getNearestMineDirection());
         assertEquals(DirectionType.NORTH,map.getNearestTavernDirection());
     }
+
+    @Test
+    public void getPositionFromDirection() {
+        Map map = new Map(gameState);
+        GameState.Position position = new GameState.Position(1,1);
+        GameState.Position otherPosition = map.getPositionFromDirection(position, DirectionType.NORTH);
+        DirectionType directionType = DirectionType.fromPositions(position, otherPosition);
+        assertEquals(directionType, DirectionType.NORTH);
+        otherPosition = map.getPositionFromDirection(position, DirectionType.SOUTH);
+        directionType = DirectionType.fromPositions(position, otherPosition);
+        assertEquals(directionType, DirectionType.SOUTH);
+        otherPosition = map.getPositionFromDirection(position, DirectionType.EAST);
+        directionType = DirectionType.fromPositions(position, otherPosition);
+        assertEquals(directionType, DirectionType.EAST);
+        otherPosition = map.getPositionFromDirection(position, DirectionType.WEST);
+        directionType = DirectionType.fromPositions(position, otherPosition);
+        assertEquals(directionType, DirectionType.WEST);
+    }
 }

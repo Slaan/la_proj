@@ -1,5 +1,6 @@
 package bot.Bender1;
 
+import algorithms.dijkstra.Dijkstra;
 import bot.Bender.ISimplifiedGState;
 import bot.Bender.Map;
 import bot.RewardConfig;
@@ -16,6 +17,7 @@ public class SimplifiedGState1 implements ISimplifiedGState {
     private SimpleMine closestMine;
     private SimpleTavern closestTavern;
     private Map map;
+    private Dijkstra dijkstra;
     private GameState.Position spawn;
     private GameState.Position currentPos;
 
@@ -27,11 +29,14 @@ public class SimplifiedGState1 implements ISimplifiedGState {
         spawn = gameState.getHero().getSpawnPos();
         currentPos = gameState.getHero().getPos();
 
+        dijkstra = new Dijkstra(map, spawn);
+        dijkstra.runDijkstra();
+
         life = calcLife(gameState.getHero().getLife());
         noOfOurMines = calcNoOfMines(gameState.getHero().getMineCount());
-        closestHero = map.getHeroes().get(0);
-        closestMine = map.getClosestMine();
-        closestTavern = map.getClosestTavern();
+        closestHero = null;
+        closestMine = dijkstra.getNearestMine();
+        closestTavern = dijkstra.getNearestTavern();
     }
 
     private Quantity calcNoOfMines(int mineCount) {

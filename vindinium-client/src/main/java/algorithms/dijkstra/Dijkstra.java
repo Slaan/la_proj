@@ -3,6 +3,8 @@ package algorithms.dijkstra;
 
 import bot.Bender.DirectionType;
 import bot.Bender.TileType;
+import bot.Bender1.SimpleMine;
+import bot.Bender1.SimpleTavern;
 import bot.dto.GameState;
 
 import java.util.*;
@@ -15,23 +17,23 @@ public class Dijkstra {
     private Map<GameState.Position, GameState.Position> previousFrom;
     private Map<GameState.Position, Integer> costFrom;
     private Map<GameState.Position, Boolean> visited;
-    List<GameState.Position> mines;
-    List<GameState.Position> tavern;
+    private List<GameState.Position> mines;
+    private List<GameState.Position> tavern;
     private bot.Bender.Map map;
+    private GameState.Position playerPosition;
 
-    public Dijkstra(bot.Bender.Map map){
+    public Dijkstra(bot.Bender.Map map, GameState.Position playerPosition){
         previousFrom = new HashMap<>();
         costFrom = new HashMap<>();
         visited = new HashMap<>();
         mines = new ArrayList<>();
         tavern = new ArrayList<>();
         this.map = map;
+        this.playerPosition = playerPosition;
     }
 
 
-    public void runDijkstraFrom(GameState.Position playerPosition){
-
-
+    public void runDijkstra(){
         Queue<GameState.Position> queue = new LinkedList<>();
 
         previousFrom.put(playerPosition, playerPosition);
@@ -59,37 +61,24 @@ public class Dijkstra {
 
     public List<GameState.Position> neighborOf(GameState.Position currentPosition){
         List<GameState.Position> positions = new ArrayList<>();
-        for(int x = -1; x <= 1; x =  x + 2){
-            if(isWalkableTile(currentPosition, x, 0)){
-                GameState.Position neighborPosition = new GameState.Position(currentPosition.getX() + x, currentPosition.getY() + 0);
+        for(DirectionType directionType : DirectionType.values()){
+            if(isWalkableTile(currentPosition, directionType)) {
+                GameState.Position neighborPosition = map.getPositionFromDirection(currentPosition, directionType);
                 if(!visited.containsKey(neighborPosition)){
                     positions.add(neighborPosition);
                 }
             }
         }
-            for(int y = -1; y <= 1; y = y + 2){
-                if(isWalkableTile(currentPosition, 0, y)){
-                    GameState.Position neighborPosition = new GameState.Position(currentPosition.getX() + 0, currentPosition.getY() + y);
-                    if(!visited.containsKey(neighborPosition)){
-                        positions.add(neighborPosition);
-                    }
-                }
-            }
-
-
         return positions;
     }
 
-    private boolean isWalkableTile(GameState.Position currentPosition ,int additionX, int additionY){
-        int x = currentPosition.getX() + additionX;
-        int y = currentPosition.getY() + additionY;
-        if((0 > x) || ( x >= map.getCurrentMap().length)) return false;
-        if((0 > y) || ( y >= map.getCurrentMap()[0].length)) return false;
-        if(map.getCurrentMap()[x][y].equals(TileType.BLOCKED)){
+    private boolean isWalkableTile(GameState.Position currentPosition , DirectionType directionType){
+        TileType tileType = map.getTileFromDirection(currentPosition, directionType);
+        if(tileType.equals(TileType.BLOCKED)){
             return false;
         }
-        if(map.getCurrentMap()[x][y].equals(TileType.MINE)){
-            GameState.Position position = new GameState.Position(x, y);
+        if(tileType.equals(TileType.MINE)){
+            GameState.Position position = map.getPositionFromDirection(currentPosition, directionType);
             if(!visited.containsKey(position)) {
                 mines.add(position);
                 previousFrom.put(position, currentPosition);
@@ -98,8 +87,8 @@ public class Dijkstra {
             }
             return false;
         }
-        if(map.getCurrentMap()[x][y].equals(TileType.TAVERN)){
-            GameState.Position position = new GameState.Position(x, y);
+        if(tileType.equals(TileType.TAVERN)) {
+            GameState.Position position = map.getPositionFromDirection(currentPosition, directionType);
             if(!visited.containsKey(position)) {
                 tavern.add(position);
                 previousFrom.put(position, currentPosition);
@@ -109,5 +98,46 @@ public class Dijkstra {
             return false;
         }
         return true;
+    }
+
+    public DirectionType getDirectionToPosition(GameState.Position minePosition) {
+
+        GameState.Position prev = minePosition;
+        while(!previousFrom.get(previousFrom.get(prev)).equals(previousFrom.get(prev))){
+            prev = previousFrom.get(prev);
+        }
+        return map.calcDirection(playerPosition, prev);
+    }
+
+    public SimpleMine getSimpleMine(GameState.Position minePosition){
+        return new SimpleMine(getDirectionToPosition(minePosition), costFrom.get(minePosition));
+    }
+
+    public SimpleMine getNearestMine(){
+        return getSimpleMine(mines.get(0));
+    }
+
+    public List<SimpleMine> getSimpleMines () {
+        List<SimpleMine> simpleMines = new ArrayList<>();
+        for(GameState.Position position : mines){
+            simpleMines.add(getSimpleMine(position));
+        }
+        return simpleMines;
+    }
+
+    public SimpleTavern getSimpleTavern(GameState.Position tavernPosition){
+        return new SimpleTavern(getDirectionToPosition(tavernPosition), costFrom.get(tavernPosition));
+    }
+
+    public SimpleTavern getNearestTavern(){
+        return getSimpleTavern(tavern.get(0));
+    }
+
+    public List<SimpleTavern> getSimpleTaverns () {
+        List<SimpleTavern> simpleTaverns = new ArrayList<>();
+        for(GameState.Position position : tavern){
+            simpleTaverns.add(getSimpleTavern(position));
+        }
+        return simpleTaverns;
     }
 }

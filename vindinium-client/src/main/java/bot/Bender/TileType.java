@@ -1,5 +1,7 @@
 package bot.Bender;
 
+import bot.dto.GameState;
+
 /**
  * Created by Daniel Hofmeister on 18.10.2015.
  */

@@ -1,25 +1,26 @@
 package bot.Bender1;
 
 import bot.Bender.BotMove;
+import bot.Bender.DirectionType;
 
 /**
  * Created by slaan on 02.11.15.
  */
 public class SimpleMine {
 
-    private BotMove direction;
-    private Quantity distance;
+    private DirectionType direction;
+    private Distance distance;
 
-    public SimpleMine(BotMove direction, Quantity distance) {
+    public SimpleMine(DirectionType direction, int distance) {
         this.direction = direction;
-        this.distance = distance;
+        this.distance = Distance.calcDistance(distance);
     }
 
-    public BotMove getDirection() {
+    public DirectionType getDirection() {
         return direction;
     }
 
-    public Quantity getDistance() {
+    public Distance getDistance() {
         return distance;
     }
 }

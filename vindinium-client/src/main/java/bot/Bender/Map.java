@@ -142,19 +142,23 @@ public class Map {
         }
     }
 
-    public List<SimpleHero> getHeroes() {
-        //TODO
-        return null;
-    }
-
-    public SimpleTavern getClosestTavern() {
-        //TODO
-        return null;
-    }
-
-    public SimpleMine getClosestMine() {
-        //TODO
-        return null;
+    public GameState.Position getPositionFromDirection(GameState.Position currentPosition, DirectionType dir){
+        switch (dir) {
+            case NORTH:
+                if (currentPosition.getY() < 1) { throw new RuntimeException("out of map."); }
+                return new GameState.Position(currentPosition.getX()   ,currentPosition.getY() - 1);
+            case EAST:
+                if (currentPosition.getX() >= currentMap.length - 1) { throw new RuntimeException("out of map."); }
+                return new GameState.Position(currentPosition.getX() + 1,currentPosition.getY()   );
+            case SOUTH:
+                if (currentPosition.getY() >= currentMap[0].length - 1) { throw new RuntimeException("out of map."); }
+                return new GameState.Position(currentPosition.getX()    ,currentPosition.getY() + 1);
+            case WEST:
+                if (currentPosition.getX() < 1) { throw new RuntimeException("out of map."); }
+                return new GameState.Position(currentPosition.getX() - 1,currentPosition.getY()    );
+            default:
+                throw new RuntimeException("received a non supported direction.");
+        }
     }
 
     public TileType[][] getCurrentMap() {
