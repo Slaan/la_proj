@@ -33,9 +33,11 @@ public class Config {
     static int QueueLength;
     static boolean sarsaStateActionLogs;
     static String Bender;
+    static String serverURL;
+    static int serverPort;
 
-    private final static String TRAINING_URL = "http://vindinium.org/api/training";
-    private final static String COMPETITION_URL = "http://vindinium.org/api/arena";
+    private final static String TRAINING_URL = "/api/training";
+    private final static String COMPETITION_URL = "/api/arena";
 
     private Config() {}
 
@@ -60,13 +62,15 @@ public class Config {
             SlackURL = new GenericUrl(prop.getProperty("slackurl"));
             DBUser = prop.getProperty("dbuser");
             DBPassword = prop.getProperty("dbpassword");
+            serverURL = prop.getProperty("serverURL");
+            serverPort = Integer.parseInt(prop.getProperty("serverPort"));
             Mode = prop.getProperty("modus");
             if ("COMPETITION".equals(Mode)) {
-                GameURL = new GenericUrl(COMPETITION_URL);
+                GameURL = new GenericUrl(serverURL+COMPETITION_URL);
                 APIKey = new ApiKey(prop.getProperty("apikey"));
             }
             else{
-                GameURL = new GenericUrl(TRAINING_URL);
+                GameURL = new GenericUrl(serverURL+TRAINING_URL);
                 APIKey = new TurnApiKey(prop.getProperty("apikey"), NoOfRounds);
             }
             LearningRate = Double.parseDouble(prop.getProperty("learningrate"));

@@ -1,7 +1,7 @@
 package bot.Bender1;
 
 import bot.Bender.BotMove;
-import bot.RewardConfig;
+import bot.Bender0.RewardConfig;
 
 /**
  * Created by slaan on 02.11.15.

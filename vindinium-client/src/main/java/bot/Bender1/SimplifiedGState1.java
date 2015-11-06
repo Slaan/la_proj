@@ -1,10 +1,9 @@
 package bot.Bender1;
 
 import algorithms.dijkstra.Dijkstra;
-import bot.Bender.DirectionType;
 import bot.Bender.ISimplifiedGState;
 import bot.Bender.Map;
-import bot.RewardConfig;
+import bot.Bender0.RewardConfig;
 import bot.dto.GameState;
 
 /**
@@ -13,7 +12,9 @@ import bot.dto.GameState;
 public class SimplifiedGState1 implements ISimplifiedGState {
 
     private Quantity life;
+    private int lifeHP;
     private Quantity noOfOurMines;
+    private int mineCount;
     private SimpleHero closestHero=null;
     private SimpleMine closestMine;
     private SimpleTavern closestTavern;
@@ -38,6 +39,8 @@ public class SimplifiedGState1 implements ISimplifiedGState {
         closestHero = null;
         closestMine = dijkstra.getNearestMine();
         closestTavern = dijkstra.getNearestTavern();
+        lifeHP = gameState.getHero().getLife();
+        mineCount = gameState.getHero().getMineCount();
     }
 
     private Quantity calcNoOfMines(int mineCount) {
@@ -96,4 +99,11 @@ public class SimplifiedGState1 implements ISimplifiedGState {
         return 0;
     }
 
+    public int getLifeHP() {
+        return lifeHP;
+    }
+
+    public int getMineCount() {
+        return mineCount;
+    }
 }
