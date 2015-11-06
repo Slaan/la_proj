@@ -17,7 +17,7 @@ public class SessionBuilder {
             java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
             factory = new AnnotationConfiguration().
                     configure().
-                    setProperty("hibernate.connection.url", "jdbc:mysql://localhost/bender0").
+                    setProperty("hibernate.connection.url", "jdbc:mysql://localhost/" + Config.getBender()).
                     setProperty("hibernate.hbm2ddl.auto", "update").
                     setProperty("hibernate.connection.username", Config.getDBUser()).
                     setProperty("hibernate.connection.password", Config.getDBPassword()).

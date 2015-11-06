@@ -18,4 +18,6 @@ public interface ISimplifiedGState {
     public GameState.Position getSpawn();
 
     public GameState.Position getCurrentPos();
+
+    public int generateGStateId();
 }

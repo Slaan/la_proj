@@ -1,10 +1,7 @@
 package bot.Bender0;
 
 
-import bot.Bender.DirectionType;
-import bot.Bender.IRewarder;
-import bot.Bender.Map;
-import bot.Bender.TileType;
+import bot.Bender.*;
 import persistence.GameLog;
 
 /**
@@ -27,15 +24,15 @@ public class Rewarder implements IRewarder {
         this.gameLog = gameLog;
     }
 
-    public int calculateReward(SimplifiedGState state) {
+    public int calculateReward(ISimplifiedGState state) {
         if (formerState == null) {
-            formerState = state;
+            formerState = (SimplifiedGState)state;
             return 0;
         }
 
         reward = TURNREWARD;
 
-        currentState = state;
+        currentState = (SimplifiedGState)state;
 
         if (checkForDeath()) {
             gameLog.addDeath();
@@ -57,7 +54,7 @@ public class Rewarder implements IRewarder {
             calcBlockedReward();
         }
 
-        formerState = state;
+        formerState = currentState;
         return reward;
     }
 

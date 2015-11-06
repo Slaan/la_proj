@@ -1,6 +1,7 @@
 package persistence;
 
 import bot.Bender.BotMove;
+import bot.Bender.ISimplifiedGState;
 import bot.Bender0.SimplifiedGState;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -28,7 +29,7 @@ public class ManageSarsaState {
     public ManageSarsaStateAction getManageSarsaStateAction() { return manageSarsaStateAction; }
 
 
-    synchronized public SarsaState getSarsaStateOfId(SimplifiedGState simplifiedGState){
+    synchronized public SarsaState getSarsaStateOfId(ISimplifiedGState simplifiedGState){
         int sarsaStateId = simplifiedGState.generateGStateId();
         // Object is already available.
         if(sarsaStateMap.containsKey(sarsaStateId)){
@@ -63,7 +64,7 @@ public class ManageSarsaState {
         }
     }
 
-    public synchronized void addSarsaState(SimplifiedGState simplifiedGState){
+    public synchronized void addSarsaState(ISimplifiedGState simplifiedGState){
         int sarsaStateId = simplifiedGState.generateGStateId();
         Session session = factory.openSession();
         Transaction tx = null;

@@ -44,7 +44,7 @@ public class DijkstraTest{
 
         Map map = new Map(gs);
         Dijkstra dijkstra = new Dijkstra(map, pos);
-        dijkstra.runDijkstraFrom();
+        dijkstra.runDijkstra();
 
         SimpleMine simpleMine = new SimpleMine(DirectionType.WEST, 1);
         assertEquals(simpleMine.getDirection(), dijkstra.getNearestMine().getDirection());

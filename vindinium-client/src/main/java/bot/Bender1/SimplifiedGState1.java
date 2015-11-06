@@ -1,6 +1,7 @@
 package bot.Bender1;
 
 import algorithms.dijkstra.Dijkstra;
+import bot.Bender.DirectionType;
 import bot.Bender.ISimplifiedGState;
 import bot.Bender.Map;
 import bot.RewardConfig;
@@ -88,6 +89,11 @@ public class SimplifiedGState1 implements ISimplifiedGState {
 
     public GameState.Position getCurrentPos() {
         return currentPos;
+    }
+
+    public int generateGStateId() {
+
+        return 0;
     }
 
 }

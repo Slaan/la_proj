@@ -13,5 +13,5 @@ public interface IRewarder {
      * @param state New GameState
      * @return Reward the bot receives
      */
-    public int calculateReward(SimplifiedGState state);
+    public int calculateReward(ISimplifiedGState state);
 }
