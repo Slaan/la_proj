@@ -1,5 +1,6 @@
 package bot.Bender0;
 
+import algorithms.IdShifter;
 import bot.Bender.DirectionType;
 import bot.Bender.ISimplifiedGState;
 import bot.Bender.Map;
@@ -95,26 +96,5 @@ public class SimplifiedGState implements ISimplifiedGState {
         id.shift(map.getNearestTavernDirection().getValue(), ID_SHIFT_DIRECTION);
         id.shift((life > 40 ? 1 : 0), 1);
         return id.getId();
-    }
-
-    private static class IdShifter {
-        int id;
-
-        public IdShifter() {}
-        public IdShifter(int id) { this.id = id; }
-        void shift(int wert, int shift) {
-            id <<= shift;
-            id += wert;
-        }
-
-        int unShift(int shift) {
-            int wert;
-            int shifter = ((1 << shift) - 1);
-            wert = id & shifter;
-            id >>= shift;
-            return wert;
-        }
-
-        int getId() { return id; }
     }
 }
