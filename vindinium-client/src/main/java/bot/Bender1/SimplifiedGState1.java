@@ -1,5 +1,6 @@
 package bot.Bender1;
 
+import algorithms.IdShifter;
 import algorithms.dijkstra.Dijkstra;
 import bot.Bender.ISimplifiedGState;
 import bot.Bender.Map;
@@ -10,6 +11,10 @@ import bot.dto.GameState;
  * Created by slaan on 02.11.15.
  */
 public class SimplifiedGState1 implements ISimplifiedGState {
+    static final int ID_SHIFT_DISTANCE = 3;
+    static final int ID_SHIFT_QUANTITY = 2;
+    static final int ID_SHIFT_DIRECTION = 3;
+    static final int ID_SHIFT_MINECOUNT = 1;
 
     private Quantity life;
     private int lifeHP;
@@ -95,8 +100,23 @@ public class SimplifiedGState1 implements ISimplifiedGState {
     }
 
     public int generateGStateId() {
-
-        return 0;
+        IdShifter id = new IdShifter();
+        id.shift(getLife().getValue(), ID_SHIFT_QUANTITY);
+        id.shift(getNoOfOurMines().getValue(), ID_SHIFT_QUANTITY);
+        id.shift(getClosestMine().getDirection().getValue(), ID_SHIFT_DIRECTION);
+        // TODO: implement closest hero.
+        //id.shift(getClosestHero().getDirection().getValue(), ID_SHIFT_DIRECTION);
+        id.shift(0, ID_SHIFT_DIRECTION);
+        id.shift(getClosestTavern().getDirection().getValue(), ID_SHIFT_DIRECTION);
+        id.shift(getClosestMine().getDistance().getValue(), ID_SHIFT_DISTANCE);
+        //id.shift(getClosestHero().getDistance().getValue(), ID_SHIFT_DISTANCE);
+        id.shift(0, ID_SHIFT_DISTANCE);
+        //id.shift(getClosestHero().getHealth().getValue(), ID_SHIFT_QUANTITY);
+        id.shift(0, ID_SHIFT_QUANTITY);
+        //id.shift(getClosestHero().getNoOfMines().getValue(), ID_SHIFT_MINECOUNT);
+        id.shift(0, ID_SHIFT_MINECOUNT);
+        id.shift(getClosestTavern().getDistance().getValue(), ID_SHIFT_DISTANCE);
+        return id.getId();
     }
 
     public int getLifeHP() {
