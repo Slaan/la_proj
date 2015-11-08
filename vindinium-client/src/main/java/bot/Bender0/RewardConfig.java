@@ -37,7 +37,7 @@ public class RewardConfig {
 
     public static void init() {
         Properties prop = new Properties();
-        String propFileName = "res/mainConfig.properties";
+        String propFileName = "res/rewardConfigBender0.properties";
 
         try {
             inputstream = new FileInputStream(propFileName);
