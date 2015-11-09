@@ -1,15 +1,12 @@
 package bot.Bender1;
 
-import bot.Bender.DirectionType;
-import bot.Bender.ISimplifiedGState;
-import bot.Bender.GameMap;
-import bot.Bender.TileType;
+import bot.Bender.*;
 import persistence.GameLog;
 
 /**
  * Created by Daniel Hofmeister on 06.11.2015.
  */
-public class RewarderBender1 {
+public class RewarderBender1 implements IRewarder {
 
 
     private final GameLog gameLog;
