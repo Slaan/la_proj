@@ -114,6 +114,10 @@ public class SimplifiedGState1 implements ISimplifiedGState {
         id.shift(getClosestHero().getLifeDifference().getValue(), ID_SHIFT_QUANTITY);
         id.shift(getClosestHero().getEnemyMines().getValue(), ID_SHIFT_QUANTITY);
         id.shift(getClosestTavern().getDistance().getValue(), ID_SHIFT_DISTANCE);
+        id.shift(gameMap.getTileFromDirection(currentPos,DirectionType.NORTH).equals(TileType.BLOCKED)? 0:1 , 1);
+        id.shift(gameMap.getTileFromDirection(currentPos,DirectionType.EAST).equals(TileType.BLOCKED)? 0:1 , 1);
+        id.shift(gameMap.getTileFromDirection(currentPos,DirectionType.SOUTH).equals(TileType.BLOCKED)? 0:1 , 1);
+        id.shift(gameMap.getTileFromDirection(currentPos,DirectionType.WEST).equals(TileType.BLOCKED)? 0:1 , 1);
         return id.getId();
     }
 

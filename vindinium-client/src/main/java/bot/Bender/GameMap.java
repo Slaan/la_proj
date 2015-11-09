@@ -91,7 +91,7 @@ public class GameMap {
             if (mineDist<curClosestMineDist) {
                 closestMinePos = minePos;
                 curClosestMineDist = mineDist;
-            };
+            }
         }
 
         for(GameState.Position tavernPos : taverns) {
