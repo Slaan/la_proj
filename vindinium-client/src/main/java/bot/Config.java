@@ -26,12 +26,21 @@ public class Config {
     static String DBUser;
     static String DBPassword;
     static String Mode;
+
+    //Sarsa Lambda
     static Double LearningRate;
     static Double ExplorationRate;
     static Double DiscountFactor;
     static Double Lamda;
     static int QueueLength;
     static boolean sarsaStateActionLogs;
+
+    //Dijkstra
+    static int stepsToLook;
+    static int numberOfHerosToLook;
+    static int numberOfMinesToLook;
+    static int numberOfTavernsToLook;
+
     static String Bender;
     static String serverURL;
 
@@ -79,6 +88,11 @@ public class Config {
             sarsaStateActionLogs = Boolean.parseBoolean(prop.getProperty("sarsaStateActionLogs"));
             Bender = prop.getProperty("Bender");
 
+            stepsToLook = Integer.parseInt(prop.getProperty("stepsToLook"));
+            numberOfHerosToLook = Integer.parseInt(prop.getProperty("numberOfHerosToLook"));
+            numberOfMinesToLook = Integer.parseInt(prop.getProperty("numberOfMinesToLook"));
+            numberOfTavernsToLook = Integer.parseInt(prop.getProperty("numberOfTavernsToLook"));
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -125,4 +139,12 @@ public class Config {
     public static boolean getSarsaStateActionLogs() { return sarsaStateActionLogs; }
 
     public static String getBender() { return Bender; }
+
+    public static int getStepsToLook() { return stepsToLook; }
+
+    public static int getNumberOfHerosToLook() { return numberOfHerosToLook; }
+
+    public static int getNumberOfMinesToLook() { return numberOfMinesToLook; }
+
+    public static int getNumberOfTavernsToLook() { return numberOfTavernsToLook; }
 }

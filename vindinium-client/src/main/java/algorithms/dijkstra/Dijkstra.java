@@ -7,6 +7,7 @@ import bot.Bender.TileType;
 import bot.Bender1.SimpleHero;
 import bot.Bender1.SimpleMine;
 import bot.Bender1.SimpleTavern;
+import bot.Config;
 import bot.dto.GameState;
 
 import java.util.*;
@@ -44,22 +45,25 @@ public class Dijkstra {
         costFrom.put(playerPosition, 0);
         queue.add(playerPosition);
 
-        while((queue.size() > 0) && ((mines.size() < 1) || (tavern.size() < 1) || (heroes.size() < 1))){
-            GameState.Position currentPosition = queue.remove();
-            visited.put(currentPosition, true);
-            for(GameState.Position position : neighborOf(currentPosition)){
-                queue.add(position);
-                Integer newValue = costFrom.get(currentPosition) + 1;
-                Integer oldValue = Integer.MAX_VALUE;
-                if(costFrom.containsKey(position)){
-                    oldValue = costFrom.get(position);
-                }
-                if(newValue < oldValue){
-                    costFrom.put(position, newValue);
-                    previousFrom.put(position, currentPosition);
+        for(int steps = 0; (steps < Config.getStepsToLook()) && ((mines.size() < Config.getNumberOfMinesToLook()) || (tavern.size() < Config.getNumberOfTavernsToLook()) || (heroes.size() < Config.getNumberOfHerosToLook())); steps++){
+            Queue<GameState.Position> newQueue = new LinkedList<>();
+            while((queue.size() > 0) && ((mines.size() < Config.getNumberOfMinesToLook()) || (tavern.size() < Config.getNumberOfTavernsToLook()) || (heroes.size() < Config.getNumberOfHerosToLook()))) {
+                GameState.Position currentPosition = queue.remove();
+                visited.put(currentPosition, true);
+                for (GameState.Position position : neighborOf(currentPosition)) {
+                    newQueue.add(position);
+                    Integer newValue = costFrom.get(currentPosition) + 1;
+                    Integer oldValue = Integer.MAX_VALUE;
+                    if (costFrom.containsKey(position)) {
+                        oldValue = costFrom.get(position);
+                    }
+                    if (newValue < oldValue) {
+                        costFrom.put(position, newValue);
+                        previousFrom.put(position, currentPosition);
+                    }
                 }
             }
-
+            queue = newQueue;
         }
     }
 
@@ -132,7 +136,10 @@ public class Dijkstra {
     }
 
     public SimpleMine getNearestMine(){
-        return getSimpleMine(mines.get(0));
+        if(mines.size() > 0){
+            return getSimpleMine(mines.get(0));
+        }
+        return new SimpleMine();
     }
 
     public List<SimpleMine> getSimpleMines () {
