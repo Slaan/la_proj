@@ -34,7 +34,6 @@ public class Config {
     static boolean sarsaStateActionLogs;
     static String Bender;
     static String serverURL;
-    static int serverPort;
 
     private final static String TRAINING_URL = "/api/training";
     private final static String COMPETITION_URL = "/api/arena";
@@ -63,7 +62,6 @@ public class Config {
             DBUser = prop.getProperty("dbuser");
             DBPassword = prop.getProperty("dbpassword");
             serverURL = prop.getProperty("serverURL");
-            serverPort = Integer.parseInt(prop.getProperty("serverPort"));
             Mode = prop.getProperty("modus");
             if ("COMPETITION".equals(Mode)) {
                 GameURL = new GenericUrl(serverURL+COMPETITION_URL);
