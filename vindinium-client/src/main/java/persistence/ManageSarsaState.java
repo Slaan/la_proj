@@ -74,7 +74,7 @@ public class ManageSarsaState {
             if(sarsaState == null) {
                 sarsaState = new SarsaState(sarsaStateId);
                 session.save(sarsaState);
-                for (BotMove botMove : BotMove.values()) {
+                for (BotMove botMove : simplifiedGState.getPossibleMoves()) {
                     manageSarsaStateAction.addSarsaStateActionInSession(session, sarsaState, "", botMove);
                 }
             }

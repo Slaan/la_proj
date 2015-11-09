@@ -43,4 +43,14 @@ public enum DirectionType {
             throw new RuntimeException("DirectionType fromPositions failed.");
         }
     }
+
+    public BotMove toBotMove(){
+        switch (this){
+            case WEST: return BotMove.WEST;
+            case EAST: return BotMove.EAST;
+            case NORTH: return BotMove.NORTH;
+            case SOUTH: return BotMove.SOUTH;
+            default: throw new RuntimeException("not supportet dir");
+        }
+    }
 }

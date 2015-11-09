@@ -2,10 +2,12 @@ package bot.Bender1;
 
 import algorithms.IdShifter;
 import algorithms.dijkstra.Dijkstra;
-import bot.Bender.ISimplifiedGState;
-import bot.Bender.GameMap;
+import bot.Bender.*;
 import bot.Bender0.RewardConfig;
 import bot.dto.GameState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by slaan on 02.11.15.
@@ -125,5 +127,15 @@ public class SimplifiedGState1 implements ISimplifiedGState {
 
     public int getMineCount() {
         return mineCount;
+    }
+
+    public List<BotMove> getPossibleMoves(){
+        List<BotMove> possibleMoves = new ArrayList<>();
+        for(DirectionType directionType : DirectionType.values()){
+            if(gameMap.getTileFromDirection(currentPos, directionType).equals(TileType.BLOCKED)){
+                possibleMoves.add(directionType.toBotMove());
+            }
+        }
+        return possibleMoves;
     }
 }

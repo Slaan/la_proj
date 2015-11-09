@@ -2,6 +2,8 @@ package bot.Bender;
 
 import bot.dto.GameState;
 
+import java.util.List;
+
 /**
  * Created by slaan on 02.11.15.
  */
@@ -20,4 +22,6 @@ public interface ISimplifiedGState {
     public GameState.Position getCurrentPos();
 
     public int generateGStateId();
+
+    public List<BotMove> getPossibleMoves();
 }

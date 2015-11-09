@@ -1,12 +1,12 @@
 package bot.Bender0;
 
 import algorithms.IdShifter;
-import bot.Bender.DirectionType;
-import bot.Bender.ISimplifiedGState;
-import bot.Bender.GameMap;
-import bot.Bender.TileType;
+import bot.Bender.*;
 import bot.dto.GameState;
 import persistence.SarsaState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Daniel Hofmeister on 19.10.15.
@@ -96,5 +96,13 @@ public class SimplifiedGState implements ISimplifiedGState {
         id.shift(gameMap.getNearestTavernDirection().getValue(), ID_SHIFT_DIRECTION);
         id.shift((life > 40 ? 1 : 0), 1);
         return id.getId();
+    }
+
+    public List<BotMove> getPossibleMoves(){
+        List<BotMove> possibleMoves = new ArrayList<>();
+        for(BotMove botMove : BotMove.values()){
+            possibleMoves.add(botMove);
+        }
+        return possibleMoves;
     }
 }
