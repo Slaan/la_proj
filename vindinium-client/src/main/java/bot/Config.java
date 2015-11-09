@@ -73,7 +73,6 @@ public class Config {
                 GameURL = new GenericUrl(serverURL+TRAINING_URL);
                 APIKey = new TurnApiKey(prop.getProperty("apikey"), NoOfRounds);
             }
-            GameURL.setPort(serverPort);
             LearningRate = Double.parseDouble(prop.getProperty("learningrate"));
             ExplorationRate = Double.parseDouble(prop.getProperty("explorationrate"));
             DiscountFactor = Double.parseDouble(prop.getProperty("discountfactor"));
