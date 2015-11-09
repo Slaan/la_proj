@@ -14,6 +14,10 @@ import java.util.Set;
  */
 public class SimplifiedGState2 extends SimplifiedGState1{
 
+    public SimplifiedGState2(){
+        super();
+    }
+
     @Override
     public Set<BotMove> getPossibleMoves() {
         Set<BotMove> possibleMoves = new HashSet<>();
@@ -28,7 +32,8 @@ public class SimplifiedGState2 extends SimplifiedGState1{
         }
         if(!possibleMoves.isEmpty()){
             return possibleMoves;
+        } else {
+            return super.getPossibleMoves();
         }
-        super.getPossibleMoves();
     }
 }

@@ -142,6 +142,18 @@ public class Dijkstra {
         return new SimpleMine();
     }
 
+    public List<SimpleMine> getNeededSimpleMines () {
+        List<SimpleMine> simpleMines = new ArrayList<>();
+        for(int neededMines = 0; neededMines < Config.getNumberOfMinesToLook(); neededMines++){
+            if(mines.size() > neededMines) {
+                simpleMines.add(getSimpleMine(mines.get(neededMines)));
+            } else {
+                simpleMines.add(new SimpleMine());
+            }
+        }
+        return simpleMines;
+    }
+
     public List<SimpleMine> getSimpleMines () {
         List<SimpleMine> simpleMines = new ArrayList<>();
         for(GameState.Position position : mines){
@@ -155,7 +167,22 @@ public class Dijkstra {
     }
 
     public SimpleTavern getNearestTavern(){
-        return getSimpleTavern(tavern.get(0));
+        if(tavern.size() > 0){
+            return getSimpleTavern(tavern.get(0));
+        }
+        return new SimpleTavern();
+    }
+
+    public List<SimpleTavern> getNeededSimpleTaverns () {
+        List<SimpleTavern> simpleTaverns = new ArrayList<>();
+        for(int neededTaverns = 0; neededTaverns < Config.getNumberOfTavernsToLook(); neededTaverns++){
+            if(mines.size() > neededTaverns) {
+                simpleTaverns.add(getSimpleTavern(tavern.get(neededTaverns)));
+            } else {
+                simpleTaverns.add(new SimpleTavern());
+            }
+        }
+        return simpleTaverns;
     }
 
     public List<SimpleTavern> getSimpleTaverns () {
@@ -172,7 +199,22 @@ public class Dijkstra {
     }
 
     public SimpleHero getNearesHero(){
-        return getSimpleHero(heroes.get(0));
+        if(heroes.size() > 0){
+            return getSimpleHero(heroes.get(0));
+        }
+        return new SimpleHero();
+    }
+
+    public List<SimpleHero> getNeededSimpleHeros () {
+        List<SimpleHero> simpleHeros = new ArrayList<>();
+        for(int neededHeroes = 0; neededHeroes < Config.getNumberOfHerosToLook(); neededHeroes++){
+            if(heroes.size() > neededHeroes) {
+                simpleHeros.add(getSimpleHero(heroes.get(neededHeroes)));
+            } else {
+                simpleHeros.add(new SimpleHero());
+            }
+        }
+        return simpleHeros;
     }
 
     public List<SimpleHero> getSimpleHeros(){

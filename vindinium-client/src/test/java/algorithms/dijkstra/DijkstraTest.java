@@ -4,6 +4,7 @@ import bot.Bender.DirectionType;
 import bot.Bender.GameMap;
 import bot.Bender1.SimpleMine;
 import bot.Bender1.SimpleTavern;
+import bot.Config;
 import bot.dto.GameState;
 import org.junit.Test;
 
@@ -86,6 +87,8 @@ public class DijkstraTest{
         GameState.Position pos = new GameState.Position(0, 4);
         GameState.Hero hero = new GameState.Hero(1, "dan", "0", 0, pos, 100, 0, 0, pos, false);
         GameState gs = new GameState(game, hero, "", "", "");
+
+        Config.init();
 
         GameMap gameMap = new GameMap(gs);
         long start = System.currentTimeMillis();
