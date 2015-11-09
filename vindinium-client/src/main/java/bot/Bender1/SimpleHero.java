@@ -16,7 +16,16 @@ public class SimpleHero {
     private Quantity enemyMines;
     private DirectionType direction;
 
-
+    /**
+     * Create a Hero that is out of sight.
+     */
+    public SimpleHero() {
+        heroID = -1;
+        lifeDifference = Quantity.LOTS;
+        distance = Distance.OUTOFSIGHT;
+        enemyMines = Quantity.FEW;
+        direction = DirectionType.NORTH;
+    }
 
     public SimpleHero(int heroID, DirectionType direction, int distance) {
         this.heroID = heroID;
