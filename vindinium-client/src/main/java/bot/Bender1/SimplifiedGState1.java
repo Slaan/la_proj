@@ -7,7 +7,9 @@ import bot.Bender0.RewardConfig;
 import bot.dto.GameState;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by slaan on 02.11.15.
@@ -123,8 +125,8 @@ public class SimplifiedGState1 implements ISimplifiedGState {
         return mineCount;
     }
 
-    public List<BotMove> getPossibleMoves(){
-        List<BotMove> possibleMoves = new ArrayList<>();
+    public Set<BotMove> getPossibleMoves(){
+        Set<BotMove> possibleMoves = new HashSet<>();
         for(DirectionType directionType : DirectionType.values()){
             if(!gameMap.getTileFromDirection(currentPos, directionType).equals(TileType.BLOCKED)){
                 possibleMoves.add(directionType.toBotMove());

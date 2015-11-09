@@ -3,6 +3,7 @@ package bot.Bender;
 import bot.dto.GameState;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by slaan on 02.11.15.
@@ -23,5 +24,5 @@ public interface ISimplifiedGState {
 
     public int generateGStateId();
 
-    public List<BotMove> getPossibleMoves();
+    public Set<BotMove> getPossibleMoves();
 }

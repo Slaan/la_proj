@@ -6,7 +6,9 @@ import bot.dto.GameState;
 import persistence.SarsaState;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Daniel Hofmeister on 19.10.15.
@@ -98,8 +100,8 @@ public class SimplifiedGState implements ISimplifiedGState {
         return id.getId();
     }
 
-    public List<BotMove> getPossibleMoves(){
-        List<BotMove> possibleMoves = new ArrayList<>();
+    public Set<BotMove> getPossibleMoves(){
+        Set<BotMove> possibleMoves = new HashSet<>();
         for(BotMove botMove : BotMove.values()){
             possibleMoves.add(botMove);
         }
