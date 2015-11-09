@@ -3,6 +3,7 @@ package bot.Bender;
 import algorithms.sarsaLambda.SarsaLambda;
 import bot.Bender0.Rewarder;
 import bot.Bender0.SimplifiedGState;
+import bot.Bender1.RewarderBender1;
 import bot.Bender1.SimplifiedGState1;
 import bot.Config;
 import bot.dto.GameState;
@@ -49,7 +50,7 @@ public class Bender {
 
     private IRewarder getRewarder(GameLog gameLog){
         if(Config.getBender().equals("bender1")){
-            return null;
+            return new RewarderBender1(gameLog);
         } else {
             return new Rewarder(gameLog);
         }

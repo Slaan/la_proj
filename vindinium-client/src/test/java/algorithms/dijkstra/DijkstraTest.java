@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by beckf on 04.11.2015.
@@ -52,5 +53,48 @@ public class DijkstraTest{
         assertEquals(simpleTavern.getDistance(), dijkstra.getNearestTavern().getDistance());
 
         assertNotNull(dijkstra.getNearesHero());
+    }
+
+    @Test
+    public void checkMapInTime() {
+        String tiles = "######              ##    ##              ######"
+            + "########                                ########"
+            + "####$-        $-                $-        $-####"
+            + "$-##$-      $-$-                $-$-      $-##$-"
+            + "@1$-                $-    $-                $-@4"
+            + "      $-        ##            ##        $-      "
+            + "              ##                ##              "
+            + "        ##    $-                $-    ##        "
+            + "    $-          ##            ##          $-    "
+            + "##        ##    []            []    ##        ##"
+            + "          ##    $-  $-    $-  $-    ##          "
+            + "                  ####    ####                  "
+            + "                  ####    ####                  "
+            + "          ##    $-  $-    $-  $-    ##          "
+            + "##        ##    []            []    ##        ##"
+            + "    $-          ##            ##          $-    "
+            + "        ##    $-                $-    ##        "
+            + "              ##                ##              "
+            + "      $-        ##            ##        $-      "
+            + "@2$-                $-    $-                $-@3"
+            + "$-##$-      $-$-                $-$-      $-##$-"
+            + "####$-        $-                $-        $-####"
+            + "########                                ########"
+            + "######              ##    ##              ######";
+        GameState.Board board = new GameState.Board(tiles, 24);
+        GameState.Game game = new GameState.Game("id", 0, 0, null, board, false);
+        GameState.Position pos = new GameState.Position(0, 4);
+        GameState.Hero hero = new GameState.Hero(1, "dan", "0", 0, pos, 100, 0, 0, pos, false);
+        GameState gs = new GameState(game, hero, "", "", "");
+
+        GameMap gameMap = new GameMap(gs);
+        long start = System.currentTimeMillis();
+
+        Dijkstra dijkstra = new Dijkstra(gameMap, pos);
+        dijkstra.runDijkstra();
+
+        long finish = System.currentTimeMillis();
+        assertTrue(String.format("Finished in %d ms.", (finish - start)) , (finish - start) < 3500);
+
     }
 }

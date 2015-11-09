@@ -20,7 +20,7 @@ public class RewardConfigBender1 {
     static int tavernRewardLowHP;
     static int killDefault;
     static int killPerMine;
-    static int killPerMineDiscount;
+    static double killPerMineDiscount;
 
     static int lowerLifeBoundry;
     static int upperLifeboundry;
@@ -40,7 +40,11 @@ public class RewardConfigBender1 {
 
         try {
             inputStream = new FileInputStream(propFileName);
+            if (inputStream == null || inputStream.available() == 0)
+                throw new RuntimeException("konnte " + propFileName + " nicht öffnen.");
             prop.load(inputStream);
+            if (!prop.propertyNames().hasMoreElements())
+                throw new RuntimeException("konnte " + propFileName + " nicht parsen.");
 
             turnReward = Integer.parseInt(prop.getProperty("turn"));
             getMineReward = Integer.parseInt(prop.getProperty("getMine"));
@@ -52,7 +56,7 @@ public class RewardConfigBender1 {
             tavernRewardLowHP = Integer.parseInt(prop.getProperty("tavernRewardLowHP"));
             killDefault = Integer.parseInt(prop.getProperty("killDefault"));
             killPerMine = Integer.parseInt(prop.getProperty("killPerMine"));
-            killPerMineDiscount = Integer.parseInt(prop.getProperty("killPerMineDiscount"));
+            killPerMineDiscount = Double.parseDouble(prop.getProperty("killPerMineDiscount"));
 
             lowerLifeBoundry = Integer.parseInt(prop.getProperty("lowerLifeBoundry"));
             upperLifeboundry = Integer.parseInt(prop.getProperty("upperLifeBoundry"));
@@ -104,7 +108,7 @@ public class RewardConfigBender1 {
         return killPerMine;
     }
 
-    public static int getKillPerMineDiscount() {
+    public static double getKillPerMineDiscount() {
         return killPerMineDiscount;
     }
 

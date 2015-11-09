@@ -132,7 +132,7 @@ public class SimplifiedGState1 implements ISimplifiedGState {
     public List<BotMove> getPossibleMoves(){
         List<BotMove> possibleMoves = new ArrayList<>();
         for(DirectionType directionType : DirectionType.values()){
-            if(gameMap.getTileFromDirection(currentPos, directionType).equals(TileType.BLOCKED)){
+            if(!gameMap.getTileFromDirection(currentPos, directionType).equals(TileType.BLOCKED)){
                 possibleMoves.add(directionType.toBotMove());
             }
         }

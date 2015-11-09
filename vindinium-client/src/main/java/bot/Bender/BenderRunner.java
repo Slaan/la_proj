@@ -93,6 +93,10 @@ public class BenderRunner extends Thread {
                 }
             } catch (IOException e) {
                 logger.error("Error during game play", e);
+                if (gameState != null && gameState.getGame() != null && gameState.getGame().getBoard() != null)
+                    logger.error(String.format("The game board (size %d) was:\n%s",
+                        gameState.getGame().getBoard().getSize(),
+                        gameState.getGame().getBoard().getTiles()));
             }
 /*
                 // Slack integration.

@@ -18,10 +18,10 @@ public class RewardConfig {
     static int deathDefaultReward;
     static int deathperMineReward;
     static int deathForAllMinesReward;
-    static Double tavernPerHP;
+    static double tavernPerHP;
     static int tavernDefault;
     static int killPerMine;
-    static int killPerMineDiscount;
+    static double killPerMineDiscount;
 
     static int lowerLifeBoundry;
     static int upperLifeboundry;
@@ -53,7 +53,7 @@ public class RewardConfig {
             tavernPerHP = Double.parseDouble(prop.getProperty("tavernPerHP"));
             tavernDefault = Integer.parseInt(prop.getProperty("tavernDefault"));
             killPerMine = Integer.parseInt(prop.getProperty("killPerMine"));
-            killPerMineDiscount = Integer.parseInt(prop.getProperty("killPerMineDiscount"));
+            killPerMineDiscount = Double.parseDouble(prop.getProperty("killPerMineDiscount"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,7 +94,7 @@ public class RewardConfig {
         return deathForAllMinesReward;
     }
 
-    public static Double getTavernPerHP() {
+    public static double getTavernPerHP() {
         return tavernPerHP;
     }
 
@@ -106,7 +106,7 @@ public class RewardConfig {
         return killPerMine;
     }
 
-    public static int getKillPerMineDiscount() {
+    public static double getKillPerMineDiscount() {
         return killPerMineDiscount;
     }
 

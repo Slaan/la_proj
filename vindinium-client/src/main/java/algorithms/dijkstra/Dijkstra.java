@@ -44,7 +44,7 @@ public class Dijkstra {
         costFrom.put(playerPosition, 0);
         queue.add(playerPosition);
 
-        while(queue.size() > 0){
+        while((queue.size() > 0) && ((mines.size() < 1) || (tavern.size() < 1) || (heroes.size() < 1))){
             GameState.Position currentPosition = queue.remove();
             visited.put(currentPosition, true);
             for(GameState.Position position : neighborOf(currentPosition)){

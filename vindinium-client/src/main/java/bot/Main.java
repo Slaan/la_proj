@@ -1,6 +1,8 @@
 package bot;
 
 import bot.Bender.BenderRunner;
+import bot.Bender0.RewardConfig;
+import bot.Bender1.RewardConfigBender1;
 import org.hibernate.SessionFactory;
 import persistence.*;
 
@@ -16,7 +18,8 @@ public class Main extends Thread{
 
     public static void main(String args[]){
         Config.init();
-        SessionBuilder.generateSessionFactory();
+        RewardConfig.init();
+        RewardConfigBender1.init();
         Main main = new Main();
         main.run();
     }

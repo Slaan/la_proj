@@ -85,6 +85,7 @@ public class SarsaState {
     }
 
     @Override public String toString() {
-        return SimplifiedGState.explainState(this);
+        //return SimplifiedGState.explainState(this);
+        return String.format("Sag ich nicht! %d", gStateId);
     }
 }
