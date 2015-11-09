@@ -1,5 +1,7 @@
 package bot.Bender;
 
+import bot.Bender.DirectionType;
+import bot.Bender.TileType;
 import bot.Bender1.SimpleHero;
 import bot.Bender1.SimpleMine;
 import bot.Bender1.SimpleTavern;
@@ -11,7 +13,7 @@ import java.util.List;
 /**
  * Created by Daniel Hofmeister on 18.10.2015.
  */
-public class Map {
+public class GameMap {
 
     private TileType[][] currentMap;
     private DirectionType nearestMineDirection;
@@ -19,8 +21,9 @@ public class Map {
 
     private List<GameState.Position> mines;
     private List<GameState.Position> taverns;
+    private List<GameState.Position> heroes;
 
-    public Map(GameState gameState) {
+    public GameMap(GameState gameState) {
         currentMap = parseMap(gameState);
         calculateNearestMineAndTavern(gameState.getHero().getPos());
     }
@@ -34,6 +37,7 @@ public class Map {
         int positionInTiles = 0;
         taverns = new ArrayList<>();
         mines = new ArrayList<>();
+        heroes = new ArrayList<>();
 
         for(int y=0; y<size; y++) {
             // y-axis
@@ -47,13 +51,26 @@ public class Map {
                     GameState.Position tavernpos = new GameState.Position(x,y);
                     taverns.add(tavernpos);
                 } else if (tileString.substring(0,1).equals("$")) {
-                    if (tileString.substring(1,2).equals(""+heroNumber)) {
+                    if (tileString.substring(1, 2).equals("" + heroNumber)) {
                         result[x][y] = TileType.BLOCKED;
                     } else {
                         result[x][y] = TileType.MINE;
-                        GameState.Position minepos = new GameState.Position(x,y);
+                        GameState.Position minepos = new GameState.Position(x, y);
                         mines.add(minepos);
                     }
+                } else if (tileString.substring(0,1).equals("@")) {
+                    if (tileString.substring(1,2).equals("1")) {
+                        result[x][y] = TileType.HERO1;
+                    } else if (tileString.substring(1,2).equals("2")) {
+                        result[x][y] = TileType.HERO2;
+                    } else if (tileString.substring(1,2).equals("3")) {
+                        result[x][y] = TileType.HERO3;
+                    } else if (tileString.substring(1,2).equals("4")) {
+                        result[x][y] = TileType.HERO4;
+                    } else {
+                        throw new IllegalStateException("Hero unknown: " + tileString.substring(1,2));
+                    }
+
                 } else {
                     result[x][y] = TileType.BLOCKED;
                 }
@@ -84,7 +101,7 @@ public class Map {
                 curClosestTavernDist = tavernDist;
             }
         }
-        
+
         nearestMineDirection = calcDirection(heropos, closestMinePos);
         nearestTavernDirection = calcDirection(heropos, closestTavernPos);
 
@@ -140,6 +157,10 @@ public class Map {
             default:
                 throw new RuntimeException("received a non supported direction.");
         }
+    }
+
+    public TileType getTile(GameState.Position position) {
+        return currentMap[position.getX()][position.getY()];
     }
 
     public GameState.Position getPositionFromDirection(GameState.Position currentPosition, DirectionType dir){

@@ -1,8 +1,7 @@
 package bot;
 
-import bot.Bender.Map;
+import bot.Bender.GameMap;
 import bot.Bender.TileType;
-import bot.Bender1.Map1;
 import bot.dto.GameState;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +11,7 @@ import static org.junit.Assert.assertArrayEquals;
 /**
  * Created by Daniel Hofmeister on 08.11.2015.
  */
-public class Map1Test {
+public class GameMap1Test {
 
     TileType[][] expectedMap;
     TileType[][] realMap;
@@ -35,7 +34,7 @@ public class Map1Test {
 
     @Test
     public void parseMapTest() {
-        Map1 map = new Map1(gameState);
+        GameMap map = new GameMap(gameState);
         realMap = map.getCurrentMap();
 
         expectedMap = new TileType[3][3];

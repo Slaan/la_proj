@@ -1,7 +1,7 @@
 package bot;
 
 import bot.Bender.DirectionType;
-import bot.Bender.Map;
+import bot.Bender.GameMap;
 import bot.Bender.TileType;
 import bot.dto.GameState;
 import org.junit.Before;
@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 /**
  * Created by Daniel Hofmeister on 18.10.2015.
  */
-public class MapTest {
+public class GameMapTest {
 
     TileType[][] expectedMap;
     TileType[][] realMap;
@@ -33,19 +33,19 @@ public class MapTest {
 
     @Test
     public void parseMapTest() {
-        Map map = new Map(gameState);
-        realMap = map.getCurrentMap();
+        GameMap gameMap = new GameMap(gameState);
+        realMap = gameMap.getCurrentMap();
 
         expectedMap = new TileType[3][3];
         expectedMap[0][0] = TileType.BLOCKED;
-        expectedMap[1][0] = TileType.BLOCKED;
+        expectedMap[1][0] = TileType.HERO1;
         expectedMap[2][0] = TileType.FREE;
         expectedMap[0][1] = TileType.BLOCKED;
         expectedMap[1][1] = TileType.TAVERN;
         expectedMap[2][1] = TileType.MINE;
         expectedMap[0][2] = TileType.MINE;
         expectedMap[1][2] = TileType.FREE;
-        expectedMap[2][2] = TileType.BLOCKED;
+        expectedMap[2][2] = TileType.HERO2;
 
         assertArrayEquals(expectedMap,realMap);
     }
@@ -73,13 +73,13 @@ public class MapTest {
         GameState.Hero hero = new GameState.Hero(1, "dan", "0", 0, pos, 100, 0, 0, pos, false);
         GameState gs = new GameState(game, hero, "", "", "");
 
-        Map map = new Map(gs);
-        assertEquals(TileType.BLOCKED, map.getCurrentMap()[1][3]);
-        assertEquals(TileType.BLOCKED, map.getTileFromDirection(pos, DirectionType.NORTH));
-        assertEquals(TileType.TAVERN, map.getCurrentMap()[2][4]);
-        assertEquals(TileType.TAVERN, map.getTileFromDirection(pos, DirectionType.EAST));
-        assertEquals(TileType.FREE, map.getTileFromDirection(pos, DirectionType.SOUTH));
-        assertEquals(TileType.MINE, map.getTileFromDirection(pos, DirectionType.WEST));
+        GameMap gameMap = new GameMap(gs);
+        assertEquals(TileType.BLOCKED, gameMap.getCurrentMap()[1][3]);
+        assertEquals(TileType.BLOCKED, gameMap.getTileFromDirection(pos, DirectionType.NORTH));
+        assertEquals(TileType.TAVERN, gameMap.getCurrentMap()[2][4]);
+        assertEquals(TileType.TAVERN, gameMap.getTileFromDirection(pos, DirectionType.EAST));
+        assertEquals(TileType.FREE, gameMap.getTileFromDirection(pos, DirectionType.SOUTH));
+        assertEquals(TileType.MINE, gameMap.getTileFromDirection(pos, DirectionType.WEST));
     }
 
     @Test
@@ -106,42 +106,42 @@ public class MapTest {
         GameState.Hero hero = new GameState.Hero(1, "dan", "0", 0, pos, 100, 0, 0, pos, false);
         GameState gs = new GameState(game, hero, "", "", "");
 
-        Map map = new Map(gs);
-        assertEquals(TileType.BLOCKED, map.getTileFromDirection(pos, DirectionType.NORTH));
-        assertEquals(TileType.BLOCKED, map.getTileFromDirection(pos, DirectionType.WEST));
+        GameMap gameMap = new GameMap(gs);
+        assertEquals(TileType.BLOCKED, gameMap.getTileFromDirection(pos, DirectionType.NORTH));
+        assertEquals(TileType.BLOCKED, gameMap.getTileFromDirection(pos, DirectionType.WEST));
 
         pos = new GameState.Position(13, 13);
-        assertEquals(TileType.BLOCKED, map.getTileFromDirection(pos, DirectionType.EAST));
-        assertEquals(TileType.BLOCKED, map.getTileFromDirection(pos, DirectionType.SOUTH));
+        assertEquals(TileType.BLOCKED, gameMap.getTileFromDirection(pos, DirectionType.EAST));
+        assertEquals(TileType.BLOCKED, gameMap.getTileFromDirection(pos, DirectionType.SOUTH));
 
         pos = new GameState.Position(12, 12);
-        assertEquals(TileType.MINE, map.getTileFromDirection(pos, DirectionType.EAST));
+        assertEquals(TileType.MINE, gameMap.getTileFromDirection(pos, DirectionType.EAST));
 
         pos = new GameState.Position(10, 12);
-        assertEquals(TileType.MINE, map.getTileFromDirection(pos, DirectionType.SOUTH));
+        assertEquals(TileType.MINE, gameMap.getTileFromDirection(pos, DirectionType.SOUTH));
     }
 
     @Test
     public void calcDirectionTest() {
-        Map map = new Map(gameState);
-        assertEquals(DirectionType.WEST,map.getNearestMineDirection());
-        assertEquals(DirectionType.NORTH,map.getNearestTavernDirection());
+        GameMap gameMap = new GameMap(gameState);
+        assertEquals(DirectionType.WEST, gameMap.getNearestMineDirection());
+        assertEquals(DirectionType.NORTH, gameMap.getNearestTavernDirection());
     }
 
     @Test
     public void getPositionFromDirection() {
-        Map map = new Map(gameState);
+        GameMap gameMap = new GameMap(gameState);
         GameState.Position position = new GameState.Position(1,1);
-        GameState.Position otherPosition = map.getPositionFromDirection(position, DirectionType.NORTH);
+        GameState.Position otherPosition = gameMap.getPositionFromDirection(position, DirectionType.NORTH);
         DirectionType directionType = DirectionType.fromPositions(position, otherPosition);
         assertEquals(directionType, DirectionType.NORTH);
-        otherPosition = map.getPositionFromDirection(position, DirectionType.SOUTH);
+        otherPosition = gameMap.getPositionFromDirection(position, DirectionType.SOUTH);
         directionType = DirectionType.fromPositions(position, otherPosition);
         assertEquals(directionType, DirectionType.SOUTH);
-        otherPosition = map.getPositionFromDirection(position, DirectionType.EAST);
+        otherPosition = gameMap.getPositionFromDirection(position, DirectionType.EAST);
         directionType = DirectionType.fromPositions(position, otherPosition);
         assertEquals(directionType, DirectionType.EAST);
-        otherPosition = map.getPositionFromDirection(position, DirectionType.WEST);
+        otherPosition = gameMap.getPositionFromDirection(position, DirectionType.WEST);
         directionType = DirectionType.fromPositions(position, otherPosition);
         assertEquals(directionType, DirectionType.WEST);
     }

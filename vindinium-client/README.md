@@ -8,7 +8,7 @@ This is a simple Java client for the [Vindinium](http://vindinium.org) game.  Vi
 
 The project is created using the Google HTTP client and GSON.  I decided to write a client because other clients seem to have some strange/verbose ways of parsing server communication and of presenting the game.  This client is focused on staying out of the way and letting people develop AIs to play.  It is also meant to be very easy to extend.
 
-There are two flavors of the client.  The simple one gives a very bare-bones game state and forces the bot to do a lot of the work parsing the map.  The advanced one gives a much nicer game state that includes hash maps containing locations of objects on the map.  This convenience comes at the expense of time.
+There are two flavors of the client.  The simple one gives a very bare-bones game state and forces the bot to do a lot of the work parsing the gameMap.  The advanced one gives a much nicer game state that includes hash maps containing locations of objects on the gameMap.  This convenience comes at the expense of time.
 
 ### License
 This software is public domain.

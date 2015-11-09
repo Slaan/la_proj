@@ -1,23 +1,29 @@
 package bot.Bender1;
 
 import bot.Bender.BotMove;
+import bot.Bender.DirectionType;
 import bot.Bender0.RewardConfig;
+import bot.dto.GameState;
 
 /**
  * Created by slaan on 02.11.15.
  */
 public class SimpleHero {
 
+    private int heroID;
     private Quantity lifeDifference;
-    private Quantity distance;
+    private Distance distance;
     private Quantity enemyMines;
-    private BotMove direction;
+    private DirectionType direction;
 
-    public SimpleHero(int benderLife, int enemyLife, BotMove direction, Quantity enemyMines, Quantity distance) {
+
+
+    public SimpleHero(int heroID, DirectionType direction, int distance) {
+        this.heroID = heroID;
+        this.distance = Distance.calcDistance(distance);
+        //this.lifeDifference = calcLifeDif(bender.getLife(), enemy.getLife());
         this.direction = direction;
-        this.lifeDifference = calcLifeDif(benderLife,enemyLife);
-        this.distance = distance;
-        this.enemyMines = enemyMines;
+        //this.enemyMines = calcMineDif(bender.getMineCount(), enemy.getMineCount());
     }
 
     /**
@@ -35,5 +41,25 @@ public class SimpleHero {
         } else {
             return Quantity.FEW;
         }
+    }
+
+    /**
+     * Maps the absolute distance to a relative one configured by the RewardConfig.
+     */
+    private Quantity calcDistance(int distance) {
+        if (distance < RewardConfig.getDistantClose())
+            return Quantity.FEW;
+        else if (distance > RewardConfig.getDistantFar())
+            return  Quantity.LOTS;
+        return Quantity.MIDDLE;
+    }
+
+    private Quantity calcMineDif(int benderMineCount, int enemyMineCount) {
+        int diff = enemyMineCount - benderMineCount;
+        if (diff < RewardConfig.getLowerMineBoundryTotal())
+            return Quantity.FEW;
+        else if (diff > RewardConfig.getUpperMineBoundryTotal())
+            return Quantity.LOTS;
+        return Quantity.MIDDLE;
     }
 }

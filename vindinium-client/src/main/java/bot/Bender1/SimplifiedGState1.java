@@ -3,7 +3,7 @@ package bot.Bender1;
 import algorithms.IdShifter;
 import algorithms.dijkstra.Dijkstra;
 import bot.Bender.ISimplifiedGState;
-import bot.Bender.Map;
+import bot.Bender.GameMap;
 import bot.Bender0.RewardConfig;
 import bot.dto.GameState;
 
@@ -23,7 +23,7 @@ public class SimplifiedGState1 implements ISimplifiedGState {
     private SimpleHero closestHero=null;
     private SimpleMine closestMine;
     private SimpleTavern closestTavern;
-    private Map map;
+    private GameMap gameMap;
     private Dijkstra dijkstra;
     private GameState.Position spawn;
     private GameState.Position currentPos;
@@ -32,11 +32,11 @@ public class SimplifiedGState1 implements ISimplifiedGState {
     }
 
     public void init(GameState gameState) {
-        map = new Map(gameState);
+        gameMap = new GameMap(gameState);
         spawn = gameState.getHero().getSpawnPos();
         currentPos = gameState.getHero().getPos();
 
-        dijkstra = new Dijkstra(map, spawn);
+        dijkstra = new Dijkstra(gameMap, currentPos);
         dijkstra.runDijkstra();
 
         life = calcLife(gameState.getHero().getLife());
@@ -87,8 +87,8 @@ public class SimplifiedGState1 implements ISimplifiedGState {
         return closestTavern;
     }
 
-    public Map getMap() {
-        return map;
+    public GameMap getGameMap() {
+        return gameMap;
     }
 
     public GameState.Position getSpawn() {

@@ -3,7 +3,7 @@ package bot.Bender0;
 import algorithms.IdShifter;
 import bot.Bender.DirectionType;
 import bot.Bender.ISimplifiedGState;
-import bot.Bender.Map;
+import bot.Bender.GameMap;
 import bot.Bender.TileType;
 import bot.dto.GameState;
 import persistence.SarsaState;
@@ -19,7 +19,7 @@ public class SimplifiedGState implements ISimplifiedGState {
 
     private int life;
     private int noOfOurMines;
-    private Map map;
+    private GameMap gameMap;
     private GameState.Position spawn;
     private GameState.Position currentPos;
 
@@ -27,7 +27,7 @@ public class SimplifiedGState implements ISimplifiedGState {
     }
 
     public void init(GameState gameState) {
-        map = new Map(gameState);
+        gameMap = new GameMap(gameState);
         life = gameState.getHero().getLife();
         noOfOurMines = gameState.getHero().getMineCount();
         spawn = gameState.getHero().getSpawnPos();
@@ -42,8 +42,8 @@ public class SimplifiedGState implements ISimplifiedGState {
         return noOfOurMines;
     }
 
-    public Map getMap() {
-        return map;
+    public GameMap getGameMap() {
+        return gameMap;
     }
 
     public GameState.Position getSpawn() {
@@ -87,13 +87,13 @@ public class SimplifiedGState implements ISimplifiedGState {
 
     public int generateGStateId() {
         IdShifter id = new IdShifter();
-        // Generate ID from gs and map.
-        id.shift(map.getTileFromDirection(currentPos, DirectionType.NORTH).getValue(), ID_SHIFT_TILE);
-        id.shift(map.getTileFromDirection(currentPos, DirectionType.EAST).getValue(), ID_SHIFT_TILE);
-        id.shift(map.getTileFromDirection(currentPos, DirectionType.SOUTH).getValue(), ID_SHIFT_TILE);
-        id.shift(map.getTileFromDirection(currentPos, DirectionType.WEST).getValue(), ID_SHIFT_TILE);
-        id.shift(map.getNearestMineDirection().getValue(), ID_SHIFT_DIRECTION);
-        id.shift(map.getNearestTavernDirection().getValue(), ID_SHIFT_DIRECTION);
+        // Generate ID from gs and gameMap.
+        id.shift(gameMap.getTileFromDirection(currentPos, DirectionType.NORTH).getValueB0(), ID_SHIFT_TILE);
+        id.shift(gameMap.getTileFromDirection(currentPos, DirectionType.EAST).getValueB0(), ID_SHIFT_TILE);
+        id.shift(gameMap.getTileFromDirection(currentPos, DirectionType.SOUTH).getValueB0(), ID_SHIFT_TILE);
+        id.shift(gameMap.getTileFromDirection(currentPos, DirectionType.WEST).getValueB0(), ID_SHIFT_TILE);
+        id.shift(gameMap.getNearestMineDirection().getValue(), ID_SHIFT_DIRECTION);
+        id.shift(gameMap.getNearestTavernDirection().getValue(), ID_SHIFT_DIRECTION);
         id.shift((life > 40 ? 1 : 0), 1);
         return id.getId();
     }

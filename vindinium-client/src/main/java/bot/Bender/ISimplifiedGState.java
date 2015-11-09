@@ -13,7 +13,7 @@ public interface ISimplifiedGState {
      */
     public void init(GameState gameState);
 
-    public Map getMap();
+    public GameMap getGameMap();
 
     public GameState.Position getSpawn();
 

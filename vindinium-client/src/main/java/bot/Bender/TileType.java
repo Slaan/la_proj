@@ -19,6 +19,34 @@ public enum TileType {
     public int getValue() { return value; }
 
     /**
+     * "Casts" this TileType to an integer compatible with Bender0.
+     * @return
+     */
+    public int getValueB0() {
+        if (isHero())
+            return BLOCKED.getValueB0();
+        return this.getValue();
+    }
+
+    public boolean isHero() {
+        return (this == HERO1 || this == HERO2 || this == HERO3 || this == HERO4);
+    }
+
+    /**
+     * Returns the Hero ID.
+     * @return
+     */
+    public int getHero() {
+        switch (this) {
+            case HERO1: return 1;
+            case HERO2: return 2;
+            case HERO3: return 3;
+            case HERO4: return 4;
+            default: throw new RuntimeException("Can't access getHero if the entity isn't a Hero.");
+        }
+    }
+
+    /**
      * "Casts" an integer to a TileType.
      * @param value Value retrieved by "getValue".
      */

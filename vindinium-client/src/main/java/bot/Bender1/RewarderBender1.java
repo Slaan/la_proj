@@ -2,9 +2,8 @@ package bot.Bender1;
 
 import bot.Bender.DirectionType;
 import bot.Bender.ISimplifiedGState;
-import bot.Bender.Map;
+import bot.Bender.GameMap;
 import bot.Bender.TileType;
-import bot.Bender0.SimplifiedGState;
 import persistence.GameLog;
 
 /**
@@ -86,11 +85,11 @@ public class RewarderBender1 {
     private boolean tavernNear() {
         int x = formerState.getCurrentPos().getX();
         int y = formerState.getCurrentPos().getY();
-        Map map = formerState.getMap();
-        if ((map.getTileFromDirection(formerState.getCurrentPos(), DirectionType.EAST))== TileType.TAVERN ||
-                (map.getTileFromDirection(formerState.getCurrentPos(),DirectionType.NORTH))==TileType.TAVERN ||
-                (map.getTileFromDirection(formerState.getCurrentPos(),DirectionType.WEST))==TileType.TAVERN ||
-                (map.getTileFromDirection(formerState.getCurrentPos(),DirectionType.SOUTH))==TileType.TAVERN) {
+        GameMap gameMap = formerState.getGameMap();
+        if ((gameMap.getTileFromDirection(formerState.getCurrentPos(), DirectionType.EAST))== TileType.TAVERN ||
+                (gameMap.getTileFromDirection(formerState.getCurrentPos(),DirectionType.NORTH))==TileType.TAVERN ||
+                (gameMap.getTileFromDirection(formerState.getCurrentPos(),DirectionType.WEST))==TileType.TAVERN ||
+                (gameMap.getTileFromDirection(formerState.getCurrentPos(),DirectionType.SOUTH))==TileType.TAVERN) {
             return true;
         }
         return false;
