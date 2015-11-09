@@ -15,8 +15,7 @@ import java.util.List;
 public class SimplifiedGState1 implements ISimplifiedGState {
     static final int ID_SHIFT_DISTANCE = 3;
     static final int ID_SHIFT_QUANTITY = 2;
-    static final int ID_SHIFT_DIRECTION = 3;
-    static final int ID_SHIFT_MINECOUNT = 1;
+    static final int ID_SHIFT_DIRECTION = 2;
 
     private Quantity life;
     private int lifeHP;
@@ -43,7 +42,7 @@ public class SimplifiedGState1 implements ISimplifiedGState {
 
         life = calcLife(gameState.getHero().getLife());
         noOfOurMines = calcNoOfMines(gameState.getHero().getMineCount());
-        closestHero = null;
+        closestHero = dijkstra.getNearesHero();
         closestMine = dijkstra.getNearestMine();
         closestTavern = dijkstra.getNearestTavern();
         lifeHP = gameState.getHero().getLife();
@@ -106,17 +105,12 @@ public class SimplifiedGState1 implements ISimplifiedGState {
         id.shift(getLife().getValue(), ID_SHIFT_QUANTITY);
         id.shift(getNoOfOurMines().getValue(), ID_SHIFT_QUANTITY);
         id.shift(getClosestMine().getDirection().getValue(), ID_SHIFT_DIRECTION);
-        // TODO: implement closest hero.
-        //id.shift(getClosestHero().getDirection().getValue(), ID_SHIFT_DIRECTION);
-        id.shift(0, ID_SHIFT_DIRECTION);
+        id.shift(getClosestHero().getDirection().getValue(), ID_SHIFT_DIRECTION);
         id.shift(getClosestTavern().getDirection().getValue(), ID_SHIFT_DIRECTION);
         id.shift(getClosestMine().getDistance().getValue(), ID_SHIFT_DISTANCE);
-        //id.shift(getClosestHero().getDistance().getValue(), ID_SHIFT_DISTANCE);
-        id.shift(0, ID_SHIFT_DISTANCE);
-        //id.shift(getClosestHero().getHealth().getValue(), ID_SHIFT_QUANTITY);
-        id.shift(0, ID_SHIFT_QUANTITY);
-        //id.shift(getClosestHero().getNoOfMines().getValue(), ID_SHIFT_MINECOUNT);
-        id.shift(0, ID_SHIFT_MINECOUNT);
+        id.shift(getClosestHero().getDistance().getValue(), ID_SHIFT_DISTANCE);
+        id.shift(getClosestHero().getLifeDifference().getValue(), ID_SHIFT_QUANTITY);
+        id.shift(getClosestHero().getEnemyMines().getValue(), ID_SHIFT_QUANTITY);
         id.shift(getClosestTavern().getDistance().getValue(), ID_SHIFT_DISTANCE);
         return id.getId();
     }
@@ -137,5 +131,17 @@ public class SimplifiedGState1 implements ISimplifiedGState {
             }
         }
         return possibleMoves;
+    }
+
+    public static Distance calcDistance(int distance){
+        if(distance == 1){
+            return Distance.BESIDE;
+        } else if (distance < RewardConfig.getDistantClose()){
+            return Distance.CLOSE;
+        } else if (distance < RewardConfig.getDistantFar()){
+            return Distance.MEDIUM;
+        } else {
+            return Distance.FAR;
+        }
     }
 }

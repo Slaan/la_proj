@@ -13,7 +13,7 @@ public class SimpleMine {
 
     public SimpleMine(DirectionType direction, int distance) {
         this.direction = direction;
-        this.distance = Distance.calcDistance(distance);
+        this.distance = SimplifiedGState1.calcDistance(distance);
     }
 
     public DirectionType getDirection() {
