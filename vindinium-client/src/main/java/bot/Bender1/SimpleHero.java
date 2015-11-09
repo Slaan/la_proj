@@ -21,9 +21,18 @@ public class SimpleHero {
     public SimpleHero(int heroID, DirectionType direction, int distance) {
         this.heroID = heroID;
         this.distance = SimplifiedGState1.calcDistance(distance);
-        //this.lifeDifference = calcLifeDif(bender.getLife(), enemy.getLife());
         this.direction = direction;
-        //this.enemyMines = calcMineDif(bender.getMineCount(), enemy.getMineCount());
+    }
+
+    public SimpleHero init(GameState gameState) {
+        for (GameState.Hero enemy : gameState.getGame().getHeroes()) {
+            if (enemy.getId() == getHeroID()) {
+                this.lifeDifference = calcLifeDif(gameState.getHero().getLife(), enemy.getLife());
+                this.enemyMines = calcMineDif(gameState.getHero().getMineCount(), enemy.getMineCount());
+                break;
+            }
+        }
+        return this;
     }
 
     public int getHeroID() {

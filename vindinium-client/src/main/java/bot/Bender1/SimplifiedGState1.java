@@ -42,7 +42,7 @@ public class SimplifiedGState1 implements ISimplifiedGState {
 
         life = calcLife(gameState.getHero().getLife());
         noOfOurMines = calcNoOfMines(gameState.getHero().getMineCount());
-        closestHero = dijkstra.getNearesHero();
+        closestHero = dijkstra.getNearesHero().init(gameState);
         closestMine = dijkstra.getNearestMine();
         closestTavern = dijkstra.getNearestTavern();
         lifeHP = gameState.getHero().getLife();
