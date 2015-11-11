@@ -6,6 +6,8 @@ import bot.Bender0.SimplifiedGState;
 import bot.Bender1.RewarderBender1;
 import bot.Bender1.SimplifiedGState1;
 import bot.Config;
+import bot.bender2.RewarderBender2;
+import bot.bender2.SimplifiedGState2;
 import bot.dto.GameState;
 import persistence.*;
 
@@ -43,6 +45,8 @@ public class Bender {
     private ISimplifiedGState getSimplifiedGState(){
         if(Config.getBender().equals("bender1")){
             return new SimplifiedGState1();
+        } else if(Config.getBender().equals("bender2")){
+            return new SimplifiedGState2();
         } else {
             return new SimplifiedGState();
         }
@@ -51,6 +55,8 @@ public class Bender {
     private IRewarder getRewarder(GameLog gameLog){
         if(Config.getBender().equals("bender1")){
             return new RewarderBender1(gameLog);
+        } else if(Config.getBender().equals("bender2")){
+            return new RewarderBender2(gameLog);
         } else {
             return new Rewarder(gameLog);
         }

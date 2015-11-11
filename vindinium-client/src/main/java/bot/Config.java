@@ -26,15 +26,23 @@ public class Config {
     static String DBUser;
     static String DBPassword;
     static String Mode;
+
+    //Sarsa Lambda
     static Double LearningRate;
     static Double ExplorationRate;
     static Double DiscountFactor;
     static Double Lamda;
     static int QueueLength;
     static boolean sarsaStateActionLogs;
+
+    //Dijkstra
+    static int stepsToLook;
+    static int numberOfHerosToLook;
+    static int numberOfMinesToLook;
+    static int numberOfTavernsToLook;
+
     static String Bender;
     static String serverURL;
-    static int serverPort;
 
     private final static String TRAINING_URL = "/api/training";
     private final static String COMPETITION_URL = "/api/arena";
@@ -63,7 +71,6 @@ public class Config {
             DBUser = prop.getProperty("dbuser");
             DBPassword = prop.getProperty("dbpassword");
             serverURL = prop.getProperty("serverURL");
-            serverPort = Integer.parseInt(prop.getProperty("serverPort"));
             Mode = prop.getProperty("modus");
             if ("COMPETITION".equals(Mode)) {
                 GameURL = new GenericUrl(serverURL+COMPETITION_URL);
@@ -73,7 +80,6 @@ public class Config {
                 GameURL = new GenericUrl(serverURL+TRAINING_URL);
                 APIKey = new TurnApiKey(prop.getProperty("apikey"), NoOfRounds);
             }
-            GameURL.setPort(serverPort);
             LearningRate = Double.parseDouble(prop.getProperty("learningrate"));
             ExplorationRate = Double.parseDouble(prop.getProperty("explorationrate"));
             DiscountFactor = Double.parseDouble(prop.getProperty("discountfactor"));
@@ -81,6 +87,11 @@ public class Config {
             QueueLength = Integer.parseInt(prop.getProperty("queuelength"));
             sarsaStateActionLogs = Boolean.parseBoolean(prop.getProperty("sarsaStateActionLogs"));
             Bender = prop.getProperty("Bender");
+
+            stepsToLook = Integer.parseInt(prop.getProperty("stepsToLook"));
+            numberOfHerosToLook = Integer.parseInt(prop.getProperty("numberOfHerosToLook"));
+            numberOfMinesToLook = Integer.parseInt(prop.getProperty("numberOfMinesToLook"));
+            numberOfTavernsToLook = Integer.parseInt(prop.getProperty("numberOfTavernsToLook"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -128,4 +139,12 @@ public class Config {
     public static boolean getSarsaStateActionLogs() { return sarsaStateActionLogs; }
 
     public static String getBender() { return Bender; }
+
+    public static int getStepsToLook() { return stepsToLook; }
+
+    public static int getNumberOfHerosToLook() { return numberOfHerosToLook; }
+
+    public static int getNumberOfMinesToLook() { return numberOfMinesToLook; }
+
+    public static int getNumberOfTavernsToLook() { return numberOfTavernsToLook; }
 }

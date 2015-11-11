@@ -1,9 +1,10 @@
-package bot.Bender1;
+package bot.bender2;
 
 import algorithms.IdShifter;
 import algorithms.dijkstra.Dijkstra;
 import bot.Bender.*;
 import bot.Bender0.RewardConfig;
+import bot.Bender1.*;
 import bot.dto.GameState;
 
 import java.util.ArrayList;
@@ -12,9 +13,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by slaan on 02.11.15.
+ * Created by fabi on 09.11.15.
  */
-public class SimplifiedGState1 implements ISimplifiedGState {
+public class SimplifiedGState2 implements ISimplifiedGState{
+
     static final int ID_SHIFT_DISTANCE = 3;
     static final int ID_SHIFT_QUANTITY = 2;
     static final int ID_SHIFT_DIRECTION = 2;
@@ -31,7 +33,7 @@ public class SimplifiedGState1 implements ISimplifiedGState {
     private GameState.Position spawn;
     private GameState.Position currentPos;
 
-    public SimplifiedGState1() {
+    public SimplifiedGState2() {
     }
 
     public void init(GameState gameState) {
@@ -52,7 +54,7 @@ public class SimplifiedGState1 implements ISimplifiedGState {
     }
 
     private Quantity calcNoOfMines(int mineCount) {
-        if (mineCount<=RewardConfig.getLowerMineBoundryTotal()) {
+        if (mineCount<= RewardConfig.getLowerMineBoundryTotal()) {
             return Quantity.FEW;
         } else if (mineCount<=RewardConfig.getUpperMineBoundryTotal()) {
             return Quantity.MIDDLE;
@@ -102,6 +104,29 @@ public class SimplifiedGState1 implements ISimplifiedGState {
         return currentPos;
     }
 
+
+    public int getLifeHP() {
+        return lifeHP;
+    }
+
+    public int getMineCount() {
+        return mineCount;
+    }
+
+
+
+    public static Distance calcDistance(int distance){
+        if(distance == 1){
+            return Distance.BESIDE;
+        } else if (distance < RewardConfig.getDistantClose()){
+            return Distance.CLOSE;
+        } else if (distance < RewardConfig.getDistantFar()){
+            return Distance.MEDIUM;
+        } else {
+            return Distance.FAR;
+        }
+    }
+
     public int generateGStateId() {
         IdShifter id = new IdShifter();
         id.shift(getLife().getValue(), ID_SHIFT_QUANTITY);
@@ -114,40 +139,21 @@ public class SimplifiedGState1 implements ISimplifiedGState {
         id.shift(getClosestHero().getLifeDifference().getValue(), ID_SHIFT_QUANTITY);
         id.shift(getClosestHero().getEnemyMines().getValue(), ID_SHIFT_QUANTITY);
         id.shift(getClosestTavern().getDistance().getValue(), ID_SHIFT_DISTANCE);
-        id.shift(gameMap.getTileFromDirection(currentPos,DirectionType.NORTH).equals(TileType.BLOCKED)? 0:1 , 1);
-        id.shift(gameMap.getTileFromDirection(currentPos,DirectionType.EAST).equals(TileType.BLOCKED)? 0:1 , 1);
-        id.shift(gameMap.getTileFromDirection(currentPos,DirectionType.SOUTH).equals(TileType.BLOCKED)? 0:1 , 1);
-        id.shift(gameMap.getTileFromDirection(currentPos,DirectionType.WEST).equals(TileType.BLOCKED)? 0:1 , 1);
         return id.getId();
     }
 
-    public int getLifeHP() {
-        return lifeHP;
-    }
-
-    public int getMineCount() {
-        return mineCount;
-    }
-
-    public Set<BotMove> getPossibleMoves(){
+    public Set<BotMove> getPossibleMoves() {
         Set<BotMove> possibleMoves = new HashSet<>();
-        for(DirectionType directionType : DirectionType.values()){
-            if(!gameMap.getTileFromDirection(currentPos, directionType).equals(TileType.BLOCKED)){
-                possibleMoves.add(directionType.toBotMove());
-            }
+        if(!getClosestHero().getDistance().equals(Distance.OUTOFSIGHT)){
+            possibleMoves.add(getClosestHero().getDirection().toBotMove());
+        }
+        if(!getClosestMine().getDistance().equals(Distance.OUTOFSIGHT)){
+            possibleMoves.add(getClosestMine().getDirection().toBotMove());
+        }
+        if(!getClosestTavern().getDistance().equals(Distance.OUTOFSIGHT)){
+            possibleMoves.add(getClosestTavern().getDirection().toBotMove());
         }
         return possibleMoves;
-    }
 
-    public static Distance calcDistance(int distance){
-        if(distance == 1){
-            return Distance.BESIDE;
-        } else if (distance < RewardConfig.getDistantClose()){
-            return Distance.CLOSE;
-        } else if (distance < RewardConfig.getDistantFar()){
-            return Distance.MEDIUM;
-        } else {
-            return Distance.FAR;
-        }
     }
 }

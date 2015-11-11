@@ -7,6 +7,7 @@ import bot.Bender.TileType;
 import bot.Bender1.SimpleHero;
 import bot.Bender1.SimpleMine;
 import bot.Bender1.SimpleTavern;
+import bot.Config;
 import bot.dto.GameState;
 
 import java.util.*;
@@ -44,22 +45,25 @@ public class Dijkstra {
         costFrom.put(playerPosition, 0);
         queue.add(playerPosition);
 
-        while((queue.size() > 0) && ((mines.size() < 1) || (tavern.size() < 1) || (heroes.size() < 1))){
-            GameState.Position currentPosition = queue.remove();
-            visited.put(currentPosition, true);
-            for(GameState.Position position : neighborOf(currentPosition)){
-                queue.add(position);
-                Integer newValue = costFrom.get(currentPosition) + 1;
-                Integer oldValue = Integer.MAX_VALUE;
-                if(costFrom.containsKey(position)){
-                    oldValue = costFrom.get(position);
-                }
-                if(newValue < oldValue){
-                    costFrom.put(position, newValue);
-                    previousFrom.put(position, currentPosition);
+        for(int steps = 0; (steps < Config.getStepsToLook()) && ((mines.size() < Config.getNumberOfMinesToLook()) || (tavern.size() < Config.getNumberOfTavernsToLook()) || (heroes.size() < Config.getNumberOfHerosToLook())); steps++){
+            Queue<GameState.Position> newQueue = new LinkedList<>();
+            while((queue.size() > 0) && ((mines.size() < Config.getNumberOfMinesToLook()) || (tavern.size() < Config.getNumberOfTavernsToLook()) || (heroes.size() < Config.getNumberOfHerosToLook()))) {
+                GameState.Position currentPosition = queue.remove();
+                visited.put(currentPosition, true);
+                for (GameState.Position position : neighborOf(currentPosition)) {
+                    newQueue.add(position);
+                    Integer newValue = costFrom.get(currentPosition) + 1;
+                    Integer oldValue = Integer.MAX_VALUE;
+                    if (costFrom.containsKey(position)) {
+                        oldValue = costFrom.get(position);
+                    }
+                    if (newValue < oldValue) {
+                        costFrom.put(position, newValue);
+                        previousFrom.put(position, currentPosition);
+                    }
                 }
             }
-
+            queue = newQueue;
         }
     }
 
@@ -132,7 +136,22 @@ public class Dijkstra {
     }
 
     public SimpleMine getNearestMine(){
-        return getSimpleMine(mines.get(0));
+        if(mines.size() > 0){
+            return getSimpleMine(mines.get(0));
+        }
+        return new SimpleMine();
+    }
+
+    public List<SimpleMine> getNeededSimpleMines () {
+        List<SimpleMine> simpleMines = new ArrayList<>();
+        for(int neededMines = 0; neededMines < Config.getNumberOfMinesToLook(); neededMines++){
+            if(mines.size() > neededMines) {
+                simpleMines.add(getSimpleMine(mines.get(neededMines)));
+            } else {
+                simpleMines.add(new SimpleMine());
+            }
+        }
+        return simpleMines;
     }
 
     public List<SimpleMine> getSimpleMines () {
@@ -148,7 +167,22 @@ public class Dijkstra {
     }
 
     public SimpleTavern getNearestTavern(){
-        return getSimpleTavern(tavern.get(0));
+        if(tavern.size() > 0){
+            return getSimpleTavern(tavern.get(0));
+        }
+        return new SimpleTavern();
+    }
+
+    public List<SimpleTavern> getNeededSimpleTaverns () {
+        List<SimpleTavern> simpleTaverns = new ArrayList<>();
+        for(int neededTaverns = 0; neededTaverns < Config.getNumberOfTavernsToLook(); neededTaverns++){
+            if(mines.size() > neededTaverns) {
+                simpleTaverns.add(getSimpleTavern(tavern.get(neededTaverns)));
+            } else {
+                simpleTaverns.add(new SimpleTavern());
+            }
+        }
+        return simpleTaverns;
     }
 
     public List<SimpleTavern> getSimpleTaverns () {
@@ -165,7 +199,22 @@ public class Dijkstra {
     }
 
     public SimpleHero getNearesHero(){
-        return getSimpleHero(heroes.get(0));
+        if(heroes.size() > 0){
+            return getSimpleHero(heroes.get(0));
+        }
+        return new SimpleHero();
+    }
+
+    public List<SimpleHero> getNeededSimpleHeros () {
+        List<SimpleHero> simpleHeros = new ArrayList<>();
+        for(int neededHeroes = 0; neededHeroes < Config.getNumberOfHerosToLook(); neededHeroes++){
+            if(heroes.size() > neededHeroes) {
+                simpleHeros.add(getSimpleHero(heroes.get(neededHeroes)));
+            } else {
+                simpleHeros.add(new SimpleHero());
+            }
+        }
+        return simpleHeros;
     }
 
     public List<SimpleHero> getSimpleHeros(){

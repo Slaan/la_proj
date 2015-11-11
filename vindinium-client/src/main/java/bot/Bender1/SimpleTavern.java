@@ -10,9 +10,17 @@ public class SimpleTavern {
     private DirectionType direction;
     private Distance distance;
 
+    /**
+     * Create a Hero that is out of sight.
+     */
+    public SimpleTavern() {
+        direction = DirectionType.NORTH;
+        distance = Distance.OUTOFSIGHT;
+    }
+
     public SimpleTavern(DirectionType direction, int distance) {
         this.direction = direction;
-        this.distance = Distance.calcDistance(distance);
+        this.distance = SimplifiedGState1.calcDistance(distance);
     }
 
     public DirectionType getDirection() {

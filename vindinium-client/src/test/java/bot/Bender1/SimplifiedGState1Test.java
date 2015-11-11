@@ -10,11 +10,13 @@ import static org.junit.Assert.*;
  */
 public class SimplifiedGState1Test {
     
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
 
     }
 
-    @Test public void testGenerateGStateId() throws Exception {
+    @Test
+    public void testGenerateGStateId() throws Exception {
 
     }
 }
