@@ -1,7 +1,5 @@
 package bot.Bender;
 
-import bot.Bender0.SimplifiedGState;
-
 /**
  * Created by slaan on 02.11.15.
  */
@@ -14,4 +12,6 @@ public interface IRewarder {
      * @return Reward the bot receives
      */
     public int calculateReward(ISimplifiedGState state);
+
+    public void setLastMove(BotMove move);
 }

@@ -12,11 +12,16 @@ public class RewarderBender2 implements IRewarder{
 
     private final GameLog gameLog;
     private SimplifiedGState2 formerState;
+    private BotMove move;
     private SimplifiedGState2 currentState;
     private int reward;
 
     public RewarderBender2(GameLog gameLog){
         this.gameLog = gameLog;
+    }
+
+    public void setLastMove(BotMove move){
+        this.move = move;
     }
 
     public int calculateReward(ISimplifiedGState state) {

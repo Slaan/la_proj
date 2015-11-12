@@ -24,6 +24,10 @@ public class Rewarder implements IRewarder {
         this.gameLog = gameLog;
     }
 
+    public void setLastMove(BotMove move){
+
+    }
+
     public int calculateReward(ISimplifiedGState state) {
         if (formerState == null) {
             formerState = (SimplifiedGState)state;
