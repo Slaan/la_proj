@@ -38,7 +38,8 @@ public class Bender {
         simplifiedGState.init(gameState);
         SarsaState state = manageSarsaState.getSarsaStateOfId(simplifiedGState);
         SarsaStateAction action = sarsaLambda.sarsaStep(state,
-            rewarder.calculateReward(simplifiedGState));
+            rewarder.calculateReward(simplifiedGState),
+                simplifiedGState.getPossibleMoves());
         rewarder.setLastMove(action.getAction());
         return action.getAction();
     }

@@ -7,9 +7,7 @@ import bot.Bender0.RewardConfig;
 import bot.Bender1.*;
 import bot.dto.GameState;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -152,6 +150,13 @@ public class SimplifiedGState2 implements ISimplifiedGState{
         }
         if(!getClosestTavern().getDistance().equals(Distance.OUTOFSIGHT)){
             possibleMoves.add(getClosestTavern().getDirection().toBotMove());
+        }
+        if(possibleMoves.isEmpty()){
+            for(DirectionType directionType : DirectionType.values()){
+                if(!gameMap.getTileFromDirection(currentPos, directionType).equals(TileType.BLOCKED)){
+                    possibleMoves.add(directionType.toBotMove());
+                }
+            }
         }
         return possibleMoves;
 

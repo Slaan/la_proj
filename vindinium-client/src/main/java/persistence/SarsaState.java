@@ -1,6 +1,6 @@
 package persistence;
 
-import bot.Bender0.SimplifiedGState;
+import bot.Bender.BotMove;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
@@ -9,6 +9,7 @@ import org.apache.logging.log4j.MarkerManager;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by beckf on 17.10.2015.
@@ -53,30 +54,47 @@ public class SarsaState {
     //    actions.add(new SarsaStateAction(description, action, qValue));
     //}
 
-    public SarsaStateAction getGStateActionForExplorationRate(double epsilon){
+    private List<SarsaStateAction> getPossigbleSarsaStateActions(Set<BotMove> botMoves){
+        List<SarsaStateAction> possigbleSarsaStateActions = new ArrayList<>();
+        for(SarsaStateAction sarsaStateAction : actions){
+            if(botMoves.contains(sarsaStateAction.getAction())){
+                possigbleSarsaStateActions.add(sarsaStateAction);
+            }
+        }
+        return possigbleSarsaStateActions;
+    }
+
+    public SarsaStateAction getGStateActionForExplorationRate(double epsilon, Set<BotMove> botMoves){
+
+        List<SarsaStateAction> possigbleSarsaStateActions = getPossigbleSarsaStateActions(botMoves);
+
 
         // Uncomment me if you want to see the world learn.
         logger.debug(markCurrent, this.toString());
-        for (SarsaStateAction action : actions) {
+        for (SarsaStateAction action : possigbleSarsaStateActions) {
             logger.debug(markAvailable, "Action available: " + action);
         }
+        for (SarsaStateAction action : actions) {
+            logger.debug(markAvailable, "Action: " + action);
+        }
+
 
         SarsaStateAction action;
         if((epsilon * 100) > (Math.random() * 100 + 1)){
             logger.debug(markChoose, "I'm exploring.");
-            action = actions.get((int)Math.random() * actions.size());
+            action = possigbleSarsaStateActions.get((int)Math.random() * possigbleSarsaStateActions.size());
         } else {
             logger.debug(markAvailable, "I'm getting best Action.");
-            action = getBestGStateAction();
+            action = getBestGStateAction(possigbleSarsaStateActions);
         }
         logger.debug(markAvailable, "using: " + action.toString());
         action.addUse();
         return action;
     }
 
-    private SarsaStateAction getBestGStateAction(){
-        SarsaStateAction best = actions.get(0);
-        for(SarsaStateAction gstateAction : actions){
+    private SarsaStateAction getBestGStateAction(List<SarsaStateAction> possigbleSarsaStateActions){
+        SarsaStateAction best = possigbleSarsaStateActions.get(0);
+        for(SarsaStateAction gstateAction : possigbleSarsaStateActions){
             if(best.getQValue() < gstateAction.getQValue()){
                 best = gstateAction;
             }

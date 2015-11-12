@@ -2,14 +2,12 @@ package persistence;
 
 import bot.Bender.BotMove;
 import bot.Bender.ISimplifiedGState;
-import bot.Bender0.SimplifiedGState;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -74,7 +72,7 @@ public class ManageSarsaState {
             if(sarsaState == null) {
                 sarsaState = new SarsaState(sarsaStateId);
                 session.save(sarsaState);
-                for (BotMove botMove : simplifiedGState.getPossibleMoves()) {
+                for (BotMove botMove : BotMove.values()) {
                     manageSarsaStateAction.addSarsaStateActionInSession(session, sarsaState, "", botMove);
                 }
             }
