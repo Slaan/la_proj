@@ -4,3 +4,4 @@ target/
 dependency-reduced-pom.xml
 logs/
 *.properties
+log4j2.xml
