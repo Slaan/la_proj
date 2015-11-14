@@ -28,11 +28,13 @@ public class SimplifiedGState1 implements ISimplifiedGState {
     private Dijkstra dijkstra;
     private GameState.Position spawn;
     private GameState.Position currentPos;
+    private GameState game;
 
     public SimplifiedGState1() {
     }
 
     public void init(GameState gameState) {
+        game = gameState;
         gameMap = new GameMap(gameState);
         spawn = gameState.getHero().getSpawnPos();
         currentPos = new GameState.Position(gameState.getHero().getPos().getX()+1,
@@ -123,6 +125,11 @@ public class SimplifiedGState1 implements ISimplifiedGState {
     public int getMineCount() {
         return mineCount;
     }
+
+    public GameState getGame() {
+        return game;
+    }
+
 
     public Set<BotMove> getPossibleMoves(){
         Set<BotMove> possibleMoves = new HashSet<>();

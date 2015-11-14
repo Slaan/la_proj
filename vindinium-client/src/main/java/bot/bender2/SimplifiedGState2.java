@@ -30,11 +30,13 @@ public class SimplifiedGState2 implements ISimplifiedGState{
     private Dijkstra dijkstra;
     private GameState.Position spawn;
     private GameState.Position currentPos;
+    private GameState game;
 
     public SimplifiedGState2() {
     }
 
     public void init(GameState gameState) {
+        game = gameState;
         gameMap = new GameMap(gameState);
         spawn = gameState.getHero().getSpawnPos();
         currentPos = new GameState.Position(gameState.getHero().getPos().getX()+1,
@@ -112,7 +114,9 @@ public class SimplifiedGState2 implements ISimplifiedGState{
         return mineCount;
     }
 
-
+    public GameState getGame() {
+        return game;
+    }
 
     public static Distance calcDistance(int distance){
         if(distance == 1){

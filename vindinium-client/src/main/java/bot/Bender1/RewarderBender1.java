@@ -1,8 +1,11 @@
 package bot.Bender1;
 
 import bot.Bender.*;
+import bot.dto.GameState;
 import org.omg.SendingContext.RunTime;
 import persistence.GameLog;
+
+import java.util.List;
 
 /**
  * Created by Daniel Hofmeister on 06.11.2015.
@@ -57,19 +60,24 @@ public class RewarderBender1 implements IRewarder {
         return reward;
     }
 
-     private boolean checkForKill() {
+    private boolean checkForKill() {
          boolean result = false;
-         if (attackedHero()) {
-            if(!heroDead())
-                result = true;
+         if (attackedHero()&&heroKilled()) {
+             result = true;
          }
          return result;
     }
 
+    /** Checks if we attacked a Hero last turn
+     *
+     * @return
+     */
     private boolean attackedHero() {
         boolean result = false;
+        // Enemy hero has to be next to us and we haven't moved between rounds
         if (formerState.getClosestHero().getDistance().equals((Distance.BESIDE))
                 && formerState.getCurrentPos().equals(currentState.getCurrentPos())) {
+            // our last action has to be in the direction of the enemy hero
             if (move.equals(BotMove.EAST) && formerState.getClosestHero().getDirection().equals(DirectionType.EAST)) {
                 result = true;
             } else if (move.equals(BotMove.SOUTH)
@@ -81,25 +89,44 @@ public class RewarderBender1 implements IRewarder {
             } else if (move.equals(BotMove.NORTH)
                     && formerState.getClosestHero().getDirection().equals(DirectionType.NORTH)) {
                 result = true;
-            } else {throw new RuntimeException("Enemy hero was next to us but not in a Direction? " +
-                    "#RewarderBender1.attackHero() ");
             }
+        }
+        if (result) {
+           // System.out.println("Hero attacked Turn: " + formerState.getGame().getGame().getTurn() +" \n" +
+           //         "GameURL: " + formerState.getGame().getViewUrl());
         }
         return result;
     }
 
-    private boolean heroDead() {
+    /** Checks if we killed a Hero last turn (only Heroes with Mines count currently)
+     *
+     * @return
+     */
+    // TODO: Add hero kill with without mines
+    private boolean heroKilled() {
         boolean result = false;
-
         if (formerState.getMineCount()>currentState.getMineCount()) {
             result = true;
+            //System.out.println("Game: " + formerState.getGame().getViewUrl() + " Hero killed! \n" +
+            //        "Turn: " + formerState.getGame().getGame().getTurn());
         }
-
         return result;
     }
 
     private void calcKillReward() {
+        int result;
+        int heroID = formerState.getClosestHero().getHeroID();
+        GameState.Hero hero=null;
 
+        List<GameState.Hero> list = formerState.getGame().getGame().getHeroes();
+        for (GameState.Hero h : list) {
+            if(h.getId()==heroID) {
+                hero = h;
+            }
+        }
+        result = RewardConfigBender1.getKillDefault() + hero.getMineCount() * RewardConfigBender1.getKillPerMine();
+        System.out.println("get a nice kill reward: " + result);
+        reward += result;
     }
 
     public boolean checkForDeath() {
@@ -148,8 +175,42 @@ public class RewarderBender1 implements IRewarder {
         }
     }
 
+    /** Checks if we got a mine last turn
+     *
+     * @return
+     */
     private boolean checkForMine() {
-        return ((currentState.getMineCount())>(formerState.getMineCount()));
+        boolean result = false;
+        if (grabMine() && (formerState.getMineCount()<currentState.getMineCount())) {
+            result = true;
+        }
+        return result;
+    }
+
+    /** Checks if we tried to get a mine last turn
+     *
+     * @return
+     */
+    private boolean grabMine() {
+        boolean result = false;
+        // Enemy hero has to be next to us and we havent moved between rounds
+        if (formerState.getClosestMine().getDistance().equals((Distance.BESIDE))
+                && formerState.getCurrentPos().equals(currentState.getCurrentPos())) {
+            // our last action has to be in the direction of the enemy hero
+            if (move.equals(BotMove.EAST) && formerState.getClosestMine().getDirection().equals(DirectionType.EAST)) {
+                result = true;
+            } else if (move.equals(BotMove.SOUTH)
+                    && formerState.getClosestMine().getDirection().equals(DirectionType.SOUTH)) {
+                result = true;
+            } else if (move.equals(BotMove.WEST)
+                    && formerState.getClosestMine().getDirection().equals(DirectionType.WEST)) {
+                result = true;
+            } else if (move.equals(BotMove.NORTH)
+                    && formerState.getClosestMine().getDirection().equals(DirectionType.NORTH)) {
+                result = true;
+            }
+        }
+        return result;
     }
 
     private void calcMineReward() {
