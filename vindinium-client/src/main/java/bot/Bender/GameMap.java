@@ -171,17 +171,21 @@ public class GameMap {
      * @return
      */
     public TileType getTileFromDirection(GameState.Position heroPosition, DirectionType dir) {
-        switch (dir) {
-            case NORTH:
-                return currentMap[heroPosition.getX()   ][heroPosition.getY()-1 ];
-            case EAST:
-                return currentMap[heroPosition.getX()+1 ][heroPosition.getY()   ];
-            case SOUTH:
-                return currentMap[heroPosition.getX()   ][heroPosition.getY()+1 ];
-            case WEST:
-                return currentMap[heroPosition.getX()-1 ][heroPosition.getY()   ];
-            default:
-                throw new RuntimeException("received a non supported direction.");
+        try {
+            switch (dir) {
+                case NORTH:
+                    return currentMap[heroPosition.getX()   ][heroPosition.getY()-1 ];
+                case EAST:
+                    return currentMap[heroPosition.getX()+1 ][heroPosition.getY()   ];
+                case SOUTH:
+                    return currentMap[heroPosition.getX()   ][heroPosition.getY()+1 ];
+                case WEST:
+                    return currentMap[heroPosition.getX()-1 ][heroPosition.getY()   ];
+                default:
+                    throw new RuntimeException("received a non supported direction.");
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return TileType.BLOCKED;
         }
     }
 
