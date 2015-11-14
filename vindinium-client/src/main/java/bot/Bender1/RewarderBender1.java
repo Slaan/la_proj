@@ -89,8 +89,8 @@ public class RewarderBender1 implements IRewarder {
             if (h.getLife()<=20) {
                 killedHeroes.add(h);
                 result = true;
-                System.out.println("Killed Hero ID: " + h.getId() + " URL: " + formerState.getGame().getViewUrl() +
-                        " Turn: " + formerState.getGame().getGame().getTurn());
+               // System.out.println("Killed Hero ID: " + h.getId() + " URL: " + formerState.getGame().getViewUrl() +
+               //         " Turn: " + formerState.getGame().getGame().getTurn());
             }
         }
         return result;
@@ -104,7 +104,7 @@ public class RewarderBender1 implements IRewarder {
                         Math.pow(RewardConfigBender1.getKillPerMineDiscount(),i);
             }
         }
-        System.out.println("Got a reward <3");
+       // System.out.println("Got a reward <3");
     }
 
 
