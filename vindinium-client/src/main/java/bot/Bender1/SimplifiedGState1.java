@@ -35,7 +35,8 @@ public class SimplifiedGState1 implements ISimplifiedGState {
     public void init(GameState gameState) {
         gameMap = new GameMap(gameState);
         spawn = gameState.getHero().getSpawnPos();
-        currentPos = gameState.getHero().getPos();
+        currentPos = new GameState.Position(gameState.getHero().getPos().getX()+1,
+                gameState.getHero().getPos().getY()+1);
 
         dijkstra = new Dijkstra(gameMap, currentPos);
         dijkstra.runDijkstra();

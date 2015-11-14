@@ -25,8 +25,7 @@ public class GameMap {
     private List<GameState.Position> heroes;
 
     /** IMPORTANT: Map is updated to include a ring of "blocked" tiles. That means that all GameState Positions
-     * are off by +1 on both x- and y-axis. See method comments for how this is handled.
-     * All attributes of this class are adjusted to this.
+     * are off by 1 on both x- and y-axis. All attributes of this class are adjusted to the new Positions.
      *
      * @param gameState
      */
@@ -165,34 +164,34 @@ public class GameMap {
         return (Math.abs(pos1.getX()-pos2.getX()) + Math.abs(pos1.getY()-pos2.getY()));
     }
 
-    /** Adjusts for old HeroPosition.
+    /** Requires new MapCoordinates
      *
-     * @param heroPosition old GameState.getHero.getPos()
+     * @param heroPosition actual HeroPosition in Map
      * @param dir
      * @return
      */
     public TileType getTileFromDirection(GameState.Position heroPosition, DirectionType dir) {
         switch (dir) {
             case NORTH:
-                return currentMap[heroPosition.getX()+1    ][heroPosition.getY()];
+                return currentMap[heroPosition.getX()   ][heroPosition.getY()-1 ];
             case EAST:
-                return currentMap[heroPosition.getX()+2][heroPosition.getY()+1    ];
+                return currentMap[heroPosition.getX()+1 ][heroPosition.getY()   ];
             case SOUTH:
-                return currentMap[heroPosition.getX()+1    ][heroPosition.getY() + 2];
+                return currentMap[heroPosition.getX()   ][heroPosition.getY()+1 ];
             case WEST:
-                return currentMap[heroPosition.getX()][heroPosition.getY()+1    ];
+                return currentMap[heroPosition.getX()-1 ][heroPosition.getY()   ];
             default:
                 throw new RuntimeException("received a non supported direction.");
         }
     }
 
-    /** Assuming the GameState Hero is used, adjusts for changed Map (+1/+1)
+    /** returns TileType at Position position
      *
-     * @param position old GameState.Hero.getPos()
+     * @param position Actual Position in Map
      * @return
      */
     public TileType getTile(GameState.Position position) {
-        return currentMap[position.getX()+1][position.getY()+1];
+        return currentMap[position.getX()][position.getY()];
     }
 
     public GameState.Position getPositionFromDirection(GameState.Position currentPosition, DirectionType dir){

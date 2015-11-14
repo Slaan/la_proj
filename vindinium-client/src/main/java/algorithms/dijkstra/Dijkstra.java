@@ -128,7 +128,7 @@ public class Dijkstra {
         while(!previousFrom.get(previousFrom.get(prev)).equals(previousFrom.get(prev))){
             prev = previousFrom.get(prev);
         }
-        return gameMap.calcDirection(new GameState.Position(playerPosition.getX(),playerPosition.getY()), prev);
+        return gameMap.calcDirection(playerPosition, prev);
     }
 
     public SimpleMine getSimpleMine(GameState.Position minePosition){

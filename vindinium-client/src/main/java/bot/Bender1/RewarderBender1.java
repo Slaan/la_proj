@@ -1,6 +1,7 @@
 package bot.Bender1;
 
 import bot.Bender.*;
+import org.omg.SendingContext.RunTime;
 import persistence.GameLog;
 
 /**
@@ -57,7 +58,44 @@ public class RewarderBender1 implements IRewarder {
     }
 
      private boolean checkForKill() {
-        return false;
+         boolean result = false;
+         if (attackedHero()) {
+            if(!heroDead())
+                result = true;
+         }
+         return result;
+    }
+
+    private boolean attackedHero() {
+        boolean result = false;
+        if (formerState.getClosestHero().getDistance().equals((Distance.BESIDE))
+                && formerState.getCurrentPos().equals(currentState.getCurrentPos())) {
+            if (move.equals(BotMove.EAST) && formerState.getClosestHero().getDirection().equals(DirectionType.EAST)) {
+                result = true;
+            } else if (move.equals(BotMove.SOUTH)
+                    && formerState.getClosestHero().getDirection().equals(DirectionType.SOUTH)) {
+                result = true;
+            } else if (move.equals(BotMove.WEST)
+                    && formerState.getClosestHero().getDirection().equals(DirectionType.WEST)) {
+                result = true;
+            } else if (move.equals(BotMove.NORTH)
+                    && formerState.getClosestHero().getDirection().equals(DirectionType.NORTH)) {
+                result = true;
+            } else {throw new RuntimeException("Enemy hero was next to us but not in a Direction? " +
+                    "#RewarderBender1.attackHero() ");
+            }
+        }
+        return result;
+    }
+
+    private boolean heroDead() {
+        boolean result = false;
+
+        if (formerState.getMineCount()>currentState.getMineCount()) {
+            result = true;
+        }
+
+        return result;
     }
 
     private void calcKillReward() {
