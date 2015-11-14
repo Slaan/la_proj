@@ -18,30 +18,47 @@ public class GameMap {
     private TileType[][] currentMap;
     private DirectionType nearestMineDirection;
     private DirectionType nearestTavernDirection;
+    //private GameState.Position heroPosition;
 
     private List<GameState.Position> mines;
     private List<GameState.Position> taverns;
     private List<GameState.Position> heroes;
 
+    /** IMPORTANT: Map is updated to include a ring of "blocked" tiles. That means that all GameState Positions
+     * are off by +1 on both x- and y-axis. See method comments for how this is handled.
+     * All attributes of this class are adjusted to this.
+     *
+     * @param gameState
+     */
     public GameMap(GameState gameState) {
         currentMap = parseMap(gameState);
-        calculateNearestMineAndTavern(gameState.getHero().getPos());
+/*        heroPosition = new GameState.Position(gameState.getHero().getPos().getX()+1,
+                gameState.getHero().getPos().getY()+1);*/
+        calculateNearestMineAndTavern(new GameState.Position(gameState.getHero().getPos().getX()+1,
+                gameState.getHero().getPos().getY()+1));
     }
 
     private TileType[][] parseMap(GameState gameState) {
 
         int size = gameState.getGame().getBoard().getSize();
         String tiles = gameState.getGame().getBoard().getTiles();
-        TileType[][] result = new TileType[size][size];
+        TileType[][] result = new TileType[size+2][size+2];
         int heroNumber = gameState.getHero().getId();
         int positionInTiles = 0;
         taverns = new ArrayList<>();
         mines = new ArrayList<>();
         heroes = new ArrayList<>();
 
-        for(int y=0; y<size; y++) {
+        for(int z=0; z<size+2; z++) {
+            result[0][z] = TileType.BLOCKED;
+            result[z][0] = TileType.BLOCKED;
+            result[size+1][z] = TileType.BLOCKED;
+            result[z][size+1] = TileType.BLOCKED;
+        }
+
+        for(int y=1; y<size+1; y++) {
             // y-axis
-            for(int x=0; x<size; x++) {
+            for(int x=1; x<size+1; x++) {
                 //x-axis
                 String tileString = tiles.substring(positionInTiles, positionInTiles+2);
                 if(tileString.equals("  ")) {
@@ -80,6 +97,8 @@ public class GameMap {
         return result;
     }
 
+    /** Requires new Map Coordinates from hero.
+     */
     private void calculateNearestMineAndTavern(GameState.Position heropos) {
         GameState.Position closestMinePos = null;
         int curClosestMineDist = Integer.MAX_VALUE;
@@ -107,6 +126,12 @@ public class GameMap {
 
     }
 
+    /** Requires new Map Coordinates
+     *
+     * @param heroPos actual hero Position with new Map Coordinates
+     * @param objPos target Position with new Map coordinates
+     * @return
+     */
     public DirectionType calcDirection(GameState.Position heroPos, GameState.Position objPos) {
         int xDist = heroPos.getX()-objPos.getX();
         int yDist = heroPos.getY()-objPos.getY();
@@ -136,31 +161,38 @@ public class GameMap {
         return result;
     }
 
-    public int distanceBetweenPositions(GameState.Position pos1, GameState.Position pos2) {
+    private int distanceBetweenPositions(GameState.Position pos1, GameState.Position pos2) {
         return (Math.abs(pos1.getX()-pos2.getX()) + Math.abs(pos1.getY()-pos2.getY()));
     }
 
+    /** Adjusts for old HeroPosition.
+     *
+     * @param heroPosition old GameState.getHero.getPos()
+     * @param dir
+     * @return
+     */
     public TileType getTileFromDirection(GameState.Position heroPosition, DirectionType dir) {
         switch (dir) {
             case NORTH:
-                if (heroPosition.getY() < 1) { return TileType.BLOCKED; }
-                return currentMap[heroPosition.getX()    ][heroPosition.getY() - 1];
+                return currentMap[heroPosition.getX()+1    ][heroPosition.getY()];
             case EAST:
-                if (heroPosition.getX() >= currentMap.length - 1) { return TileType.BLOCKED; }
-                return currentMap[heroPosition.getX() + 1][heroPosition.getY()    ];
+                return currentMap[heroPosition.getX()+2][heroPosition.getY()+1    ];
             case SOUTH:
-                if (heroPosition.getY() >= currentMap[0].length - 1) { return TileType.BLOCKED; }
-                return currentMap[heroPosition.getX()    ][heroPosition.getY() + 1];
+                return currentMap[heroPosition.getX()+1    ][heroPosition.getY() + 2];
             case WEST:
-                if (heroPosition.getX() < 1) { return TileType.BLOCKED; }
-                return currentMap[heroPosition.getX() - 1][heroPosition.getY()    ];
+                return currentMap[heroPosition.getX()][heroPosition.getY()+1    ];
             default:
                 throw new RuntimeException("received a non supported direction.");
         }
     }
 
+    /** Assuming the GameState Hero is used, adjusts for changed Map (+1/+1)
+     *
+     * @param position old GameState.Hero.getPos()
+     * @return
+     */
     public TileType getTile(GameState.Position position) {
-        return currentMap[position.getX()][position.getY()];
+        return currentMap[position.getX()+1][position.getY()+1];
     }
 
     public GameState.Position getPositionFromDirection(GameState.Position currentPosition, DirectionType dir){
@@ -197,4 +229,9 @@ public class GameMap {
     public List<GameState.Position> getMines() { return mines; }
 
     public List<GameState.Position> getTaverns() { return taverns; }
+
+/*    public GameState.Position getHeroPosition() {
+        return heroPosition;
+    }*/
+
 }
