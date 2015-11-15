@@ -36,7 +36,7 @@ public class SimplifiedGState1 implements ISimplifiedGState {
     public void init(GameState gameState) {
         game = gameState;
         gameMap = new GameMap(gameState);
-        spawn = gameState.getHero().getSpawnPos();
+        spawn = new GameState.Position(gameState.getHero().getSpawnPos().getX(),gameState.getHero().getSpawnPos().getY());
         currentPos = new GameState.Position(gameState.getHero().getPos().getX()+1,
                 gameState.getHero().getPos().getY()+1);
 
