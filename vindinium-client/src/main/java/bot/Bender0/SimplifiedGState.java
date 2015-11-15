@@ -32,8 +32,10 @@ public class SimplifiedGState implements ISimplifiedGState {
         gameMap = new GameMap(gameState);
         life = gameState.getHero().getLife();
         noOfOurMines = gameState.getHero().getMineCount();
-        spawn = new GameState.Position(gameState.getHero().getSpawnPos().getX(),gameState.getHero().getSpawnPos().getY());
-        currentPos = new GameState.Position(gameState.getHero().getPos().getX(),gameState.getHero().getPos().getY());
+        spawn = new GameState.Position(gameState.getHero().getSpawnPos().getX()+1,
+                gameState.getHero().getSpawnPos().getY()+1);
+        currentPos = new GameState.Position(gameState.getHero().getPos().getX()+1,
+                gameState.getHero().getPos().getY()+1);
     }
 
     public int getLife() {
