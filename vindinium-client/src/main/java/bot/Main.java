@@ -33,11 +33,11 @@ public class Main extends Thread{
             SlackThread slackThread = new SlackThread(gameLogBuffer);
             SessionFactory factory = SessionBuilder.generateSessionFactory();
             ManageGameLog manageGameLog = new ManageGameLog(factory);
-            ManageSarsaStateActionLog manageSarsaStateActionLog = new ManageSarsaStateActionLog(factory);
-            ManageSarsaStateAction manageSarsaStateAction = new ManageSarsaStateAction(factory, manageSarsaStateActionLog);
-            ManageSarsaState manageSarsaState = new ManageSarsaState(factory, manageSarsaStateAction);
+            ManageStateActionLog manageStateActionLog = new ManageStateActionLog(factory);
+            ManageStateAction manageStateAction = new ManageStateAction(factory, manageStateActionLog);
+            ManageState manageState = new ManageState(factory, manageStateAction);
             for(int i = 0; i<Config.getNoOfThreads(); i++) {
-                runners.add(new BenderRunner(manageSarsaState, manageGameLog, gameLogBuffer));
+                runners.add(new BenderRunner(manageState, manageGameLog, gameLogBuffer));
             }
 
             slackThread.start();

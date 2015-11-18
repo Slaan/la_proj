@@ -21,10 +21,10 @@ public class SessionBuilder {
                     setProperty("hibernate.hbm2ddl.auto", "update").
                     setProperty("hibernate.connection.username", Config.getDBUser()).
                     setProperty("hibernate.connection.password", Config.getDBPassword()).
-                    addAnnotatedClass(SarsaState.class).
-                    addAnnotatedClass(SarsaStateAction.class).
+                    addAnnotatedClass(State.class).
+                    addAnnotatedClass(StateAction.class).
                     addAnnotatedClass(GameLog.class).
-                    addAnnotatedClass(SarsaStateActionLog.class).
+                    addAnnotatedClass(StateActionLog.class).
             buildSessionFactory();
         }catch (Throwable ex) {
             System.err.println("Failed to create sessionFactory object." + ex);

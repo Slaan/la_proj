@@ -10,13 +10,13 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "SarsaStateActionLog")
-public class SarsaStateActionLog {
+@Table(name = "StateActionLog")
+public class StateActionLog {
     @Id @GeneratedValue
-    @Column(name = "sarsaStateActionIDLog")
-    private int sarsaStateActionIDLog;
-    @Column(name = "sarsaStateActionID")
-    private int sarsaStateActionID;
+    @Column(name = "stateActionIDLog")
+    private int stateActionIDLog;
+    @Column(name = "stateActionID")
+    private int stateActionID;
     @JoinColumn(name = "state")
     private int state;
     @Column(name = "description")
@@ -28,30 +28,30 @@ public class SarsaStateActionLog {
     @Column(name = "used")
     private int used;
 
-    private SarsaStateActionLog(){}
-    protected SarsaStateActionLog(SarsaStateAction sarsaStateAction){
-        this.sarsaStateActionID = sarsaStateAction.getSarsaStateActionID();
-        this.state = sarsaStateAction.getState().getgStateId();
-        this.description = sarsaStateAction.getDescription();
-        this.action = sarsaStateAction.getAction();
-        this.qValue = sarsaStateAction.getQValue();
-        this.used = sarsaStateAction.getUsed();
+    private StateActionLog(){}
+    protected StateActionLog(StateAction stateAction){
+        this.stateActionID = stateAction.getStateActionID();
+        this.state = stateAction.getState().getStateId();
+        this.description = stateAction.getDescription();
+        this.action = stateAction.getAction();
+        this.qValue = stateAction.getQValue();
+        this.used = stateAction.getUsed();
     }
 
-    public int getSarsaStateActionIDLog() {
-        return sarsaStateActionIDLog;
+    public int getStateActionIDLog() {
+        return stateActionIDLog;
     }
 
-    public void setSarsaStateActionIDLog(int sarsaStateActionIDLog) {
-        this.sarsaStateActionIDLog = sarsaStateActionIDLog;
+    public void setStateActionIDLog(int stateActionIDLog) {
+        this.stateActionIDLog = stateActionIDLog;
     }
 
-    public int getSarsaStateActionID() {
-        return sarsaStateActionID;
+    public int getStateActionID() {
+        return stateActionID;
     }
 
-    public void setSarsaStateActionID(int sarsaStateActionID) {
-        this.sarsaStateActionID = sarsaStateActionID;
+    public void setStateActionID(int stateActionID) {
+        this.stateActionID = stateActionID;
     }
 
     public int getState() {

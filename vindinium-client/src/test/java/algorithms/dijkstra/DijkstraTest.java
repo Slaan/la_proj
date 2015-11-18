@@ -41,8 +41,12 @@ public class DijkstraTest{
         GameState.Hero hero = new GameState.Hero(1, "dan", "0", 0, pos, 100, 0, 0, pos, false);
         GameState gs = new GameState(game, hero, "", "", "");
 
+        Config.init();
+
+        GameState.Position heroPos = new GameState.Position(2, 5);
+
         GameMap gameMap = new GameMap(gs);
-        Dijkstra dijkstra = new Dijkstra(gameMap, pos);
+        Dijkstra dijkstra = new Dijkstra(gameMap, heroPos);
         dijkstra.runDijkstra();
 
         SimpleMine simpleMine = new SimpleMine(DirectionType.WEST, 1);

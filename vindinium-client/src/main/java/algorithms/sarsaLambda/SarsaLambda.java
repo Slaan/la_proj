@@ -1,19 +1,20 @@
 package algorithms.sarsaLambda;
 
+import algorithms.ILearning;
 import bot.Bender.BotMove;
 import bot.Config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import persistence.ManageSarsaStateAction;
-import persistence.SarsaState;
-import persistence.SarsaStateAction;
+import persistence.ManageStateAction;
+import persistence.State;
+import persistence.StateAction;
 
 import java.util.Set;
 
 /**
  * Created by beckf on 17.10.2015.
  */
-public class SarsaLambda {
+public class SarsaLambda implements ILearning{
     private static final Logger logger = LogManager.getLogger(SarsaLambda.class);
 
     private double alpha; //Lerning Rate
@@ -21,41 +22,41 @@ public class SarsaLambda {
     private double gamma; //Discount factor
     private double lambda; //Eligibility trace decay rate
 
-    private SarsaStateAction lastSarsaStateAction;
+    private StateAction lastStateAction;
 
     private SarsaQueue sarsaQueue;
 
-    public SarsaLambda(ManageSarsaStateAction manageSarsaStateAction){
+    public SarsaLambda(ManageStateAction manageStateAction){
         this.alpha = Config.getLearningRate();
         this.epsilon = Config.getExplorationRate();
         this.gamma = Config.getDiscountFactor();
         this.lambda = Config.getLambda();
-        this.sarsaQueue = new SarsaQueue(manageSarsaStateAction);
+        this.sarsaQueue = new SarsaQueue(manageStateAction);
     }
 
-    public SarsaStateAction sarsaInit(SarsaState currentSarsaState, Set<BotMove> possibleMoves){
-        SarsaStateAction currentSarsaStateAction = currentSarsaState.getGStateActionForExplorationRate(epsilon, possibleMoves);
+    public StateAction init(State currentState, Set<BotMove> possibleMoves){
+        StateAction currentStateAction = currentState.getStateActionForExplorationRate(epsilon, possibleMoves);
 
-        lastSarsaStateAction = currentSarsaStateAction;
+        lastStateAction = currentStateAction;
 
-        sarsaQueue.putGStateAction(currentSarsaStateAction);
-        return currentSarsaStateAction;
+        sarsaQueue.putStateAction(currentStateAction);
+        return currentStateAction;
     }
 
-    public SarsaStateAction sarsaStep(SarsaState currentSarsaState, int reward, Set<BotMove> possibleMoves){
-        if (lastSarsaStateAction == null) {
-            return sarsaInit(currentSarsaState, possibleMoves);
+    public StateAction step(State currentState, int reward, Set<BotMove> possibleMoves){
+        if (lastStateAction == null) {
+            return init(currentState, possibleMoves);
         }
 
 
-        SarsaStateAction currentSarsaStateAction = currentSarsaState.getGStateActionForExplorationRate(epsilon, possibleMoves);
-        logger.debug("delta: " + reward + " " + (gamma * currentSarsaStateAction.getQValue()) + " " + lastSarsaStateAction.getQValue());
-        sarsaQueue.updateGStateActions(reward + (gamma * currentSarsaStateAction.getQValue()) - lastSarsaStateAction
+        StateAction currentStateAction = currentState.getStateActionForExplorationRate(epsilon, possibleMoves);
+        logger.debug("delta: " + reward + " " + (gamma * currentStateAction.getQValue()) + " " + lastStateAction.getQValue());
+        sarsaQueue.updateStateActions(reward + (gamma * currentStateAction.getQValue()) - lastStateAction
             .getQValue(),alpha,lambda);
 
-        lastSarsaStateAction = currentSarsaStateAction;
+        lastStateAction = currentStateAction;
 
-        sarsaQueue.putGStateAction(currentSarsaStateAction);
-        return currentSarsaStateAction;
+        sarsaQueue.putStateAction(currentStateAction);
+        return currentStateAction;
     }
 }

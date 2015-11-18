@@ -1,31 +1,27 @@
 package bot.Bender;
 
 import algorithms.sarsaLambda.SarsaLambda;
-import bot.Bender0.Rewarder;
-import bot.Bender0.SimplifiedGState;
-import bot.Bender1.RewarderBender1;
-import bot.Bender1.SimplifiedGState1;
-import bot.Config;
-import bot.bender2.RewarderBender2;
-import bot.bender2.SimplifiedGState2;
 import bot.dto.GameState;
-import persistence.*;
+import persistence.GameLog;
+import persistence.ManageState;
+import persistence.State;
+import persistence.StateAction;
 
 /**
  * Created by octavian on 19.10.15.
  */
-public class Bender {
+public abstract class Bender {
 
-    ManageSarsaState manageSarsaState;
+    ManageState manageState;
     private GameLog gameLog;
     SarsaLambda sarsaLambda;
     IRewarder rewarder;
 
-    public Bender(ManageSarsaState manageSarsaState, GameLog gameLog){
-        this.manageSarsaState = manageSarsaState;
+    public Bender(ManageState manageState, GameLog gameLog){
+        this.manageState = manageState;
         this.gameLog = gameLog;
         rewarder = getRewarder(gameLog);
-        sarsaLambda = new SarsaLambda(manageSarsaState.getManageSarsaStateAction());
+        sarsaLambda = new SarsaLambda(manageState.getManageStateAction());
     }
     /**
      * Method that plays each move
@@ -36,31 +32,15 @@ public class Bender {
     public BotMove move(GameState gameState) {
         ISimplifiedGState simplifiedGState = getSimplifiedGState();
         simplifiedGState.init(gameState);
-        SarsaState state = manageSarsaState.getSarsaStateOfId(simplifiedGState);
-        SarsaStateAction action = sarsaLambda.sarsaStep(state,
+        State state = manageState.getStateOfId(simplifiedGState);
+        StateAction action = sarsaLambda.step(state,
             rewarder.calculateReward(simplifiedGState),
                 simplifiedGState.getPossibleMoves());
         rewarder.setLastMove(action.getAction());
         return action.getAction();
     }
 
-    private ISimplifiedGState getSimplifiedGState(){
-        if(Config.getBender().equals("bender1")){
-            return new SimplifiedGState1();
-        } else if(Config.getBender().equals("bender2")){
-            return new SimplifiedGState2();
-        } else {
-            return new SimplifiedGState();
-        }
-    }
+    protected abstract ISimplifiedGState getSimplifiedGState();
 
-    private IRewarder getRewarder(GameLog gameLog){
-        if(Config.getBender().equals("bender1")){
-            return new RewarderBender1(gameLog);
-        } else if(Config.getBender().equals("bender2")){
-            return new RewarderBender2(gameLog);
-        } else {
-            return new Rewarder(gameLog);
-        }
-    }
+    protected abstract IRewarder getRewarder(GameLog gameLog);
 }

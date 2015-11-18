@@ -1,6 +1,9 @@
 package bot.Bender;
 
+import bot.Bender0.Bender0;
+import bot.Bender1.Bender1;
 import bot.Config;
+import bot.bender2.Bender2;
 import bot.dto.ApiKey;
 import bot.dto.GameState;
 import bot.dto.Move;
@@ -11,10 +14,12 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.gson.GsonFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import persistence.*;
+import persistence.GameLog;
+import persistence.ManageGameLog;
+import persistence.ManageState;
+import persistence.SharedBuffer;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 
 public class BenderRunner extends Thread {
     private static final HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
@@ -34,17 +39,17 @@ public class BenderRunner extends Thread {
 
     private final ManageGameLog manageGameLog;
     private final SharedBuffer<GameLog> gameLogBuffer;
-    private final ManageSarsaState manageSarsaState;
+    private final ManageState manageState;
 
     private boolean run = true;
 
-    public BenderRunner(ManageSarsaState manageSarsaState, ManageGameLog manageGameLog, SharedBuffer<GameLog> gameLogBuffer) {
+    public BenderRunner(ManageState manageState, ManageGameLog manageGameLog, SharedBuffer<GameLog> gameLogBuffer) {
         this.apiKey = Config.getAPIKey();
         this.gameUrl = Config.getGameURL();
         this.user = Config.getName();
         this.manageGameLog = manageGameLog;
         this.gameLogBuffer = gameLogBuffer;
-        this.manageSarsaState = manageSarsaState;
+        this.manageState = manageState;
     }
 
     public void end() { run = false; }
@@ -60,7 +65,7 @@ public class BenderRunner extends Thread {
 
 
             GameLog gameLog = manageGameLog.getGameLog();
-            Bender bender = new Bender(manageSarsaState, gameLog);
+            Bender bender = getBender(manageState, gameLog);
 
 
             try {
@@ -118,10 +123,20 @@ public class BenderRunner extends Thread {
 
             gameLog.setWin(isWinner(gameState));
             gameLogBuffer.addEntity(gameLog);
-            //manageSarsaState.updateSarsaStates();
             manageGameLog.addGameLog(gameLog);
             logger.debug("Game over");
         }
+    }
+
+    public Bender getBender(ManageState manageState, GameLog gameLog){
+        if(Config.getBender().equals("bender0")){
+            return new Bender0(manageState, gameLog);
+        } else if (Config.getBender().equals("bender1")){
+            return new Bender1(manageState, gameLog);
+        } else if (Config.getBender().equals("bender2")) {
+            return new Bender2(manageState, gameLog);
+        }
+        return null;
     }
 
     public boolean isWinner(GameState gs) {

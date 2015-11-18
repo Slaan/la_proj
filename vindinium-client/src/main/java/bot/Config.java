@@ -33,7 +33,7 @@ public class Config {
     static Double DiscountFactor;
     static Double Lamda;
     static int QueueLength;
-    static boolean sarsaStateActionLogs;
+    static boolean stateActionLogs;
 
     //Dijkstra
     static int stepsToLook;
@@ -85,7 +85,7 @@ public class Config {
             DiscountFactor = Double.parseDouble(prop.getProperty("discountfactor"));
             Lamda = Double.parseDouble(prop.getProperty("lamda"));
             QueueLength = Integer.parseInt(prop.getProperty("queuelength"));
-            sarsaStateActionLogs = Boolean.parseBoolean(prop.getProperty("sarsaStateActionLogs"));
+            stateActionLogs = Boolean.parseBoolean(prop.getProperty("sarsaStateActionLogs"));
             Bender = prop.getProperty("Bender");
 
             stepsToLook = Integer.parseInt(prop.getProperty("stepsToLook"));
@@ -136,7 +136,7 @@ public class Config {
 
     public static int getQueueLenght() {return QueueLength;}
 
-    public static boolean getSarsaStateActionLogs() { return sarsaStateActionLogs; }
+    public static boolean getStateActionLogs() { return stateActionLogs; }
 
     public static String getBender() { return Bender; }
 

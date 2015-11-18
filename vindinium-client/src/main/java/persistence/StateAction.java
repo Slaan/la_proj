@@ -8,14 +8,14 @@ import javax.persistence.*;
  * Created by beckf on 17.10.2015.
  */
 @Entity
-@Table(name = "SarsaStateAction")
-public class SarsaStateAction {
+@Table(name = "StateAction")
+public class StateAction {
     @Id @GeneratedValue
-    @Column(name = "sarsaStateActionID")
-    private int sarsaStateActionID;
+    @Column(name = "stateActionID")
+    private int stateActionID;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "state")
-    private SarsaState state;
+    private State state;
     @Column(name = "description")
     private String description;
     @Column(name = "action")
@@ -25,8 +25,8 @@ public class SarsaStateAction {
     @Column(name = "used")
     private int used;
 
-    private SarsaStateAction(){}
-    protected SarsaStateAction(SarsaState state, String description, BotMove action){
+    private StateAction(){}
+    protected StateAction(State state, String description, BotMove action){
         this.state = state;
         this.description = description;
         this.action = action;
@@ -34,10 +34,10 @@ public class SarsaStateAction {
         this.used = 0;
     }
 
-    public int getSarsaStateActionID() {
-        return sarsaStateActionID;
+    public int getStateActionID() {
+        return stateActionID;
     }
-    public SarsaState getState() {
+    public State getState() {
         return state;
     }
     public String getDescription() {
@@ -49,10 +49,10 @@ public class SarsaStateAction {
     }
     public int getUsed() { return used; }
 
-    public void setSarsaStateActionID(int sarsaStateActionID) {
-        this.sarsaStateActionID = sarsaStateActionID;
+    public void setStateActionID(int stateActionID) {
+        this.stateActionID = stateActionID;
     }
-    public void setState(SarsaState state) {
+    public void setState(State state) {
         this.state = state;
     }
     public void setDescription(String description) {

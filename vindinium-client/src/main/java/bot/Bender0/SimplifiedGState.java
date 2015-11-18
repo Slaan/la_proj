@@ -3,11 +3,9 @@ package bot.Bender0;
 import algorithms.IdShifter;
 import bot.Bender.*;
 import bot.dto.GameState;
-import persistence.SarsaState;
+import persistence.State;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -58,8 +56,8 @@ public class SimplifiedGState implements ISimplifiedGState {
         return currentPos;
     }
 
-    public static String explainState(SarsaState state) {
-        IdShifter id = new IdShifter(state.getgStateId());
+    public static String explainState(State state) {
+        IdShifter id = new IdShifter(state.getStateId());
         // Unshift in entgegengesetzter Reihenfolge zu Shift!!!!
         boolean life = id.unShift(1) > 0; // getLife > 40
         DirectionType tav = DirectionType.fromValue(id.unShift(ID_SHIFT_DIRECTION)); // Tavern-Direction
@@ -78,7 +76,7 @@ public class SimplifiedGState implements ISimplifiedGState {
                         + "\\-+-+-/\n"
                         + "  |%5$s|\n"
                         + "  \\-/\n",
-                state.getgStateId(),
+                state.getStateId(),
                 north.getAbbreviation(),
                 west.getAbbreviation(),
                 east.getAbbreviation(),

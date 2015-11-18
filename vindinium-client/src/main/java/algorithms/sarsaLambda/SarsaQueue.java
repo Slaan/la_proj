@@ -1,8 +1,8 @@
 package algorithms.sarsaLambda;
 
 import bot.Config;
-import persistence.ManageSarsaStateAction;
-import persistence.SarsaStateAction;
+import persistence.ManageStateAction;
+import persistence.StateAction;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -11,28 +11,28 @@ import java.util.Queue;
  * Created by beckf on 17.10.2015.
  */
 public class SarsaQueue {
-    private Queue<SarsaStateAction> sarsaStateActionsQueue;
+    private Queue<StateAction> stateActionsQueue;
     private int queueLength;
-    private ManageSarsaStateAction manageSarsaStateAction;
+    private ManageStateAction manageStateAction;
 
-    public SarsaQueue(ManageSarsaStateAction manageSarsaStateAction){
+    public SarsaQueue(ManageStateAction manageStateAction){
         this.queueLength = Config.getQueueLenght();
-        this.manageSarsaStateAction = manageSarsaStateAction;
-        sarsaStateActionsQueue = new LinkedList<>();
+        this.manageStateAction = manageStateAction;
+        stateActionsQueue = new LinkedList<>();
     }
 
-    public void putGStateAction(SarsaStateAction sarsaStateAction){
-        sarsaStateActionsQueue.add(sarsaStateAction);
-        if(sarsaStateActionsQueue.size() > queueLength){
-            sarsaStateActionsQueue.remove();
+    public void putStateAction(StateAction stateAction){
+        stateActionsQueue.add(stateAction);
+        if(stateActionsQueue.size() > queueLength){
+            stateActionsQueue.remove();
         }
     }
 
-    public void updateGStateActions(double delta, double alpha, double lambda){
-        int pos = sarsaStateActionsQueue.size()-1;
-        for(SarsaStateAction sarsaStateAction : sarsaStateActionsQueue){
-            sarsaStateAction.updateQValue(delta * alpha * Math.pow(lambda,pos));
-            manageSarsaStateAction.updateGStateAction(sarsaStateAction);
+    public void updateStateActions(double delta, double alpha, double lambda){
+        int pos = stateActionsQueue.size()-1;
+        for(StateAction stateAction : stateActionsQueue){
+            stateAction.updateQValue(delta * alpha * Math.pow(lambda,pos));
+            manageStateAction.updateStateAction(stateAction);
             pos--;
         }
     }
