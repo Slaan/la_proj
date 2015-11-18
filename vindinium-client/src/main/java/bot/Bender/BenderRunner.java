@@ -85,7 +85,9 @@ public class BenderRunner extends Thread {
                 // Game loop
                 while (!gameState.getGame().isFinished() && !gameState.getHero().isCrashed()) {
                     logger.debug("Taking turn " + gameState.getGame().getTurn());
+                    long startTime = System.currentTimeMillis();
                     BotMove direction = bender.move(gameState);
+                    System.out.println(startTime-System.currentTimeMillis());
                     Move move = new Move(apiKey.getKey(), direction.toString());
 
 

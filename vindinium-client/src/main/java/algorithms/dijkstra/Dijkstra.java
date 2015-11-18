@@ -40,8 +40,16 @@ public class Dijkstra {
         this.playerPosition = playerPosition;
     }
 
+    public void runDijkstra() {
+        long start = System.currentTimeMillis();
+        _runDijkstra();
+        long ende = System.currentTimeMillis();
+        if (ende - start > 700) {
+            throw new RuntimeException(String.format("runDijkstra() brauchte zu lange (%d ms).", (ende - start)));
+        }
+    }
 
-    public void runDijkstra(){
+    private void _runDijkstra(){
         Queue<GameState.Position> queue = new LinkedList<>();
 
         previousFrom.put(playerPosition, playerPosition);

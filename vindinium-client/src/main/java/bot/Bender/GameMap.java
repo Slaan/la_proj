@@ -120,9 +120,13 @@ public class GameMap {
             }
         }
 
-        nearestMineDirection = calcDirection(heropos, closestMinePos);
         nearestTavernDirection = calcDirection(heropos, closestTavernPos);
-
+        if (closestMinePos == null) {
+            // if we own all mines nearestMine shows to nearestTavern.
+            nearestMineDirection = nearestTavernDirection;
+        } else {
+            nearestMineDirection = calcDirection(heropos, closestMinePos);
+        }
     }
 
     /** Requires new Map Coordinates
