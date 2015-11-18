@@ -79,7 +79,13 @@ public class Dijkstra {
         }
     }
 
-    public List<GameState.Position> neighborOf(GameState.Position currentPosition){
+    /**
+     * Checks which Positions in the Directions of the currently processed Direction are Free.
+     *
+     * @param currentPosition the Position that is processed right now
+     * @return the Positions are Free and the neighbors of the currentPosition
+     */
+    private List<GameState.Position> neighborOf(GameState.Position currentPosition){
         List<GameState.Position> positions = new ArrayList<>();
         for(DirectionType directionType : DirectionType.values()){
             if(isWalkableTile(currentPosition, directionType)) {
@@ -93,6 +99,16 @@ public class Dijkstra {
         return positions;
     }
 
+    /**
+     * Checks the TileType of the Position in the given Direction.
+     * If it is not walkable it will be cheked if is anything else then BLOCKED.
+     * Then it will be looked if the Position is not already visited.
+     * If not the Position will be added to the appropriate List add it is added to all Maps.
+     *
+     * @param currentPosition the Position that is processed right now
+     * @param directionType in which Direction should be checked
+     * @return fals if not a walkable Tile
+     */
     private boolean isWalkableTile(GameState.Position currentPosition , DirectionType directionType){
         TileType tileType = gameMap.getTileFromDirection(currentPosition, directionType);
         if(tileType.equals(TileType.BLOCKED)){
@@ -128,7 +144,15 @@ public class Dijkstra {
         return true;
     }
 
-    public void addPositionToDirection(GameState.Position currentPosition, GameState.Position position){
+    /**
+     * Puts the Position and the Direction for the shortest way to the Position as an Entry in the direction Map.
+     * If the currentPosition is the same as the Player Position the Direction will be calculated.
+     * If not the Direction will be taken from the currentPosition.
+     *
+     * @param currentPosition the Position that is processed right now
+     * @param position the key to put
+     */
+    private void addPositionToDirection(GameState.Position currentPosition, GameState.Position position){
         if(currentPosition.equals(playerPosition)){
             direction.put(position, gameMap.calcDirection(playerPosition, position));
         } else {
@@ -136,13 +160,27 @@ public class Dijkstra {
         }
     }
 
-    public void addPostionToMaps(GameState.Position currentPosition, GameState.Position position){
+    /**
+     * Puts the Position in all the needed Maps as Key.
+     * The Values are calculated out of the currentPosition.
+     *
+     * @param currentPosition the Position that is processed right now
+     * @param position the key to put
+     */
+    private void addPostionToMaps(GameState.Position currentPosition, GameState.Position position){
         previousFrom.put(position, currentPosition);
         costFrom.put(position, costFrom.get(currentPosition) + 1);
         visited.put(position, true);
         addPositionToDirection(currentPosition,position);
     }
 
+    /**
+     * It will be looked in the direction Map with the position as Key.
+     * Gives the Direction to go for the shortest Path to the given Position.
+     *
+     * @param position the Position to look up
+     * @return the DirectionTyp dedicated to the Position
+     */
     public DirectionType getDirectionToPosition(GameState.Position position) {
         return direction.get(position);
     }
@@ -151,6 +189,12 @@ public class Dijkstra {
         return new SimpleMine(getDirectionToPosition(minePosition), costFrom.get(minePosition));
     }
 
+    /**
+     * If Dijkstra found no Mine it will return a mook SimpleMine that says it is out of Sight.
+     * If Dijkstra found Mines it will return the nearest Mine as Simple Mine.
+     *
+     * @return the nearestMine as SimpleMine
+     */
     public SimpleMine getNearestMine(){
         if(mines.size() > 0){
             return getSimpleMine(mines.get(0));
