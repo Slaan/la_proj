@@ -3,6 +3,7 @@ package bot.Bender1;
 import bot.Bender.*;
 import bot.dto.GameState;
 import persistence.GameLog;
+import util.BotmoveDirectionConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,28 +64,31 @@ public class RewarderBender1 implements IRewarder {
 
     /** Checks if we killed a Hero last turn
      *
-     * @return
+     * @return true for kill, false for no kill
      */
-    //TODO: if we stand still the botmove is still "executed" in the mind of the Rewarder, this has to be fixec
     private boolean checkForKill() {
         boolean result = false;
 
         // endPos = Position at the end of last turn
-        GameState.Position endPos=null;
-        // our last action has to be in the direction of the enemy hero
-        if (move.equals(BotMove.EAST)) {
+        GameState.Position endPos;
+        DirectionType dir = BotmoveDirectionConverter.getDirectionTypeFromBotMove(move);
+        if (formerState.getGameMap().getTileFromDirection(formerState.getCurrentPos(),dir).equals(TileType.BLOCKED)) {
+            endPos = formerState.getCurrentPos();
+        } else if (move.equals(BotMove.EAST)) {
             endPos = new GameState.Position(formerState.getCurrentPos().getX()+1,formerState.getCurrentPos().getY());
         } else if (move.equals(BotMove.SOUTH)) {
             endPos = new GameState.Position(formerState.getCurrentPos().getX(),formerState.getCurrentPos().getY()+1);
         } else if (move.equals(BotMove.WEST)) {
             endPos = new GameState.Position(formerState.getCurrentPos().getX()-1,formerState.getCurrentPos().getY());
         } else if (move.equals(BotMove.NORTH)) {
-            endPos = new GameState.Position(formerState.getCurrentPos().getX()+1,formerState.getCurrentPos().getY()-1);
+            endPos = new GameState.Position(formerState.getCurrentPos().getX(),formerState.getCurrentPos().getY()-1);
+        } else {
+            throw new IllegalArgumentException("Bot moved in unknown direction");
         }
 
         List<GameState.Hero> nearHeroes = getAllHeroesNextToUs(endPos);
 
-        // A Hero is killed when we are next to him at the end of our turn and his Life are below 20
+        // A Hero is killed when we are next to him at the end of our turn and his Life is below 20
         for(GameState.Hero h : nearHeroes) {
             if (h.getLife()<=20) {
                 killedHeroes.add(h);
