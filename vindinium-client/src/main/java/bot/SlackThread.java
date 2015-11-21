@@ -39,7 +39,7 @@ public class SlackThread extends Thread {
 
         try {
             while (!isInterrupted()) {
-                sleep(60 * 1000);
+                sleep(1440 * 1000);
                 List<GameLog> gameLogs = Collections.emptyList();
                 gameLogs = gameLogBuffer.getEntityWhen(gameLogSendCount);
 
