@@ -1,8 +1,7 @@
-package bot.Bender1;
+package bot.bender1;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 /**

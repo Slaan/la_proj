@@ -1,4 +1,4 @@
-package bot.Bender;
+package bot.bender;
 
 import algorithms.sarsaLambda.SarsaLambda;
 import bot.dto.GameState;

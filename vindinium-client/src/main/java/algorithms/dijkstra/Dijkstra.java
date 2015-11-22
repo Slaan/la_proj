@@ -1,12 +1,12 @@
 package algorithms.dijkstra;
 
 
-import bot.Bender.DirectionType;
-import bot.Bender.GameMap;
-import bot.Bender.TileType;
-import bot.Bender1.SimpleHero;
-import bot.Bender1.SimpleMine;
-import bot.Bender1.SimpleTavern;
+import bot.bender.DirectionType;
+import bot.bender.GameMap;
+import bot.bender.TileType;
+import bot.bender1.SimpleHero;
+import bot.bender1.SimpleMine;
+import bot.bender1.SimpleTavern;
 import bot.Config;
 import bot.dto.GameState;
 import com.google.api.client.util.ArrayMap;

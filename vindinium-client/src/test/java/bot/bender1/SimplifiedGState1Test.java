@@ -1,9 +1,7 @@
-package bot.Bender1;
+package bot.bender1;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by octavian on 08.11.15.

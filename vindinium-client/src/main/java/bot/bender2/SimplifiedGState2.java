@@ -2,9 +2,9 @@ package bot.bender2;
 
 import algorithms.IdShifter;
 import algorithms.dijkstra.Dijkstra;
-import bot.Bender.*;
-import bot.Bender0.RewardConfig;
-import bot.Bender1.*;
+import bot.bender.*;
+import bot.bender0.RewardConfig;
+import bot.bender1.*;
 import bot.dto.GameState;
 
 import java.util.HashSet;

@@ -1,4 +1,4 @@
-package bot.Bender0;
+package bot.bender0;
 
 import java.io.FileInputStream;
 import java.io.IOException;

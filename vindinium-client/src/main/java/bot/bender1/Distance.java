@@ -1,6 +1,4 @@
-package bot.Bender1;
-
-import bot.Bender0.RewardConfig;
+package bot.bender1;
 
 /**
  * Created by beckf on 06.11.2015.

@@ -18,21 +18,21 @@ public class Config {
     private static final Logger logger = LogManager.getLogger(Config.class);
 
     static String name;
-    static int NoOfRounds;
-    static int NoOfThreads;
+    static int noOfRounds;
+    static int noOfThreads;
     static ApiKey APIKey;
-    static GenericUrl SlackURL;
-    static GenericUrl GameURL;
+    static GenericUrl slackURL;
+    static GenericUrl gameURL;
     static String DBUser;
     static String DBPassword;
-    static String Mode;
+    static String mode;
 
     //Sarsa Lambda
-    static Double LearningRate;
-    static Double ExplorationRate;
-    static Double DiscountFactor;
-    static Double Lamda;
-    static int QueueLength;
+    static Double learningRate;
+    static Double explorationRate;
+    static Double discountFactor;
+    static Double lamda;
+    static int queueLength;
     static boolean stateActionLogs;
 
     //Dijkstra
@@ -41,7 +41,7 @@ public class Config {
     static int numberOfMinesToLook;
     static int numberOfTavernsToLook;
 
-    static String Bender;
+    static String bender;
     static String serverURL;
 
     private final static String TRAINING_URL = "/api/training";
@@ -61,32 +61,32 @@ public class Config {
             prop.load(inputstream);
 
             name = prop.getProperty("name");
-            NoOfRounds = Integer.parseInt(prop.getProperty("rounds"));
-            if (NoOfRounds > 600) {
-                logger.warn("rounds is greater than 600 (" + NoOfRounds + ") it will be set to 600.");
-                NoOfRounds = 600;
+            noOfRounds = Integer.parseInt(prop.getProperty("rounds"));
+            if (noOfRounds > 600) {
+                logger.warn("rounds is greater than 600 (" + noOfRounds + ") it will be set to 600.");
+                noOfRounds = 600;
             }
-            NoOfThreads = Integer.parseInt(prop.getProperty("threads"));
-            SlackURL = new GenericUrl(prop.getProperty("slackurl"));
+            noOfThreads = Integer.parseInt(prop.getProperty("threads"));
+            slackURL = new GenericUrl(prop.getProperty("slackurl"));
             DBUser = prop.getProperty("dbuser");
             DBPassword = prop.getProperty("dbpassword");
             serverURL = prop.getProperty("serverURL");
-            Mode = prop.getProperty("modus");
-            if ("COMPETITION".equals(Mode)) {
-                GameURL = new GenericUrl(serverURL+COMPETITION_URL);
+            mode = prop.getProperty("modus");
+            if ("COMPETITION".equals(mode)) {
+                gameURL = new GenericUrl(serverURL+COMPETITION_URL);
                 APIKey = new ApiKey(prop.getProperty("apikey"));
             }
             else{
-                GameURL = new GenericUrl(serverURL+TRAINING_URL);
-                APIKey = new TurnApiKey(prop.getProperty("apikey"), NoOfRounds);
+                gameURL = new GenericUrl(serverURL+TRAINING_URL);
+                APIKey = new TurnApiKey(prop.getProperty("apikey"), noOfRounds);
             }
-            LearningRate = Double.parseDouble(prop.getProperty("learningrate"));
-            ExplorationRate = Double.parseDouble(prop.getProperty("explorationrate"));
-            DiscountFactor = Double.parseDouble(prop.getProperty("discountfactor"));
-            Lamda = Double.parseDouble(prop.getProperty("lamda"));
-            QueueLength = Integer.parseInt(prop.getProperty("queuelength"));
+            learningRate = Double.parseDouble(prop.getProperty("learningrate"));
+            explorationRate = Double.parseDouble(prop.getProperty("explorationrate"));
+            discountFactor = Double.parseDouble(prop.getProperty("discountfactor"));
+            lamda = Double.parseDouble(prop.getProperty("lamda"));
+            queueLength = Integer.parseInt(prop.getProperty("queuelength"));
             stateActionLogs = Boolean.parseBoolean(prop.getProperty("sarsaStateActionLogs"));
-            Bender = prop.getProperty("Bender");
+            bender = prop.getProperty("Bender");
 
             stepsToLook = Integer.parseInt(prop.getProperty("stepsToLook"));
             numberOfHerosToLook = Integer.parseInt(prop.getProperty("numberOfHerosToLook"));
@@ -110,35 +110,35 @@ public class Config {
 
     public static String getName() {return name;}
 
-    public static int getNoOfRounds() {return NoOfRounds;}
+    public static int getNoOfRounds() {return noOfRounds;}
 
-    public static int getNoOfThreads() {return NoOfThreads;}
+    public static int getNoOfThreads() {return noOfThreads;}
 
     public static ApiKey getAPIKey() {return APIKey;}
 
-    public static GenericUrl getSlackULR() {return SlackURL;}
+    public static GenericUrl getSlackULR() {return slackURL;}
 
-    public static GenericUrl getGameURL() {return GameURL;}
+    public static GenericUrl getGameURL() {return gameURL;}
 
     public static String getDBUser() {return DBUser;}
 
     public static String getDBPassword() {return DBPassword;}
 
-    public static String getMode() {return Mode;}
+    public static String getMode() {return mode;}
 
-    public static double getLearningRate() {return LearningRate;}
+    public static double getLearningRate() {return learningRate;}
 
-    public static double getExplorationRate() {return ExplorationRate;}
+    public static double getExplorationRate() {return explorationRate;}
 
-    public static double getDiscountFactor() {return DiscountFactor;}
+    public static double getDiscountFactor() {return discountFactor;}
 
-    public static double getLambda() {return Lamda;}
+    public static double getLambda() {return lamda;}
 
-    public static int getQueueLenght() {return QueueLength;}
+    public static int getQueueLenght() {return queueLength;}
 
     public static boolean getStateActionLogs() { return stateActionLogs; }
 
-    public static String getBender() { return Bender; }
+    public static String getBender() { return bender; }
 
     public static int getStepsToLook() { return stepsToLook; }
 

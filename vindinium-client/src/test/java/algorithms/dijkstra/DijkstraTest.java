@@ -1,9 +1,9 @@
 package algorithms.dijkstra;
 
-import bot.Bender.DirectionType;
-import bot.Bender.GameMap;
-import bot.Bender1.SimpleMine;
-import bot.Bender1.SimpleTavern;
+import bot.bender.DirectionType;
+import bot.bender.GameMap;
+import bot.bender1.SimpleMine;
+import bot.bender1.SimpleTavern;
 import bot.Config;
 import bot.dto.GameState;
 import org.junit.Test;

@@ -1,10 +1,8 @@
-package bot.Bender1;
+package bot.bender1;
 
-import bot.Bender.Bender;
-import bot.Bender.IRewarder;
-import bot.Bender.ISimplifiedGState;
-import bot.Bender0.Rewarder;
-import bot.Bender0.SimplifiedGState;
+import bot.bender.Bender;
+import bot.bender.IRewarder;
+import bot.bender.ISimplifiedGState;
 import persistence.GameLog;
 import persistence.ManageState;
 

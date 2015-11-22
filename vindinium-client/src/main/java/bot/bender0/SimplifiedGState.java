@@ -1,7 +1,7 @@
-package bot.Bender0;
+package bot.bender0;
 
 import algorithms.IdShifter;
-import bot.Bender.*;
+import bot.bender.*;
 import bot.dto.GameState;
 import persistence.State;
 

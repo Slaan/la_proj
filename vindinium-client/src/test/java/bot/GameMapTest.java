@@ -1,8 +1,8 @@
 package bot;
 
-import bot.Bender.DirectionType;
-import bot.Bender.GameMap;
-import bot.Bender.TileType;
+import bot.bender.DirectionType;
+import bot.bender.GameMap;
+import bot.bender.TileType;
 import bot.dto.GameState;
 import org.junit.Before;
 import org.junit.Test;

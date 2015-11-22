@@ -1,8 +1,7 @@
-package bot.Bender;
+package bot.bender;
 
 import bot.dto.GameState;
 
-import java.util.List;
 import java.util.Set;
 
 /**

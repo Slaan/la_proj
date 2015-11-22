@@ -1,24 +1,24 @@
-package bot.Bender1;
+package bot.bender1;
 
-import bot.Bender.DirectionType;
+import bot.bender.DirectionType;
 
 /**
  * Created by slaan on 02.11.15.
  */
-public class SimpleTavern {
+public class SimpleMine {
 
     private DirectionType direction;
     private Distance distance;
 
     /**
-     * Create a Hero that is out of sight.
+     * Create a Mine that is out of sight.
      */
-    public SimpleTavern() {
+    public SimpleMine() {
         direction = DirectionType.NORTH;
         distance = Distance.OUTOFSIGHT;
     }
 
-    public SimpleTavern(DirectionType direction, int distance) {
+    public SimpleMine(DirectionType direction, int distance) {
         this.direction = direction;
         this.distance = SimplifiedGState1.calcDistance(distance);
     }

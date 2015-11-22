@@ -1,6 +1,6 @@
 package algorithms;
 
-import bot.Bender.BotMove;
+import bot.bender.BotMove;
 import persistence.State;
 import persistence.StateAction;
 

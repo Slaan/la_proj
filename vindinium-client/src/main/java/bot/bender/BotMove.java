@@ -1,4 +1,4 @@
-package bot.Bender;
+package bot.bender;
 
 /**
  * This is the output of a SimpleBot.

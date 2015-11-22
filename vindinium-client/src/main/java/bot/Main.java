@@ -1,8 +1,8 @@
 package bot;
 
-import bot.Bender.BenderRunner;
-import bot.Bender0.RewardConfig;
-import bot.Bender1.RewardConfigBender1;
+import bot.bender.BenderRunner;
+import bot.bender0.RewardConfig;
+import bot.bender1.RewardConfigBender1;
 import org.hibernate.SessionFactory;
 import persistence.*;
 

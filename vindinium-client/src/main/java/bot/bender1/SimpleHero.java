@@ -1,8 +1,7 @@
-package bot.Bender1;
+package bot.bender1;
 
-import bot.Bender.BotMove;
-import bot.Bender.DirectionType;
-import bot.Bender0.RewardConfig;
+import bot.bender.DirectionType;
+import bot.bender0.RewardConfig;
 import bot.dto.GameState;
 
 /**

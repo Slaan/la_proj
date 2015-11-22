@@ -1,7 +1,7 @@
-package bot.Bender;
+package bot.bender;
 
-import bot.Bender0.Bender0;
-import bot.Bender1.Bender1;
+import bot.bender0.Bender0;
+import bot.bender1.Bender1;
 import bot.Config;
 import bot.bender2.Bender2;
 import bot.dto.ApiKey;

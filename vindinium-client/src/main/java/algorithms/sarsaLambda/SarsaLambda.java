@@ -1,7 +1,7 @@
 package algorithms.sarsaLambda;
 
 import algorithms.ILearning;
-import bot.Bender.BotMove;
+import bot.bender.BotMove;
 import bot.Config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

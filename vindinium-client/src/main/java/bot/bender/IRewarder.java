@@ -1,4 +1,4 @@
-package bot.Bender;
+package bot.bender;
 
 /**
  * Created by slaan on 02.11.15.

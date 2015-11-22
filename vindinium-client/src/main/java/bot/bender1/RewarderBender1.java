@@ -1,6 +1,6 @@
-package bot.Bender1;
+package bot.bender1;
 
-import bot.Bender.*;
+import bot.bender.*;
 import bot.dto.GameState;
 import persistence.GameLog;
 import util.BotmoveDirectionConverter;

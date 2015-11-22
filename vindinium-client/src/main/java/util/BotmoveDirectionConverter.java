@@ -1,7 +1,7 @@
 package util;
 
-import bot.Bender.BotMove;
-import bot.Bender.DirectionType;
+import bot.bender.BotMove;
+import bot.bender.DirectionType;
 
 /**
  * Created by Daniel Hofmeister on 21.11.2015.

@@ -1,10 +1,5 @@
-package bot.Bender;
+package bot.bender;
 
-import bot.Bender.DirectionType;
-import bot.Bender.TileType;
-import bot.Bender1.SimpleHero;
-import bot.Bender1.SimpleMine;
-import bot.Bender1.SimpleTavern;
 import bot.dto.GameState;
 
 import java.util.ArrayList;
