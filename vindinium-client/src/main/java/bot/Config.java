@@ -9,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -42,7 +44,7 @@ public class Config {
     static int numberOfMinesToLook;
     static int numberOfTavernsToLook;
 
-    static String bender;
+    static String[] bender;
     static String serverURL;
 
     private final static String TRAINING_URL = "/api/training";
@@ -88,7 +90,8 @@ public class Config {
             lamda = Double.parseDouble(prop.getProperty("lamda"));
             queueLength = Integer.parseInt(prop.getProperty("queuelength"));
             stateActionLogs = Boolean.parseBoolean(prop.getProperty("sarsaStateActionLogs"));
-            bender = prop.getProperty("Bender");
+            String benderString = prop.getProperty("Bender");
+            bender = benderString.split(",");
 
             stepsToLook = Integer.parseInt(prop.getProperty("stepsToLook"));
             numberOfHerosToLook = Integer.parseInt(prop.getProperty("numberOfHerosToLook"));
@@ -140,7 +143,7 @@ public class Config {
 
     public static boolean getStateActionLogs() { return stateActionLogs; }
 
-    public static String getBender() { return bender; }
+    public static String[] getBender() { return bender; }
 
     public static int getStepsToLook() { return stepsToLook; }
 

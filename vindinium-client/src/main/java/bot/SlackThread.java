@@ -13,6 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by octavian on 02.11.15.
@@ -28,10 +29,10 @@ public class SlackThread extends Thread {
             }
         });
 
-    private SharedBuffer<GameLog> gameLogBuffer;
+    private Map<String, SharedBuffer<GameLog>> gameLogBufferMap;
 
-    public SlackThread(SharedBuffer<GameLog> gameLogBuffer) {
-        this.gameLogBuffer = gameLogBuffer;
+    public SlackThread(Map<String, SharedBuffer<GameLog>> gameLogBufferMap) {
+        this.gameLogBufferMap = gameLogBufferMap;
     }
 
     @Override public void run() {
@@ -41,9 +42,10 @@ public class SlackThread extends Thread {
             while (!isInterrupted()) {
                 sleep(Config.getSlackWait() * 1000);
                 List<GameLog> gameLogs = Collections.emptyList();
-                gameLogs = gameLogBuffer.getEntityWhen(gameLogSendCount);
-
-                sendList(gameLogs);
+                for (Map.Entry<String, SharedBuffer<GameLog>> gameLogBufferEntry : gameLogBufferMap.entrySet()) {
+                    gameLogs = gameLogBufferEntry.getValue().getEntityWhen(gameLogSendCount);
+                    sendList(gameLogBufferEntry.getKey(), gameLogs);
+                }
             }
         } catch (InterruptedException e) {}
 
@@ -51,10 +53,12 @@ public class SlackThread extends Thread {
     }
 
     private void sendAll() {
-        sendList(gameLogBuffer.getEntities());
+        for (Map.Entry<String, SharedBuffer<GameLog>> gameLogBufferEntry : gameLogBufferMap.entrySet()) {
+            sendList(gameLogBufferEntry.getKey(), gameLogBufferEntry.getValue().getEntities());
+        }
     }
 
-    private void sendList(List<GameLog> gameLogs) {
+    private void sendList(String bender, List<GameLog> gameLogs) {
         if (gameLogs.isEmpty())
             return;
 
@@ -85,7 +89,7 @@ public class SlackThread extends Thread {
         String msg = String.format(
             "payload={\"text\": \"Gestartet von: %s (%s)- Win-Rate: %d%% (Win: %d, Loose: %d, Crash: %d):\nGewonnen:%s\nVerloren:%s\nGecrasht:%s\"}",
             Config.getName(),
-            Config.getBender(),
+            bender,
             (int)(((double)wins) / (wins + looses) * 100),
             wins, looses, crashes,
             urlsWin, urlsLoose, urlsCrash

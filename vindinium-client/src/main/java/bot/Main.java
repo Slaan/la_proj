@@ -8,7 +8,9 @@ import persistence.*;
 
 import java.io.DataInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * CLI program for launching a bot
@@ -29,23 +31,31 @@ public class Main extends Thread{
     public void run(){
         try {
             List<BenderRunner> runners = new ArrayList<>();
-            SharedBuffer<GameLog> gameLogBuffer = new SharedBuffer<>();
-            SlackThread slackThread = new SlackThread(gameLogBuffer);
-            SessionFactory factory = SessionBuilder.generateSessionFactory();
-            ManageGameLog manageGameLog = new ManageGameLog(factory);
-            ManageStateActionLog manageStateActionLog = new ManageStateActionLog(factory);
-            ManageStateAction manageStateAction = new ManageStateAction(factory, manageStateActionLog);
-            ManageState manageState = new ManageState(factory, manageStateAction);
-            for(int i = 0; i<Config.getNoOfThreads(); i++) {
-                runners.add(new BenderRunner(manageState, manageGameLog, gameLogBuffer));
+            Map<String, SharedBuffer<GameLog>> gameLogBuffers = new HashMap<>();
+
+
+
+            for(String bender : Config.getBender()) {
+                SharedBuffer<GameLog> gameLogBuffer = new SharedBuffer<>();
+                SessionFactory factory = SessionBuilder.generateSessionFactory(bender);
+                ManageGameLog manageGameLog = new ManageGameLog(factory);
+                ManageStateActionLog manageStateActionLog = new ManageStateActionLog(factory);
+                ManageStateAction manageStateAction =
+                    new ManageStateAction(factory, manageStateActionLog);
+                ManageState manageState = new ManageState(factory, manageStateAction);
+                for (int i = 0; i < Config.getNoOfThreads(); i++) {
+                    runners.add(new BenderRunner(manageState, manageGameLog, gameLogBuffer));
+                }
+
+                gameLogBuffers.put(bender, gameLogBuffer);
+                for (BenderRunner runner : runners) {
+                    runner.start();
+                    sleep(1250);
+                }
             }
 
+            SlackThread slackThread = new SlackThread(gameLogBuffers);
             slackThread.start();
-            for(BenderRunner runner: runners){
-                runner.start();
-                sleep(1250 + (int)(Math.random() * 5000));
-            }
-
             DataInputStream dataInputStream = new DataInputStream(System.in);
             while (dataInputStream.available() == 0) {
                 Thread.sleep(250);

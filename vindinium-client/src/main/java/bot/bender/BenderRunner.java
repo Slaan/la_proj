@@ -61,6 +61,10 @@ public class BenderRunner extends Thread {
         HttpResponse response;
         GameState gameState = null;
 
+        try {
+            sleep((int)(Math.random() * 20000));
+        } catch (InterruptedException e) {}
+
         while(run) {
 
 

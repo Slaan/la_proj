@@ -11,13 +11,13 @@ import java.util.logging.Level;
  */
 public class SessionBuilder {
 
-    public static SessionFactory generateSessionFactory(){
+    public static SessionFactory generateSessionFactory(String bender){
         SessionFactory factory = null;
         try{
             java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
             factory = new AnnotationConfiguration().
                     configure().
-                    setProperty("hibernate.connection.url", "jdbc:mysql://localhost/" + Config.getBender()).
+                    setProperty("hibernate.connection.url", "jdbc:mysql://localhost/" + bender).
                     setProperty("hibernate.hbm2ddl.auto", "update").
                     setProperty("hibernate.connection.username", Config.getDBUser()).
                     setProperty("hibernate.connection.password", Config.getDBPassword()).
