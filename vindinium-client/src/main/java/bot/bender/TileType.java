@@ -80,4 +80,10 @@ public enum TileType {
             default: throw new RuntimeException("TileType has no Abbreviation: " + this);
         }
     }
+
+    public char getAbbrevationB0() {
+        if (isHero())
+            return BLOCKED.getAbbreviation();
+        return getAbbreviation();
+    }
 }

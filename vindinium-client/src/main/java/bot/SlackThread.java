@@ -39,7 +39,7 @@ public class SlackThread extends Thread {
 
         try {
             while (!isInterrupted()) {
-                sleep(1440 * 1000);
+                sleep(Config.getSlackWait() * 1000);
                 List<GameLog> gameLogs = Collections.emptyList();
                 gameLogs = gameLogBuffer.getEntityWhen(gameLogSendCount);
 
@@ -83,9 +83,10 @@ public class SlackThread extends Thread {
         }
 
         String msg = String.format(
-            "payload={\"text\": \"Gestartet von: %s - Win-Rate: %d%% (Win: %d, Loose: %d, Crash: %d):\nGewonnen:%s\nVerloren:%s\nGecrasht:%s\"}",
+            "payload={\"text\": \"Gestartet von: %s (%s)- Win-Rate: %d%% (Win: %d, Loose: %d, Crash: %d):\nGewonnen:%s\nVerloren:%s\nGecrasht:%s\"}",
             Config.getName(),
-            (int)(((double)wins) / (wins + looses + crashes) * 100),
+            Config.getBender(),
+            (int)(((double)wins) / (wins + looses) * 100),
             wins, looses, crashes,
             urlsWin, urlsLoose, urlsCrash
         );

@@ -43,7 +43,7 @@ public class Main extends Thread{
             slackThread.start();
             for(BenderRunner runner: runners){
                 runner.start();
-                sleep(1250);
+                sleep(1250 + (int)(Math.random() * 5000));
             }
 
             DataInputStream dataInputStream = new DataInputStream(System.in);

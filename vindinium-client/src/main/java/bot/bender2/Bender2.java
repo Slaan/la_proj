@@ -3,6 +3,7 @@ package bot.bender2;
 import bot.bender.Bender;
 import bot.bender.IRewarder;
 import bot.bender.ISimplifiedGState;
+import bot.bender1.RewarderBender1;
 import persistence.GameLog;
 import persistence.ManageState;
 
@@ -22,6 +23,6 @@ public class Bender2 extends Bender {
 
     @Override
     protected IRewarder getRewarder(GameLog gameLog) {
-        return new RewarderBender2(gameLog);
+        return new RewarderBender1(gameLog);
     }
 }

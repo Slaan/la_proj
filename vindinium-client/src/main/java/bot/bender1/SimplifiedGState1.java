@@ -119,6 +119,40 @@ public class SimplifiedGState1 implements ISimplifiedGState {
         return id.getId();
     }
 
+    @Override public String toString() {
+        return String.format("{\n"
+            + "\tbender: {\n"
+            + "\t\tlife: \"%s\",\n"
+            + "\t\tmines: \"%s\"\n"
+            + "\t},\n"
+            + "\tmine: {\n"
+            + "\t\tdirection: \"%s\",\n"
+            + "\t\tdistance: \"%s\"\n"
+            + "\t},\n"
+            + "\tenemy: {\n"
+            + "\t\tdirection: \"%s\",\n"
+            + "\t\tdistance: \"%s\",\n"
+            + "\t\tlifediff: \"%s\",\n"
+            + "\t\tmines: \"%s\"\n"
+            + "\t},\n"
+            + "\ttavern: {\n"
+            + "\t\tdirection: \"%s\",\n"
+            + "\t\tdistance: \"%s\"\n"
+            + "\t}\n"
+            + "}",
+            getLife().toString(),
+            getNoOfOurMines().toString(),
+            getClosestMine().getDirection().toString(),
+            getClosestMine().getDistance().toString(),
+            getClosestHero().getDirection().toString(),
+            getClosestHero().getDistance().toString(),
+            getClosestHero().getLifeDifference().toString(),
+            getClosestHero().getEnemyMines().toString(),
+            getClosestTavern().getDirection().toString(),
+            getClosestTavern().getDistance().toString()
+        );
+    }
+
     public int getLifeHP() {
         return lifeHP;
     }

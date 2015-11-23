@@ -22,6 +22,7 @@ public class Config {
     static int noOfThreads;
     static ApiKey APIKey;
     static GenericUrl slackURL;
+    static int slackWait;
     static GenericUrl gameURL;
     static String DBUser;
     static String DBPassword;
@@ -68,11 +69,12 @@ public class Config {
             }
             noOfThreads = Integer.parseInt(prop.getProperty("threads"));
             slackURL = new GenericUrl(prop.getProperty("slackurl"));
+            slackWait = Integer.parseInt(prop.getProperty("slackwait", "1"));
             DBUser = prop.getProperty("dbuser");
             DBPassword = prop.getProperty("dbpassword");
             serverURL = prop.getProperty("serverURL");
             mode = prop.getProperty("modus");
-            if ("COMPETITION".equals(mode)) {
+            if ("ARENA".equals(mode)) {
                 gameURL = new GenericUrl(serverURL+COMPETITION_URL);
                 APIKey = new ApiKey(prop.getProperty("apikey"));
             }
@@ -147,4 +149,6 @@ public class Config {
     public static int getNumberOfMinesToLook() { return numberOfMinesToLook; }
 
     public static int getNumberOfTavernsToLook() { return numberOfTavernsToLook; }
+
+    public static int getSlackWait() { return slackWait; }
 }

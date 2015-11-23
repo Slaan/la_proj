@@ -2,6 +2,8 @@ package bot.bender1;
 
 import bot.bender.*;
 import bot.dto.GameState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import persistence.GameLog;
 import util.BotmoveDirectionConverter;
 
@@ -12,7 +14,7 @@ import java.util.List;
  * Created by Daniel Hofmeister on 06.11.2015.
  */
 public class RewarderBender1 implements IRewarder {
-
+    private static final Logger logger = LogManager.getLogger(RewarderBender1.class);
 
     private final GameLog gameLog;
     private SimplifiedGState1 formerState;
@@ -93,8 +95,8 @@ public class RewarderBender1 implements IRewarder {
             if (h.getLife()<=20) {
                 killedHeroes.add(h);
                 result = true;
-               // System.out.println("Killed Hero ID: " + h.getId() + " URL: " + formerState.getGame().getViewUrl() +
-               //         " Turn: " + formerState.getGame().getGame().getTurn());
+                 //System.out.println("Killed Hero ID: " + h.getId() + " URL: " + formerState.getGame().getViewUrl() +
+                 //        " Turn: " + formerState.getGame().getGame().getTurn());
             }
         }
         return result;
@@ -108,7 +110,9 @@ public class RewarderBender1 implements IRewarder {
                         Math.pow(RewardConfigBender1.getKillPerMineDiscount(),i);
             }
         }
-       // System.out.println("Got a reward <3");
+        logger.debug("Kill! gameURL: " + formerState.getGame().getViewUrl() + "\n" +
+                "Reward: " + reward + ", " +
+                "Turn: " + formerState.getGame().getGame().getTurn());
     }
 
 
@@ -136,9 +140,9 @@ public class RewarderBender1 implements IRewarder {
 
     private boolean isHeroOnTile(TileType tile) {
         boolean result = false;
-     //   if (tile.equals(TileType.HERO1)) {
-     //       result = true;
-     //   } else
+     	//   if (tile.equals(TileType.HERO1)) {
+     	//       result = true;
+     	//   } else
         if (tile.equals(TileType.HERO2)) {
             result = true;
         } else if (tile.equals(TileType.HERO3)) {
@@ -174,13 +178,17 @@ public class RewarderBender1 implements IRewarder {
 
     private void calcDeathReward() {
         reward += RewardConfigBender1.getDeathDefaultReward() +
-                (RewardConfigBender1.getDeathperMineReward() *(formerState.getMineCount() + 1)); }
+                (RewardConfigBender1.getDeathperMineReward() *(formerState.getMineCount() + 1));
+        logger.debug("Death! gameURL: " + formerState.getGame().getViewUrl() + "\n" +
+                "Reward: " + reward + ", " +
+                "Turn: " + formerState.getGame().getGame().getTurn());
+    }
 
     public boolean checkForTavern() {
         boolean result=false;
         int lifechange = currentState.getLifeHP()-formerState.getLifeHP();
         if (formerState.getCurrentPos().equals(currentState.getCurrentPos()) && tavernNear()
-                && (0<lifechange) && (lifechange<=50)) {
+                && (0<=lifechange) && (lifechange<=50)) {
             result = true;
         }
         return result;

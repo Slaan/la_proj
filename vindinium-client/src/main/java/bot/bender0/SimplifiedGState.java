@@ -56,6 +56,25 @@ public class SimplifiedGState implements ISimplifiedGState {
         return currentPos;
     }
 
+    @Override public String toString() {
+        return String.format("  /-\\\t\tId: %1$d\n"
+                + "  |%2$s|\t\tLife > 40: %6$B\n"
+                + "/-+-+-\\\t\tNearest Tavern: %7$s\n"
+                + "|%3$s|#|%4$s|\t\tNearest Mine: %8$s\n"
+                + "\\-+-+-/\n"
+                + "  |%5$s|\n"
+                + "  \\-/\n",
+            generateGStateId(),
+            gameMap.getTileFromDirection(currentPos, DirectionType.NORTH).getAbbrevationB0(),
+            gameMap.getTileFromDirection(currentPos, DirectionType.WEST).getAbbrevationB0(),
+            gameMap.getTileFromDirection(currentPos, DirectionType.EAST).getAbbrevationB0(),
+            gameMap.getTileFromDirection(currentPos, DirectionType.SOUTH).getAbbrevationB0(),
+            (life > 40 ? 1: 0),
+            gameMap.getNearestTavernDirection().toString(),
+            gameMap.getNearestMineDirection().toString()
+        );
+    }
+
     public static String explainState(State state) {
         IdShifter id = new IdShifter(state.getStateId());
         // Unshift in entgegengesetzter Reihenfolge zu Shift!!!!

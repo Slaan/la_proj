@@ -46,7 +46,7 @@ public class ManageState {
         return state;
     }
 
-    public synchronized State getState(Integer stateId){
+    private synchronized State getState(Integer stateId){
         State state = null;
         Session session = factory.openSession();
         Transaction tx = null;
@@ -62,7 +62,7 @@ public class ManageState {
         }
     }
 
-    public synchronized void addState(ISimplifiedGState simplifiedGState){
+    private synchronized void addState(ISimplifiedGState simplifiedGState){
         int stateId = simplifiedGState.generateGStateId();
         Session session = factory.openSession();
         Transaction tx = null;
@@ -70,7 +70,7 @@ public class ManageState {
             tx = session.beginTransaction();
             State state = (State) session.get(State.class, stateId);
             if(state == null) {
-                state = new State(stateId);
+                state = new State(stateId, simplifiedGState.toString());
                 session.save(state);
                 for (BotMove botMove : BotMove.values()) {
                     manageStateAction.addStateActionInSession(session, state, "", botMove);

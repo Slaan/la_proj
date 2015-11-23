@@ -31,8 +31,9 @@ public class State {
     private List<StateAction> actions;
 
     private State(){}
-    protected State(int stateId){
+    protected State(int stateId, String stateComment){
         this.setStateId(stateId);
+        this.setStateComment(stateComment);
     }
 
     public int getStateId() {
@@ -44,8 +45,12 @@ public class State {
 
     public void setStateId(int stateId) {
         this.stateId = stateId;
-        this.stateComment = this.toString();
     }
+
+    public void setStateComment(String stateComment) {
+        this.stateComment = stateComment;
+    }
+
     public void setActions(List<StateAction> actions) {
         this.actions = actions;
     }
@@ -100,10 +105,5 @@ public class State {
             }
         }
         return best;
-    }
-
-    @Override public String toString() {
-        //return SimplifiedGState.explainState(this);
-        return String.format("Sag ich nicht! %d", stateId);
     }
 }
