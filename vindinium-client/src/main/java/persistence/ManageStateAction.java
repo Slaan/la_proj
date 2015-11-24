@@ -10,7 +10,7 @@ import org.hibernate.Transaction;
  * Created by beckf on 24.10.2015.
  */
 public class ManageStateAction {
-    private static SessionFactory factory;
+    private SessionFactory factory;
     private ManageStateActionLog manageStateActionLog;
 
     public ManageStateAction(SessionFactory factory, ManageStateActionLog manageStateActionLog){

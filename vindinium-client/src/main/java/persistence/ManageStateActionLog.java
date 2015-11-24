@@ -8,7 +8,7 @@ import org.hibernate.SessionFactory;
  * Created by beckf on 05.11.2015.
  */
 public class ManageStateActionLog {
-    private static SessionFactory factory;
+    private SessionFactory factory;
 
     public ManageStateActionLog(SessionFactory factory){
         this.factory = factory;

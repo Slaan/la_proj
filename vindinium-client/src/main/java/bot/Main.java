@@ -40,18 +40,16 @@ public class Main extends Thread{
                 SessionFactory factory = SessionBuilder.generateSessionFactory(bender);
                 ManageGameLog manageGameLog = new ManageGameLog(factory);
                 ManageStateActionLog manageStateActionLog = new ManageStateActionLog(factory);
-                ManageStateAction manageStateAction =
-                    new ManageStateAction(factory, manageStateActionLog);
+                ManageStateAction manageStateAction = new ManageStateAction(factory, manageStateActionLog);
                 ManageState manageState = new ManageState(factory, manageStateAction);
                 for (int i = 0; i < Config.getNoOfThreads(); i++) {
-                    runners.add(new BenderRunner(manageState, manageGameLog, gameLogBuffer));
+                    runners.add(new BenderRunner(bender, manageState, manageGameLog, gameLogBuffer));
                 }
-
                 gameLogBuffers.put(bender, gameLogBuffer);
-                for (BenderRunner runner : runners) {
-                    runner.start();
-                    sleep(1250);
-                }
+            }
+
+            for (BenderRunner runner : runners) {
+                runner.start();
             }
 
             SlackThread slackThread = new SlackThread(gameLogBuffers);

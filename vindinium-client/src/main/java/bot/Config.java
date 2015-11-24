@@ -9,8 +9,8 @@ import org.apache.logging.log4j.Logger;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -22,7 +22,7 @@ public class Config {
     static String name;
     static int noOfRounds;
     static int noOfThreads;
-    static ApiKey APIKey;
+    static Map<String, ApiKey> aPIKeyMap;
     static GenericUrl slackURL;
     static int slackWait;
     static GenericUrl gameURL;
@@ -76,14 +76,7 @@ public class Config {
             DBPassword = prop.getProperty("dbpassword");
             serverURL = prop.getProperty("serverURL");
             mode = prop.getProperty("modus");
-            if ("ARENA".equals(mode)) {
-                gameURL = new GenericUrl(serverURL+COMPETITION_URL);
-                APIKey = new ApiKey(prop.getProperty("apikey"));
-            }
-            else{
-                gameURL = new GenericUrl(serverURL+TRAINING_URL);
-                APIKey = new TurnApiKey(prop.getProperty("apikey"), noOfRounds);
-            }
+
             learningRate = Double.parseDouble(prop.getProperty("learningrate"));
             explorationRate = Double.parseDouble(prop.getProperty("explorationrate"));
             discountFactor = Double.parseDouble(prop.getProperty("discountfactor"));
@@ -92,6 +85,30 @@ public class Config {
             stateActionLogs = Boolean.parseBoolean(prop.getProperty("sarsaStateActionLogs"));
             String benderString = prop.getProperty("Bender");
             bender = benderString.split(",");
+
+            String[] apikeys = prop.getProperty("apikey").split(",");
+            aPIKeyMap = new HashMap<>();
+            if ("ARENA".equals(mode)) {
+                gameURL = new GenericUrl(serverURL+COMPETITION_URL);
+                for(int i = 0; i < bender.length; i++){
+                    if(apikeys.length == 1){
+                        aPIKeyMap.put(bender[i], new ApiKey(apikeys[0]));
+                    } else {
+                        aPIKeyMap.put(bender[i], new ApiKey(apikeys[i]));
+                    }
+                }
+            }
+            else{
+                gameURL = new GenericUrl(serverURL+TRAINING_URL);
+                for(int i = 0; i < bender.length; i++){
+                    if(apikeys.length == 1){
+                        aPIKeyMap.put(bender[i], new TurnApiKey(apikeys[0], noOfRounds));
+                    } else {
+                        aPIKeyMap.put(bender[i], new TurnApiKey(apikeys[i], noOfRounds));
+                    }
+                }
+            }
+
 
             stepsToLook = Integer.parseInt(prop.getProperty("stepsToLook"));
             numberOfHerosToLook = Integer.parseInt(prop.getProperty("numberOfHerosToLook"));
@@ -119,7 +136,7 @@ public class Config {
 
     public static int getNoOfThreads() {return noOfThreads;}
 
-    public static ApiKey getAPIKey() {return APIKey;}
+    public static ApiKey getAPIKey(String bender) {return aPIKeyMap.get(bender);}
 
     public static GenericUrl getSlackULR() {return slackURL;}
 

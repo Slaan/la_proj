@@ -41,10 +41,13 @@ public class BenderRunner extends Thread {
     private final SharedBuffer<GameLog> gameLogBuffer;
     private final ManageState manageState;
 
+    private final String bender;
+
     private boolean run = true;
 
-    public BenderRunner(ManageState manageState, ManageGameLog manageGameLog, SharedBuffer<GameLog> gameLogBuffer) {
-        this.apiKey = Config.getAPIKey();
+    public BenderRunner(String bender, ManageState manageState, ManageGameLog manageGameLog, SharedBuffer<GameLog> gameLogBuffer) {
+        this.bender = bender;
+        this.apiKey = Config.getAPIKey(bender);
         this.gameUrl = Config.getGameURL();
         this.user = Config.getName();
         this.manageGameLog = manageGameLog;
@@ -137,11 +140,11 @@ public class BenderRunner extends Thread {
     }
 
     public Bender getBender(ManageState manageState, GameLog gameLog){
-        if(Config.getBender().equals("bender0")){
+        if(bender.equals("bender0")){
             return new Bender0(manageState, gameLog);
-        } else if (Config.getBender().equals("bender1")){
+        } else if (bender.equals("bender1")){
             return new Bender1(manageState, gameLog);
-        } else if (Config.getBender().equals("bender2")) {
+        } else if (bender.equals("bender2")) {
             return new Bender2(manageState, gameLog);
         }
         return null;
