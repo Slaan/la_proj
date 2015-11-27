@@ -1,6 +1,9 @@
 package bot.bender;
 
+import algorithms.ILearning;
+import algorithms.Qlearning;
 import algorithms.sarsaLambda.SarsaLambda;
+import bot.Config;
 import bot.dto.GameState;
 import persistence.GameLog;
 import persistence.ManageState;
@@ -14,14 +17,22 @@ public abstract class Bender {
 
     ManageState manageState;
     private GameLog gameLog;
-    SarsaLambda sarsaLambda;
+    ILearning learningAlgorithm;
     IRewarder rewarder;
 
     public Bender(ManageState manageState, GameLog gameLog){
         this.manageState = manageState;
         this.gameLog = gameLog;
         rewarder = getRewarder(gameLog);
-        sarsaLambda = new SarsaLambda(manageState.getManageStateAction());
+        if (Config.getLearningAlgorithm().equals("SarsaLamda")) {
+            learningAlgorithm = new SarsaLambda(manageState.getManageStateAction());
+        } else if (Config.getLearningAlgorithm().equals("Qlearning")) {
+            learningAlgorithm = new Qlearning(manageState.getManageStateAction());
+        } else {
+            // default
+            learningAlgorithm = new SarsaLambda(manageState.getManageStateAction());
+        }
+
     }
     /**
      * Method that plays each move
@@ -33,7 +44,7 @@ public abstract class Bender {
         ISimplifiedGState simplifiedGState = getSimplifiedGState();
         simplifiedGState.init(gameState);
         State state = manageState.getStateOfId(simplifiedGState);
-        StateAction action = sarsaLambda.step(state,
+        StateAction action = learningAlgorithm.step(state,
             rewarder.calculateReward(simplifiedGState),
                 simplifiedGState.getPossibleMoves());
         rewarder.setLastMove(action.getAction());

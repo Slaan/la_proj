@@ -30,13 +30,14 @@ public class Config {
     static String DBPassword;
     static String mode;
 
-    //Sarsa Lambda
+    //Learning Algorithm
     static Double learningRate;
     static Double explorationRate;
     static Double discountFactor;
     static Double lamda;
     static int queueLength;
     static boolean stateActionLogs;
+    static String learningAlgorithm;
 
     //Dijkstra
     static int stepsToLook;
@@ -83,6 +84,7 @@ public class Config {
             lamda = Double.parseDouble(prop.getProperty("lamda"));
             queueLength = Integer.parseInt(prop.getProperty("queuelength"));
             stateActionLogs = Boolean.parseBoolean(prop.getProperty("sarsaStateActionLogs"));
+            learningAlgorithm = prop.getProperty("learningAlgorithm");
             String benderString = prop.getProperty("Bender");
             bender = benderString.split(",");
 
@@ -157,6 +159,10 @@ public class Config {
     public static double getLambda() {return lamda;}
 
     public static int getQueueLenght() {return queueLength;}
+
+    public static String getLearningAlgorithm() {
+        return learningAlgorithm;
+    }
 
     public static boolean getStateActionLogs() { return stateActionLogs; }
 

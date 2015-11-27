@@ -106,4 +106,8 @@ public class State {
         }
         return best;
     }
+
+    public StateAction getBestAction(Set<BotMove> botMoves) {
+        return getBestStateAction(getPossibleStateActions(botMoves));
+    }
 }
