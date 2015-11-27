@@ -56,7 +56,8 @@ public class Dijkstra {
         costFrom.put(playerPosition, 0);
         queue.add(playerPosition);
 
-        for(int steps = 0; (steps < Config.getStepsToLook()) && ((mines.size() < Config.getNumberOfMinesToLook()) || (tavern.size() < Config.getNumberOfTavernsToLook()) || (heroes.size() < Config.getNumberOfHerosToLook())); steps++){
+        for(int steps = 0; (steps < Config.getStepsToLook())
+            && ((mines.size() < Config.getNumberOfMinesToLook()) || (tavern.size() < Config.getNumberOfTavernsToLook()) || (heroes.size() < Config.getNumberOfHerosToLook())); steps++){
             Queue<GameState.Position> newQueue = new LinkedList<>();
             while((queue.size() > 0) && ((mines.size() < Config.getNumberOfMinesToLook()) || (tavern.size() < Config.getNumberOfTavernsToLook()) || (heroes.size() < Config.getNumberOfHerosToLook()))) {
                 GameState.Position currentPosition = queue.remove();
