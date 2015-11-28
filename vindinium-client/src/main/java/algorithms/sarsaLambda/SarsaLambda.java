@@ -5,6 +5,7 @@ import bot.bender.BotMove;
 import bot.Config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import persistence.GameLog;
 import persistence.ManageStateAction;
 import persistence.State;
 import persistence.StateAction;
@@ -26,12 +27,12 @@ public class SarsaLambda implements ILearning{
 
     private SarsaQueue sarsaQueue;
 
-    public SarsaLambda(ManageStateAction manageStateAction){
+    public SarsaLambda(ManageStateAction manageStateAction, GameLog gameLog){
         this.alpha = Config.getLearningRate();
         this.epsilon = Config.getExplorationRate();
         this.gamma = Config.getDiscountFactor();
         this.lambda = Config.getLambda();
-        this.sarsaQueue = new SarsaQueue(manageStateAction);
+        this.sarsaQueue = new SarsaQueue(manageStateAction, gameLog);
     }
 
     public StateAction init(State currentState, Set<BotMove> possibleMoves){
@@ -52,7 +53,7 @@ public class SarsaLambda implements ILearning{
         StateAction currentStateAction = currentState.getStateActionForExplorationRate(epsilon, possibleMoves);
         logger.debug("delta: " + reward + " " + (gamma * currentStateAction.getQValue()) + " " + lastStateAction.getQValue());
         sarsaQueue.updateStateActions(reward + (gamma * currentStateAction.getQValue()) - lastStateAction
-            .getQValue(),alpha,lambda);
+                .getQValue(), alpha, lambda);
 
         lastStateAction = currentStateAction;
 

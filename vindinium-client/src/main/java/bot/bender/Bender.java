@@ -25,12 +25,12 @@ public abstract class Bender {
         this.gameLog = gameLog;
         rewarder = getRewarder(gameLog);
         if (Config.getLearningAlgorithm().equals("SarsaLamda")) {
-            learningAlgorithm = new SarsaLambda(manageState.getManageStateAction());
+            learningAlgorithm = new SarsaLambda(manageState.getManageStateAction(), gameLog);
         } else if (Config.getLearningAlgorithm().equals("Qlearning")) {
-            learningAlgorithm = new Qlearning(manageState.getManageStateAction());
+            learningAlgorithm = new Qlearning(manageState.getManageStateAction(), gameLog);
         } else {
             // default
-            learningAlgorithm = new SarsaLambda(manageState.getManageStateAction());
+            learningAlgorithm = new SarsaLambda(manageState.getManageStateAction(), gameLog);
         }
 
     }
@@ -43,7 +43,7 @@ public abstract class Bender {
     public BotMove move(GameState gameState) {
         ISimplifiedGState simplifiedGState = getSimplifiedGState();
         simplifiedGState.init(gameState);
-        State state = manageState.getStateOfId(simplifiedGState);
+        State state = manageState.getStateOfId(simplifiedGState, gameLog);
         StateAction action = learningAlgorithm.step(state,
             rewarder.calculateReward(simplifiedGState),
                 simplifiedGState.getPossibleMoves());

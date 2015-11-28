@@ -8,6 +8,8 @@ import bot.Config;
 import bot.dto.GameState;
 import org.junit.Test;
 
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -102,6 +104,9 @@ public class DijkstraTest{
         dijkstra.runDijkstra();
 
         long finish = System.currentTimeMillis();
+        Date currentTime = new Date();
+        System.out.println(currentTime);
+
         assertTrue(String.format("Finished in %d ms.", (finish - start)) , (finish - start) < 3500);
 
     }

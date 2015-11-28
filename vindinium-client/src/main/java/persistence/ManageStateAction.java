@@ -36,21 +36,21 @@ public class ManageStateAction {
         return stateActionID;
     }
 
-    protected synchronized void addStateActionInSession(Session session, State state, String description, BotMove action){
+    protected synchronized void addStateActionInSession(Session session, State state, String description, BotMove action, GameLog gameLog){
         StateAction stateAction = new StateAction(state, description, action);
 
         Integer stateActionId = (Integer) session.save(stateAction);
         stateAction.setStateActionID(stateActionId);
-        manageStateActionLog.addStateActionLogInSession(session, stateAction);
+        manageStateActionLog.addStateActionLogInSession(session, stateAction, gameLog);
     }
 
-    public synchronized void updateStateAction(StateAction stateAction){
+    public synchronized void updateStateAction(StateAction stateAction, GameLog gameLog){
         Session session = factory.openSession();
         Transaction tx = null;
         try{
             tx = session.beginTransaction();
             session.update(stateAction);
-            manageStateActionLog.addStateActionLogInSession(session, stateAction);
+            manageStateActionLog.addStateActionLogInSession(session, stateAction, gameLog);
             tx.commit();
         }catch (HibernateException e) {
             if (tx!=null) tx.rollback();

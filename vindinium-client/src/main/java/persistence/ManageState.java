@@ -27,7 +27,7 @@ public class ManageState {
     public ManageStateAction getManageStateAction() { return manageStateAction; }
 
 
-    synchronized public State getStateOfId(ISimplifiedGState simplifiedGState){
+    synchronized public State getStateOfId(ISimplifiedGState simplifiedGState, GameLog gameLog){
         int stateId = simplifiedGState.generateGStateId();
         // Object is already available.
         if(stateMap.containsKey(stateId)){
@@ -38,7 +38,7 @@ public class ManageState {
         State state = getState(stateId);
 
         if(state == null){
-            addState(simplifiedGState);
+            addState(simplifiedGState, gameLog);
             state = getState(stateId);
         }
 
@@ -62,7 +62,7 @@ public class ManageState {
         }
     }
 
-    private synchronized void addState(ISimplifiedGState simplifiedGState){
+    private synchronized void addState(ISimplifiedGState simplifiedGState, GameLog gameLog){
         int stateId = simplifiedGState.generateGStateId();
         Session session = factory.openSession();
         Transaction tx = null;
@@ -73,7 +73,7 @@ public class ManageState {
                 state = new State(stateId, simplifiedGState.toString());
                 session.save(state);
                 for (BotMove botMove : BotMove.values()) {
-                    manageStateAction.addStateActionInSession(session, state, "", botMove);
+                    manageStateAction.addStateActionInSession(session, state, "", botMove, gameLog);
                 }
             }
             tx.commit();

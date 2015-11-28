@@ -133,8 +133,8 @@ public class BenderRunner extends Thread {
 
 
             gameLog.setWin(isWinner(gameState));
+            manageGameLog.updateGameLog(gameLog);
             gameLogBuffer.addEntity(gameLog);
-            manageGameLog.addGameLog(gameLog);
             logger.debug("Game over");
         }
     }

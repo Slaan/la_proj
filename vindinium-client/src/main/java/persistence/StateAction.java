@@ -24,6 +24,10 @@ public class StateAction {
     private double qValue;
     @Column(name = "used")
     private int used;
+    @Column(name = "explored")
+    private int exploread;
+    @Column(name = "bestAktion")
+    private int bestAktion;
 
     private StateAction(){}
     protected StateAction(State state, String description, BotMove action){
@@ -32,6 +36,8 @@ public class StateAction {
         this.action = action;
         this.qValue = 0;
         this.used = 0;
+        this.exploread = 0;
+        this.bestAktion = 0;
     }
 
     public int getStateActionID() {
@@ -48,6 +54,12 @@ public class StateAction {
         return qValue;
     }
     public int getUsed() { return used; }
+    public int getBestAktion() {
+        return bestAktion;
+    }
+    public int getExploread() {
+        return exploread;
+    }
 
     public void setStateActionID(int stateActionID) {
         this.stateActionID = stateActionID;
@@ -68,7 +80,15 @@ public class StateAction {
 
     public synchronized void updateQValue(double additionQValue){ qValue += additionQValue; }
 
-    public synchronized void addUse() { used++; }
+    private synchronized void addUse() { used++; }
+    public synchronized void addExplored() {
+        exploread++;
+        addUse();
+    }
+    public synchronized void addBestAction() {
+        bestAktion++;
+        addUse();
+    }
     public void updateUsed(int additonUsed) { used += additonUsed; }
 
     @Override public String toString() {

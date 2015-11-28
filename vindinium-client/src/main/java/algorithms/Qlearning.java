@@ -4,6 +4,7 @@ import bot.Config;
 import bot.bender.BotMove;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import persistence.GameLog;
 import persistence.ManageStateAction;
 import persistence.State;
 import persistence.StateAction;
@@ -22,11 +23,14 @@ public class Qlearning implements ILearning {
     private StateAction lastStateAction;
     private ManageStateAction msa;
 
-    public Qlearning(ManageStateAction manageStateAction) {
+    private GameLog gameLog;
+
+    public Qlearning(ManageStateAction manageStateAction, GameLog gameLog) {
         this.alpha = Config.getLearningRate();
         this.epsilon = Config.getExplorationRate();
         this.gamma = Config.getDiscountFactor();
         msa = manageStateAction;
+        this.gameLog = gameLog;
     }
 
     @Override
@@ -52,7 +56,7 @@ public class Qlearning implements ILearning {
                 .getQValue()-lastStateAction.getQValue());
 
         lastStateAction.updateQValue(delta);
-        msa.updateStateAction(lastStateAction);
+        msa.updateStateAction(lastStateAction, gameLog);
 
         lastStateAction = currentStateAction;
 

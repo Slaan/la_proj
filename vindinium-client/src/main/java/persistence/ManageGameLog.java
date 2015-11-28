@@ -15,12 +15,14 @@ public class ManageGameLog {
         this.factory = factory;
     }
 
-    public synchronized void addGameLog(GameLog gameLog){
+    private synchronized GameLog addGameLog(GameLog gameLog){
         Session session = factory.openSession();
         Transaction tx = null;
+        GameLog gameLogInDB = null;
         try{
             tx = session.beginTransaction();
-            session.save(gameLog);
+            int gameLogID = (Integer) session.save(gameLog);
+            gameLogInDB = (GameLog) session.get(GameLog.class, gameLogID);
             tx.commit();
         }catch (HibernateException e) {
             if (tx!=null) tx.rollback();
@@ -28,7 +30,23 @@ public class ManageGameLog {
         }finally {
             session.close();
         }
+        return gameLogInDB;
     }
 
-    public GameLog getGameLog(){return new GameLog();}
+    public synchronized void updateGameLog(GameLog gameLog){
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.update(gameLog);
+            tx.commit();
+        } catch (HibernateException e) {
+            if(tx!=null) tx.rollback();
+        } finally {
+            session.close();
+        }
+    }
+
+
+    public GameLog getGameLog(){return addGameLog(new GameLog());}
 }

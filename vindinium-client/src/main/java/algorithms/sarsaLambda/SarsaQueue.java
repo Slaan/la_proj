@@ -1,6 +1,7 @@
 package algorithms.sarsaLambda;
 
 import bot.Config;
+import persistence.GameLog;
 import persistence.ManageStateAction;
 import persistence.StateAction;
 
@@ -15,10 +16,13 @@ public class SarsaQueue {
     private int queueLength;
     private ManageStateAction manageStateAction;
 
-    public SarsaQueue(ManageStateAction manageStateAction){
+    private GameLog gameLog;
+
+    public SarsaQueue(ManageStateAction manageStateAction, GameLog gameLog){
         this.queueLength = Config.getQueueLenght();
         this.manageStateAction = manageStateAction;
         stateActionsQueue = new LinkedList<>();
+        this.gameLog = gameLog;
     }
 
     public void putStateAction(StateAction stateAction){
@@ -32,7 +36,7 @@ public class SarsaQueue {
         int pos = stateActionsQueue.size()-1;
         for(StateAction stateAction : stateActionsQueue){
             stateAction.updateQValue(delta * alpha * Math.pow(lambda,pos));
-            manageStateAction.updateStateAction(stateAction);
+            manageStateAction.updateStateAction(stateAction, gameLog);
             pos--;
         }
     }

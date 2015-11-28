@@ -88,12 +88,13 @@ public class State {
         if((epsilon * 100) > (Math.random() * 100 + 1)){
             logger.debug(markChoose, "I'm exploring.");
             action = possigbleStateActions.get((int)Math.random() * possigbleStateActions.size());
+            action.addExplored();
         } else {
             logger.debug(markAvailable, "I'm getting best Action.");
             action = getBestStateAction(possigbleStateActions);
+            action.addBestAction();
         }
         logger.debug(markAvailable, "using: " + action.toString());
-        action.addUse();
         return action;
     }
 

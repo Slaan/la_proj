@@ -3,6 +3,7 @@ package persistence;
 import bot.bender.BotMove;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by beckf on 05.11.2015.
@@ -19,6 +20,8 @@ public class StateActionLog {
     private int stateActionID;
     @JoinColumn(name = "state")
     private int state;
+    @JoinColumn(name = "gameID")
+    private int gameID;
     @Column(name = "description")
     private String description;
     @Column(name = "action")
@@ -27,15 +30,25 @@ public class StateActionLog {
     private double qValue;
     @Column(name = "used")
     private int used;
+    @Column(name = "explored")
+    private int exploread;
+    @Column(name = "bestAktion")
+    private int bestAktion;
+    @Column(name = "usedAt")
+    private Date usedAt;
 
     private StateActionLog(){}
-    protected StateActionLog(StateAction stateAction){
+    protected StateActionLog(StateAction stateAction, int gameID){
         this.stateActionID = stateAction.getStateActionID();
         this.state = stateAction.getState().getStateId();
         this.description = stateAction.getDescription();
         this.action = stateAction.getAction();
         this.qValue = stateAction.getQValue();
         this.used = stateAction.getUsed();
+        this.gameID = gameID;
+        this.exploread = stateAction.getExploread();
+        this.bestAktion = stateAction.getBestAktion();
+        this.usedAt = new Date();
     }
 
     public int getStateActionIDLog() {

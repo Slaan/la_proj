@@ -1,6 +1,7 @@
 package persistence;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by slaan on 26.10.15.
@@ -27,6 +28,8 @@ public class GameLog {
     private int kills;
     @Column(name = "blockedWay")
     private int blockedWay;
+    @Column(name = "startingTime")
+    private Date startingTime;
 
     protected GameLog(){
         this.gameURL ="";
@@ -37,6 +40,7 @@ public class GameLog {
         this.deaths = 0;
         this.kills = 0;
         this.blockedWay = 0;
+        this.startingTime = new Date();
     }
 
     public int getGameID() {
