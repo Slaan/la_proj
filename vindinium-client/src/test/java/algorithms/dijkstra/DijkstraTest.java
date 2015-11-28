@@ -91,13 +91,14 @@ public class DijkstraTest{
         GameState.Position pos = new GameState.Position(0, 4);
         GameState.Hero hero = new GameState.Hero(1, "dan", "0", 0, pos, 100, 0, 0, pos, false);
         GameState gs = new GameState(game, hero, "", "", "");
+        GameState.Position heropos = new GameState.Position(1, 5);
 
         Config.init();
 
         GameMap gameMap = new GameMap(gs);
         long start = System.currentTimeMillis();
 
-        Dijkstra dijkstra = new Dijkstra(gameMap, pos);
+        Dijkstra dijkstra = new Dijkstra(gameMap, heropos);
         dijkstra.runDijkstra();
 
         long finish = System.currentTimeMillis();

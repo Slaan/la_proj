@@ -27,6 +27,7 @@ public class Dijkstra {
     private List<GameState.Position> heroes;
     private GameMap gameMap;
     private GameState.Position playerPosition;
+    private long startTime;
 
     public Dijkstra(GameMap gameMap, GameState.Position playerPosition){
         previousFrom = new HashMap<>();
@@ -41,11 +42,12 @@ public class Dijkstra {
     }
 
     public void runDijkstra() {
-        long start = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
         _runDijkstra();
         long ende = System.currentTimeMillis();
-        if (ende - start > 700) {
-            throw new RuntimeException(String.format("runDijkstra() brauchte zu lange (%d ms).", (ende - start)));
+        System.out.println(ende - startTime);
+        if (ende - startTime > 700) {
+            throw new RuntimeException(String.format("runDijkstra() brauchte zu lange (%d ms).", (ende - startTime)));
         }
     }
 
@@ -55,11 +57,19 @@ public class Dijkstra {
         previousFrom.put(playerPosition, playerPosition);
         costFrom.put(playerPosition, 0);
         queue.add(playerPosition);
-
-        for(int steps = 0; (steps < Config.getStepsToLook())
-            && ((mines.size() < Config.getNumberOfMinesToLook()) || (tavern.size() < Config.getNumberOfTavernsToLook()) || (heroes.size() < Config.getNumberOfHerosToLook())); steps++){
+        for(int steps = 0;
+                (steps < Config.getStepsToLook())
+                && ((mines.size() < Config.getNumberOfMinesToLook())
+                || (tavern.size() < Config.getNumberOfTavernsToLook())
+                || (heroes.size() < Config.getNumberOfHerosToLook()))
+                && ((System.currentTimeMillis() - startTime) < Config.getTimeToRunInMS());
+                steps++){
             Queue<GameState.Position> newQueue = new LinkedList<>();
-            while((queue.size() > 0) && ((mines.size() < Config.getNumberOfMinesToLook()) || (tavern.size() < Config.getNumberOfTavernsToLook()) || (heroes.size() < Config.getNumberOfHerosToLook()))) {
+            while(  (queue.size() > 0)
+                    && ((mines.size() < Config.getNumberOfMinesToLook())
+                    || (tavern.size() < Config.getNumberOfTavernsToLook())
+                    || (heroes.size() < Config.getNumberOfHerosToLook()))
+                    && ((System.currentTimeMillis() - startTime) < Config.getTimeToRunInMS())) {
                 GameState.Position currentPosition = queue.remove();
                 visited.put(currentPosition, true);
                 for (GameState.Position position : neighborOf(currentPosition)) {

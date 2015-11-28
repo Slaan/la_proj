@@ -40,6 +40,7 @@ public class Config {
     static String learningAlgorithm;
 
     //Dijkstra
+    static long timeToRunInMS;
     static int stepsToLook;
     static int numberOfHerosToLook;
     static int numberOfMinesToLook;
@@ -111,7 +112,7 @@ public class Config {
                 }
             }
 
-
+            timeToRunInMS = Long.parseLong(prop.getProperty("timeToRunInMS"));
             stepsToLook = Integer.parseInt(prop.getProperty("stepsToLook"));
             numberOfHerosToLook = Integer.parseInt(prop.getProperty("numberOfHerosToLook"));
             numberOfMinesToLook = Integer.parseInt(prop.getProperty("numberOfMinesToLook"));
@@ -167,6 +168,8 @@ public class Config {
     public static boolean getStateActionLogs() { return stateActionLogs; }
 
     public static String[] getBender() { return bender; }
+
+    public static long getTimeToRunInMS() { return timeToRunInMS; }
 
     public static int getStepsToLook() { return stepsToLook; }
 
