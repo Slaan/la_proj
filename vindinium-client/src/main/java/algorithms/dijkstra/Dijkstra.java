@@ -45,7 +45,7 @@ public class Dijkstra {
         startTime = System.currentTimeMillis();
         _runDijkstra();
         long ende = System.currentTimeMillis();
-        System.out.println(ende - startTime);
+        //System.out.println(ende - startTime);
         if (ende - startTime > 700) {
             throw new RuntimeException(String.format("runDijkstra() brauchte zu lange (%d ms).", (ende - startTime)));
         }
