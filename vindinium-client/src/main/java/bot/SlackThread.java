@@ -87,9 +87,10 @@ public class SlackThread extends Thread {
         }
 
         String msg = String.format(
-            "payload={\"text\": \"Gestartet von: %s (%s)- Win-Rate: %d%% (Win: %d, Loose: %d, Crash: %d):\nGewonnen:%s\nVerloren:%s\nGecrasht:%s\"}",
+            "payload={\"text\": \"Gestartet von: %s (%s <%s>)- Win-Rate: %d%% (Win: %d, Loose: %d, Crash: %d):\nGewonnen:%s\nVerloren:%s\nGecrasht:%s\"}",
             Config.getName(),
             bender,
+            Config.getLearningAlgorithm(),
             (int)(((double)wins) / (wins + looses) * 100),
             wins, looses, crashes,
             urlsWin, urlsLoose, urlsCrash
