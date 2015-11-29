@@ -24,6 +24,11 @@
         <!-- Hibernate resources -->
         <dependency>
             <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>5.0.4.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>3.6.7.Final</version>
         </dependency>
