@@ -56,7 +56,7 @@ public class Qlearning implements ILearning {
                 .getQValue()-lastStateAction.getQValue());
 
         lastStateAction.updateQValue(delta);
-        msa.updateStateAction(lastStateAction, gameLog);
+        msa.updateStateAction(lastStateAction, reward, gameLog);
 
         lastStateAction = currentStateAction;
 

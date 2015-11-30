@@ -25,7 +25,7 @@ public class State {
     @Id
     @Column(name = "stateId")
     private int stateId;
-    @Column(name = "stateComment")
+    @Column(name = "stateComment", length = 1000)
     private String stateComment;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "state")
     private List<StateAction> actions;

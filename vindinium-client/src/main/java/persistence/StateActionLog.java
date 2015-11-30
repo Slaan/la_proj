@@ -28,6 +28,8 @@ public class StateActionLog {
     private BotMove action;
     @Column(name = "qValue")
     private double qValue;
+    @Column(name = "reward")
+    private double reward;
     @Column(name = "used")
     private int used;
     @Column(name = "explored")
@@ -38,7 +40,7 @@ public class StateActionLog {
     private Date usedAt;
 
     private StateActionLog(){}
-    protected StateActionLog(StateAction stateAction, int gameID){
+    protected StateActionLog(StateAction stateAction,double reward, int gameID){
         this.stateActionID = stateAction.getStateActionID();
         this.state = stateAction.getState().getStateId();
         this.description = stateAction.getDescription();
@@ -49,6 +51,7 @@ public class StateActionLog {
         this.exploread = stateAction.getExploread();
         this.bestAktion = stateAction.getBestAktion();
         this.usedAt = new Date();
+        this.reward = reward;
     }
 
     public int getStateActionIDLog() {

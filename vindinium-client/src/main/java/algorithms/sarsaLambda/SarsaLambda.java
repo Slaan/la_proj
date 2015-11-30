@@ -53,7 +53,7 @@ public class SarsaLambda implements ILearning{
         StateAction currentStateAction = currentState.getStateActionForExplorationRate(epsilon, possibleMoves);
         logger.debug("delta: " + reward + " " + (gamma * currentStateAction.getQValue()) + " " + lastStateAction.getQValue());
         sarsaQueue.updateStateActions(reward + (gamma * currentStateAction.getQValue()) - lastStateAction
-                .getQValue(), alpha, lambda);
+                .getQValue(), alpha, lambda, reward);
 
         lastStateAction = currentStateAction;
 

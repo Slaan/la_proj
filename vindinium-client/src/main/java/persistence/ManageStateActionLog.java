@@ -14,9 +14,9 @@ public class ManageStateActionLog {
         this.factory = factory;
     }
 
-    protected synchronized void addStateActionLogInSession(Session session, StateAction stateAction, GameLog gameLog){
+    protected synchronized void addStateActionLogInSession(Session session, StateAction stateAction, double reward, GameLog gameLog){
         if(Config.getStateActionLogs()) {
-            session.save(new StateActionLog(stateAction, gameLog.getGameID()));
+            session.save(new StateActionLog(stateAction, reward, gameLog.getGameID()));
         }
     }
 }
