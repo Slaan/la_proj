@@ -73,7 +73,7 @@ public class ManageState {
                 state = new State(stateId, simplifiedGState.toString());
                 session.save(state);
                 for (BotMove botMove : BotMove.values()) {
-                    manageStateAction.addStateActionInSession(session, state, "", botMove, gameLog);
+                    manageStateAction.addStateActionInSession(session, state, "", botMove, 0, gameLog);
                 }
             }
             tx.commit();

@@ -40,27 +40,41 @@ public class RewarderBender1 implements IRewarder {
         reward = RewardConfigBender1.getTurnReward();
         currentState = (SimplifiedGState1)state;
 
+        double deathReward = 0;
         if (checkForDeath()) {
             gameLog.addDeath();
-            calcDeathReward();
+            deathReward = calcDeathReward();
         }
 
+        double tavernReward = 0;
         if (checkForTavern()) {
             gameLog.addTavern();
-            calcTavernReward();
+            tavernReward = calcTavernReward();
         }
 
+        double mineReward = 0;
         if (checkForMine()) {
             gameLog.addMine();
-            calcMineReward();
+            mineReward = calcMineReward();
         }
 
+        double killReward = 0;
         if (checkForKill()) {
             gameLog.addKill();
-            calcKillReward();
+            killReward = calcKillReward();
+        }
+        formerState = currentState;
+        reward += deathReward + tavernReward + mineReward + killReward;
+
+        if (reward > 250) {
+            logger.warn(String.format("Reward: %d. <death: %d, tavern: %d, mine: %d, kill: %d>",
+                reward,
+                (int)deathReward,
+                (int)tavernReward,
+                (int)mineReward,
+                (int)killReward));
         }
 
-        formerState = currentState;
         return reward;
     }
 
@@ -74,7 +88,7 @@ public class RewarderBender1 implements IRewarder {
         // endPos = Position at the end of last turn
         GameState.Position endPos;
         DirectionType dir = BotmoveDirectionConverter.getDirectionTypeFromBotMove(move);
-        if (formerState.getGameMap().getTileFromDirection(formerState.getCurrentPos(),dir).equals(TileType.BLOCKED)) {
+        if (!formerState.getGameMap().getTileFromDirection(formerState.getCurrentPos(),dir).equals(TileType.FREE)) {
             endPos = formerState.getCurrentPos();
         } else if (move.equals(BotMove.EAST)) {
             endPos = new GameState.Position(formerState.getCurrentPos().getX()+1,formerState.getCurrentPos().getY());
@@ -91,6 +105,7 @@ public class RewarderBender1 implements IRewarder {
         List<GameState.Hero> nearHeroes = getAllHeroesNextToUs(endPos);
 
         // A Hero is killed when we are next to him at the end of our turn and his Life is below 20
+        killedHeroes = new ArrayList<>();
         for(GameState.Hero h : nearHeroes) {
             if (h.getLife()<=20) {
                 killedHeroes.add(h);
@@ -102,17 +117,19 @@ public class RewarderBender1 implements IRewarder {
         return result;
     }
 
-    private void calcKillReward() {
+    private double calcKillReward() {
+        double result = 0;
         for (GameState.Hero h : killedHeroes) {
-            reward+=RewardConfigBender1.getKillDefault();
+            result+=RewardConfigBender1.getKillDefault();
             for(int i=0; i<h.getMineCount(); i++) {
-                reward += RewardConfigBender1.getKillPerMine() *
+                result += RewardConfigBender1.getKillPerMine() *
                         Math.pow(RewardConfigBender1.getKillPerMineDiscount(),i);
             }
         }
         logger.debug("Kill! gameURL: " + formerState.getGame().getViewUrl() + "\n" +
                 "Reward: " + reward + ", " +
                 "Turn: " + formerState.getGame().getGame().getTurn());
+        return result;
     }
 
 
@@ -120,34 +137,28 @@ public class RewarderBender1 implements IRewarder {
         List<GameState.Hero> result = new ArrayList<>();
         GameMap map = formerState.getGameMap();
         TileType tile = map.getTileFromDirection(position, DirectionType.EAST);
-        if (isHeroOnTile(tile)) {
+        if (isEnemyOnTile(tile)) {
             result.add(getActualHeroFromTile(tile));
         }
         tile = map.getTileFromDirection(position, DirectionType.SOUTH);
-        if (isHeroOnTile(tile)) {
+        if (isEnemyOnTile(tile)) {
             result.add(getActualHeroFromTile(tile));
         }
         tile = map.getTileFromDirection(position, DirectionType.WEST);
-        if (isHeroOnTile(tile)) {
+        if (isEnemyOnTile(tile)) {
             result.add(getActualHeroFromTile(tile));
         }
         tile = map.getTileFromDirection(position, DirectionType.NORTH);
-        if (isHeroOnTile(tile)) {
+        if (isEnemyOnTile(tile)) {
             result.add(getActualHeroFromTile(tile));
         }
         return result;
     }
 
-    private boolean isHeroOnTile(TileType tile) {
+    private boolean isEnemyOnTile(TileType tile) {
+        int ourId = currentState.getGame().getHero().getId();
         boolean result = false;
-     	//   if (tile.equals(TileType.HERO1)) {
-     	//       result = true;
-     	//   } else
-        if (tile.equals(TileType.HERO2)) {
-            result = true;
-        } else if (tile.equals(TileType.HERO3)) {
-            result = true;
-        } else if (tile.equals(TileType.HERO4)) {
+        if (tile.isHero() && getActualHeroFromTile(tile).getId() != ourId) {
             result = true;
         }
         return result;
@@ -176,12 +187,9 @@ public class RewarderBender1 implements IRewarder {
                 currentState.getCurrentPos().equals(currentState.getSpawn()));
     }
 
-    private void calcDeathReward() {
-        reward += RewardConfigBender1.getDeathDefaultReward() +
-                (RewardConfigBender1.getDeathperMineReward() *(formerState.getMineCount() + 1));
-        logger.debug("Death! gameURL: " + formerState.getGame().getViewUrl() + "\n" +
-                "Reward: " + reward + ", " +
-                "Turn: " + formerState.getGame().getGame().getTurn());
+    private double calcDeathReward() {
+        return (RewardConfigBender1.getDeathDefaultReward() +
+                (RewardConfigBender1.getDeathperMineReward() *(formerState.getMineCount() + 1)));
     }
 
     public boolean checkForTavern() {
@@ -207,14 +215,14 @@ public class RewarderBender1 implements IRewarder {
         return false;
     }
 
-    private void calcTavernReward() {
+    private double calcTavernReward() {
 
         if (formerState.getLife().equals(Quantity.FEW)) {
-            reward+=RewardConfigBender1.getTavernRewardLowHP();
+            return RewardConfigBender1.getTavernRewardLowHP();
         } else if (formerState.getLife().equals(Quantity.MIDDLE)) {
-            reward+=RewardConfigBender1.getTavernRewardMiddleHP();
+            return RewardConfigBender1.getTavernRewardMiddleHP();
         } else if (formerState.getLife().equals(Quantity.LOTS)) {
-            reward+=RewardConfigBender1.getTavernRewardHighHP();
+            return RewardConfigBender1.getTavernRewardHighHP();
         } else {
             throw new IllegalStateException("former State get Life had no State");
         }
@@ -258,8 +266,8 @@ public class RewarderBender1 implements IRewarder {
         return result;
     }
 
-    private void calcMineReward() {
-        reward+=RewardConfigBender1.getGetMineReward();
+    private double calcMineReward() {
+        return RewardConfigBender1.getGetMineReward();
     }
 
 }

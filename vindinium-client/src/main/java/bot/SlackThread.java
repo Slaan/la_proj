@@ -70,6 +70,9 @@ public class SlackThread extends Thread {
         StringBuilder urlsCrash = new StringBuilder();
 
         for (GameLog gameLog : gameLogs) {
+            if (gameLog.getGameURL() == null || gameLog.getGameURL() == "") {
+                continue;
+            }
             String url = null;
             try {
                 url = String.format(" <%s>", URLEncoder.encode(gameLog.getGameURL(), "UTF-8"));

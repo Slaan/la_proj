@@ -32,11 +32,11 @@ public class SarsaQueue {
         }
     }
 
-    public void updateStateActions(double delta, double alpha, double lambda){
+    public void updateStateActions(double delta, double alpha, double lambda, double reward){
         int pos = stateActionsQueue.size()-1;
         for(StateAction stateAction : stateActionsQueue){
             stateAction.updateQValue(delta * alpha * Math.pow(lambda,pos));
-            manageStateAction.updateStateAction(stateAction, gameLog);
+            manageStateAction.updateStateAction(stateAction, reward, gameLog);
             pos--;
         }
     }
