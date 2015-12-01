@@ -26,9 +26,12 @@ public class Config {
     static GenericUrl slackURL;
     static int slackWait;
     static GenericUrl gameURL;
+    static String mode;
+
+    //DB
     static String DBUser;
     static String DBPassword;
-    static String mode;
+    static Map<String, String> DB;
 
     //Learning Algorithm
     static Double learningRate;
@@ -76,6 +79,10 @@ public class Config {
             slackWait = Integer.parseInt(prop.getProperty("slackwait", "1"));
             DBUser = prop.getProperty("dbuser");
             DBPassword = prop.getProperty("dbpassword");
+
+            String[] dBString = prop.getProperty("DB").split(",");
+
+
             serverURL = prop.getProperty("serverURL");
             mode = prop.getProperty("modus");
 
@@ -88,6 +95,14 @@ public class Config {
             learningAlgorithm = prop.getProperty("learningAlgorithm");
             String benderString = prop.getProperty("Bender");
             bender = benderString.split(",");
+
+            if(dBString.length != bender.length){
+                throw new RuntimeException("you need the right quantity of DBs");
+            }
+            DB = new HashMap<>();
+            for (int i = 0; i < dBString.length; i++){
+                DB.put(bender[i], dBString[i]);
+            }
 
             String[] apikeys = prop.getProperty("apikey").split(",");
             aPIKeyMap = new HashMap<>();
@@ -180,4 +195,6 @@ public class Config {
     public static int getNumberOfTavernsToLook() { return numberOfTavernsToLook; }
 
     public static int getSlackWait() { return slackWait; }
+
+    public static String getDBForBender(String bender) { return DB.get(bender); }
 }

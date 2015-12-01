@@ -19,7 +19,7 @@ public class SessionBuilder {
             System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
             factory = new AnnotationConfiguration().
                     configure().
-                    setProperty("hibernate.connection.url", "jdbc:mysql://localhost/" + bender).
+                    setProperty("hibernate.connection.url", "jdbc:mysql://localhost/" + Config.getDBForBender(bender)).
                     setProperty("hibernate.hbm2ddl.auto", "update").
                     setProperty("hibernate.connection.username", Config.getDBUser()).
                     setProperty("hibernate.connection.password", Config.getDBPassword()).
