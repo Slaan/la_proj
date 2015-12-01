@@ -179,9 +179,9 @@ public class SimplifiedGState1 implements ISimplifiedGState {
     public static Distance calcDistance(int distance){
         if(distance == 1){
             return Distance.BESIDE;
-        } else if (distance < RewardConfig.getDistantClose()){
+        } else if (distance <= RewardConfigBender1.getDistantClose()){
             return Distance.CLOSE;
-        } else if (distance < RewardConfig.getDistantFar()){
+        } else if (distance <= RewardConfigBender1.getDistantFar()){
             return Distance.MEDIUM;
         } else {
             return Distance.FAR;
