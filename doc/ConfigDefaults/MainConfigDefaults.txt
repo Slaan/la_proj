@@ -1,0 +1,31 @@
+name=default
+rounds=400
+threads=1
+
+serverURL=http://vindinium.org
+apikey=sn52twky
+
+slackurl=null
+
+#DB
+dbuser=root
+dbpassword=root
+# Acceptable Values: DBs you want to use for bender
+DB=bender2
+
+modus=TRAINING
+learningrate=0.10
+explorationrate=0.10
+discountfactor=0.9
+lamda=0.9
+queuelength=10
+Bender=bender2
+sarsaStateActionLogs=false
+# Acceptable Values: Qlearning, SarsaLamda
+learningAlgorithm=Qlearning
+
+timeToRunInMS=700
+stepsToLook=10
+numberOfHerosToLook=1
+numberOfMinesToLook=1
+numberOfTavernsToLook=1

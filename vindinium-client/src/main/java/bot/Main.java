@@ -51,9 +51,12 @@ public class Main extends Thread{
             for (BenderRunner runner : runners) {
                 runner.start();
             }
-
-            SlackThread slackThread = new SlackThread(gameLogBuffers);
-            slackThread.start();
+            // if no slackURL is present in config no SlackThread will be started
+            SlackThread slackThread = null;
+            if (!Config.getSlackULR().equals(null)) {
+                slackThread = new SlackThread(gameLogBuffers);
+                slackThread.start();
+            }
             DataInputStream dataInputStream = new DataInputStream(System.in);
             while (dataInputStream.available() == 0) {
                 Thread.sleep(250);
@@ -65,8 +68,10 @@ public class Main extends Thread{
             for(BenderRunner runner: runners){
                 runner.join();
             }
-            slackThread.interrupt();
-            slackThread.join();
+            if (!slackThread.equals(null)) {
+                slackThread.interrupt();
+                slackThread.join();
+            }
 
             System.out.println("Ihr habt Bender getötet, ihr Schweine!");
         } catch (Exception e) {

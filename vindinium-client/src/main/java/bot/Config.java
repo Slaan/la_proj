@@ -68,32 +68,32 @@ public class Config {
 
             prop.load(inputstream);
 
-            name = prop.getProperty("name");
-            noOfRounds = Integer.parseInt(prop.getProperty("rounds"));
+            name = prop.getProperty("name","default");
+            noOfRounds = Integer.parseInt(prop.getProperty("rounds","400"));
             if (noOfRounds > 600) {
                 logger.warn("rounds is greater than 600 (" + noOfRounds + ") it will be set to 600.");
                 noOfRounds = 600;
             }
-            noOfThreads = Integer.parseInt(prop.getProperty("threads"));
-            slackURL = new GenericUrl(prop.getProperty("slackurl"));
+            noOfThreads = Integer.parseInt(prop.getProperty("threads","1"));
+            slackURL = new GenericUrl(prop.getProperty("slackurl",null));
             slackWait = Integer.parseInt(prop.getProperty("slackwait", "1"));
-            DBUser = prop.getProperty("dbuser");
-            DBPassword = prop.getProperty("dbpassword");
+            DBUser = prop.getProperty("dbuser","root");
+            DBPassword = prop.getProperty("dbpassword","root");
 
-            String[] dBString = prop.getProperty("DB").split(",");
+            String[] dBString = prop.getProperty("DB","bender2").split(",");
 
 
-            serverURL = prop.getProperty("serverURL");
-            mode = prop.getProperty("modus");
+            serverURL = prop.getProperty("serverURL","http://vindinium.org");
+            mode = prop.getProperty("modus","TRAINING");
 
-            learningRate = Double.parseDouble(prop.getProperty("learningrate"));
-            explorationRate = Double.parseDouble(prop.getProperty("explorationrate"));
-            discountFactor = Double.parseDouble(prop.getProperty("discountfactor"));
-            lamda = Double.parseDouble(prop.getProperty("lamda"));
-            queueLength = Integer.parseInt(prop.getProperty("queuelength"));
-            stateActionLogs = Boolean.parseBoolean(prop.getProperty("sarsaStateActionLogs"));
-            learningAlgorithm = prop.getProperty("learningAlgorithm");
-            String benderString = prop.getProperty("Bender");
+            learningRate = Double.parseDouble(prop.getProperty("learningrate","0.1"));
+            explorationRate = Double.parseDouble(prop.getProperty("explorationrate","0.1"));
+            discountFactor = Double.parseDouble(prop.getProperty("discountfactor","0.9"));
+            lamda = Double.parseDouble(prop.getProperty("lamda","0.9"));
+            queueLength = Integer.parseInt(prop.getProperty("queuelength","10"));
+            stateActionLogs = Boolean.parseBoolean(prop.getProperty("sarsaStateActionLogs","false"));
+            learningAlgorithm = prop.getProperty("learningAlgorithm","Qlearning");
+            String benderString = prop.getProperty("Bender","bender2");
             bender = benderString.split(",");
 
             if(dBString.length != bender.length){
@@ -104,7 +104,7 @@ public class Config {
                 DB.put(bender[i], dBString[i]);
             }
 
-            String[] apikeys = prop.getProperty("apikey").split(",");
+            String[] apikeys = prop.getProperty("apikey","sn52twky").split(",");
             aPIKeyMap = new HashMap<>();
             if ("ARENA".equals(mode)) {
                 gameURL = new GenericUrl(serverURL+COMPETITION_URL);
@@ -127,11 +127,11 @@ public class Config {
                 }
             }
 
-            timeToRunInMS = Long.parseLong(prop.getProperty("timeToRunInMS"));
-            stepsToLook = Integer.parseInt(prop.getProperty("stepsToLook"));
-            numberOfHerosToLook = Integer.parseInt(prop.getProperty("numberOfHerosToLook"));
-            numberOfMinesToLook = Integer.parseInt(prop.getProperty("numberOfMinesToLook"));
-            numberOfTavernsToLook = Integer.parseInt(prop.getProperty("numberOfTavernsToLook"));
+            timeToRunInMS = Long.parseLong(prop.getProperty("timeToRunInMS","700"));
+            stepsToLook = Integer.parseInt(prop.getProperty("stepsToLook","10"));
+            numberOfHerosToLook = Integer.parseInt(prop.getProperty("numberOfHerosToLook","1"));
+            numberOfMinesToLook = Integer.parseInt(prop.getProperty("numberOfMinesToLook","1"));
+            numberOfTavernsToLook = Integer.parseInt(prop.getProperty("numberOfTavernsToLook","1"));
 
         } catch (Exception e) {
             e.printStackTrace();

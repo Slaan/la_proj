@@ -1,0 +1,27 @@
+# Config for Bender1 Rewards
+
+turn=-1
+getMine=50
+deathDefault=0
+deathPerMine=-60
+#deathForAllMines describes the penality for loosing 100% of mines on field
+deathForAllMines=0
+tavernRewardHighHP=-20
+tavernRewardMiddleHP=20
+tavernRewardLowHP=100
+killDefault=0
+killPerMine=50
+killPerMineDiscount=0.9
+
+lowerLifeBoundry=20
+upperLifeBoundry=70
+lowerMineBoundryTotal=1
+upperMineBoundryTotal=4
+lowerMineBoundryPercentage=15
+upperMineBoundryPercentage=50
+# How big is the difference between our HP and enemy HP?
+enemyLifeMore=10
+enemyLifeLess=-20
+# How many tiles distance is considered "close" or "far"?
+distantClose=2
+distantFar=4

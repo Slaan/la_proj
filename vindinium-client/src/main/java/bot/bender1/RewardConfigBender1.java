@@ -45,28 +45,28 @@ public class RewardConfigBender1 {
             if (!prop.propertyNames().hasMoreElements())
                 throw new RuntimeException("konnte " + propFileName + " nicht parsen.");
 
-            turnReward = Integer.parseInt(prop.getProperty("turn"));
-            getMineReward = Integer.parseInt(prop.getProperty("getMine"));
-            deathDefaultReward = Integer.parseInt(prop.getProperty("deathDefault"));
-            deathperMineReward = Integer.parseInt(prop.getProperty("deathPerMine"));
-            deathForAllMinesReward = Integer.parseInt(prop.getProperty("deathForAllMines"));
-            tavernRewardHighHP = Integer.parseInt(prop.getProperty("tavernRewardHighHP"));
-            tavernRewardMiddleHP = Integer.parseInt(prop.getProperty("tavernRewardMiddleHP"));
-            tavernRewardLowHP = Integer.parseInt(prop.getProperty("tavernRewardLowHP"));
-            killDefault = Integer.parseInt(prop.getProperty("killDefault"));
-            killPerMine = Integer.parseInt(prop.getProperty("killPerMine"));
-            killPerMineDiscount = Double.parseDouble(prop.getProperty("killPerMineDiscount"));
+            turnReward = Integer.parseInt(prop.getProperty("turn","-1"));
+            getMineReward = Integer.parseInt(prop.getProperty("getMine","50"));
+            deathDefaultReward = Integer.parseInt(prop.getProperty("deathDefault","0"));
+            deathperMineReward = Integer.parseInt(prop.getProperty("deathPerMine","-60"));
+            deathForAllMinesReward = Integer.parseInt(prop.getProperty("deathForAllMines","0"));
+            tavernRewardHighHP = Integer.parseInt(prop.getProperty("tavernRewardHighHP","-20"));
+            tavernRewardMiddleHP = Integer.parseInt(prop.getProperty("tavernRewardMiddleHP","20"));
+            tavernRewardLowHP = Integer.parseInt(prop.getProperty("tavernRewardLowHP","100"));
+            killDefault = Integer.parseInt(prop.getProperty("killDefault","0"));
+            killPerMine = Integer.parseInt(prop.getProperty("killPerMine","50"));
+            killPerMineDiscount = Double.parseDouble(prop.getProperty("killPerMineDiscount","0.9"));
 
-            lowerLifeBoundry = Integer.parseInt(prop.getProperty("lowerLifeBoundry"));
-            upperLifeboundry = Integer.parseInt(prop.getProperty("upperLifeBoundry"));
-            lowerMineBoundryTotal = Integer.parseInt(prop.getProperty("lowerMineBoundryTotal"));
-            upperMineBoundryTotal = Integer.parseInt(prop.getProperty("upperMineBoundryTotal"));
-            lowerMineBoundryPercentage = Integer.parseInt(prop.getProperty("lowerMineBoundryPercentage"));
-            upperMineBoundryPercentage = Integer.parseInt(prop.getProperty("upperMineBoundryPercentage"));
-            enemyLifeMore = Integer.parseInt(prop.getProperty("enemyLifeMore"));
-            enemyLifeLess = Integer.parseInt(prop.getProperty("enemyLifeLess"));
-            distantClose = Integer.parseInt(prop.getProperty("distantClose"));
-            distantFar = Integer.parseInt(prop.getProperty("distantFar"));
+            lowerLifeBoundry = Integer.parseInt(prop.getProperty("lowerLifeBoundry","20"));
+            upperLifeboundry = Integer.parseInt(prop.getProperty("upperLifeBoundry","70"));
+            lowerMineBoundryTotal = Integer.parseInt(prop.getProperty("lowerMineBoundryTotal","1"));
+            upperMineBoundryTotal = Integer.parseInt(prop.getProperty("upperMineBoundryTotal","4"));
+            lowerMineBoundryPercentage = Integer.parseInt(prop.getProperty("lowerMineBoundryPercentage","15"));
+            upperMineBoundryPercentage = Integer.parseInt(prop.getProperty("upperMineBoundryPercentage","50"));
+            enemyLifeMore = Integer.parseInt(prop.getProperty("enemyLifeMore","10"));
+            enemyLifeLess = Integer.parseInt(prop.getProperty("enemyLifeLess","-20"));
+            distantClose = Integer.parseInt(prop.getProperty("distantClose","2"));
+            distantFar = Integer.parseInt(prop.getProperty("distantFar","4"));
 
         } catch (Exception e) {
             e.printStackTrace();

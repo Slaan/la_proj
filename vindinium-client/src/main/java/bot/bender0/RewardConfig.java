@@ -44,16 +44,16 @@ public class RewardConfig {
 
             prop.load(inputstream);
 
-            turnReward = Integer.parseInt(prop.getProperty("turn"));
-            getMineReward = Integer.parseInt(prop.getProperty("getMine"));
-            blockedReward = Integer.parseInt(prop.getProperty("blocked"));
-            deathDefaultReward = Integer.parseInt(prop.getProperty("deathDefault"));
-            deathperMineReward = Integer.parseInt(prop.getProperty("deathPerMine"));
-            deathForAllMinesReward = Integer.parseInt(prop.getProperty("deathForAllMines"));
-            tavernPerHP = Double.parseDouble(prop.getProperty("tavernPerHP"));
-            tavernDefault = Integer.parseInt(prop.getProperty("tavernDefault"));
-            killPerMine = Integer.parseInt(prop.getProperty("killPerMine"));
-            killPerMineDiscount = Double.parseDouble(prop.getProperty("killPerMineDiscount"));
+            turnReward = Integer.parseInt(prop.getProperty("turn","-1"));
+            getMineReward = Integer.parseInt(prop.getProperty("getMine","50"));
+            blockedReward = Integer.parseInt(prop.getProperty("blocked","-10"));
+            deathDefaultReward = Integer.parseInt(prop.getProperty("deathDefault","0"));
+            deathperMineReward = Integer.parseInt(prop.getProperty("deathPerMine","-60"));
+            deathForAllMinesReward = Integer.parseInt(prop.getProperty("deathForAllMines","0"));
+            tavernPerHP = Double.parseDouble(prop.getProperty("tavernPerHP","0.5"));
+            tavernDefault = Integer.parseInt(prop.getProperty("tavernDefault","-20"));
+            killPerMine = Integer.parseInt(prop.getProperty("killPerMine","40"));
+            killPerMineDiscount = Double.parseDouble(prop.getProperty("killPerMineDiscount","0.9"));
 
         } catch (Exception e) {
             e.printStackTrace();

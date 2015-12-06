@@ -1,0 +1,11 @@
+turn=-1
+getMine=50
+blocked=-10
+deathDefault=0
+deathPerMine=-60
+#deathForAllMines describes the penality for loosing 100% of mines on field
+deathForAllMines=0
+tavernPerHP=0.5
+tavernDefault=-20
+killPerMine=40
+killPerMineDiscount=0.9
