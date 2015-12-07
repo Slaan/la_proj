@@ -24,6 +24,8 @@ public class GameLog {
     private int tavern;
     @Column(name = "mine")
     private int mine;
+    @Column(name = "totalMineCount")
+    private int totalMineCount;
     @Column(name = "deathByEnemy")
     private int deathByEnemy;
     @Column(name = "deatbByMine")
@@ -272,5 +274,9 @@ public class GameLog {
 
     public int getSmalestReward() {
         return smalestReward;
+    }
+
+    public void setTotalMineCount(int totalMineCount) {
+        this.totalMineCount = totalMineCount;
     }
 }

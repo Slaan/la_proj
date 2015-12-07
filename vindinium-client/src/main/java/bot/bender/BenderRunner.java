@@ -119,7 +119,8 @@ public class BenderRunner extends Thread {
                 gameLog.setCrashed(true);
             }
 
-
+            GameMap gameMap = new GameMap(gameState);
+            gameLog.setTotalMineCount(gameMap.getTotalMineCount());
             gameLog.setWin(isWinner(gameState));
             setRanking(gameState, gameLog);
             manageGameLog.updateGameLog(gameLog);
@@ -158,5 +159,11 @@ public class BenderRunner extends Thread {
         for(GameState.Hero hero : gs.getGame().getHeroes()) {
             gl.setHeroForPlace(hero.getId(), hero.getUserId(), hero.getGold());
         }
+    }
+
+    private int getMineCount(GameState gs){
+        int mineCount = 0;
+
+        return mineCount;
     }
 }

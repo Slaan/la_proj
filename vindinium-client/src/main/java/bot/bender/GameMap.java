@@ -19,6 +19,8 @@ public class GameMap {
     private List<GameState.Position> taverns;
     private List<GameState.Position> heroes;
 
+    private int totalMines;
+
     /** IMPORTANT: Map is updated to include a ring of "blocked" tiles. That means that all GameState Positions
      * are off by 1 on both x- and y-axis. All attributes of this class are adjusted to the new Positions.
      *
@@ -42,6 +44,7 @@ public class GameMap {
         taverns = new ArrayList<>();
         mines = new ArrayList<>();
         heroes = new ArrayList<>();
+        totalMines = 0;
 
         for(int z=0; z<size+2; z++) {
             result[0][z] = TileType.BLOCKED;
@@ -62,6 +65,7 @@ public class GameMap {
                     GameState.Position tavernpos = new GameState.Position(x,y);
                     taverns.add(tavernpos);
                 } else if (tileString.substring(0,1).equals("$")) {
+                    totalMines++;
                     if (tileString.substring(1, 2).equals("" + heroNumber)) {
                         result[x][y] = TileType.BLOCKED;
                     } else {
@@ -232,6 +236,7 @@ public class GameMap {
 
     public List<GameState.Position> getTaverns() { return taverns; }
 
+    public int getTotalMineCount() { return totalMines; }
 /*    public GameState.Position getHeroPosition() {
         return heroPosition;
     }*/
