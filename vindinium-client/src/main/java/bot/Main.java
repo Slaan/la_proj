@@ -36,7 +36,9 @@ public class Main extends Thread{
 
 
             for(String bender : Config.getBender()) {
-                SharedBuffer<GameLog> gameLogBuffer = new SharedBuffer<>();
+                SharedBuffer<GameLog> gameLogBuffer = null;
+                if (Config.getSlackULR() != null)
+                    gameLogBuffer = new SharedBuffer<>();
                 SessionFactory factory = SessionBuilder.generateSessionFactory(bender);
                 ManageGameLog manageGameLog = new ManageGameLog(factory);
                 ManageStateActionLog manageStateActionLog = new ManageStateActionLog(factory);
@@ -53,7 +55,7 @@ public class Main extends Thread{
             }
             // if no slackURL is present in config no SlackThread will be started
             SlackThread slackThread = null;
-            if (!Config.getSlackULR().equals(null)) {
+            if (Config.getSlackULR() != null) {
                 slackThread = new SlackThread(gameLogBuffers);
                 slackThread.start();
             }

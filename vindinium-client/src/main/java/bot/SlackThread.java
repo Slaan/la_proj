@@ -75,7 +75,10 @@ public class SlackThread extends Thread {
             }
             String url = null;
             try {
-                url = String.format(" <%s>", URLEncoder.encode(gameLog.getGameURL(), "UTF-8"));
+                url = String.format(
+                    " <%s> (%d)",
+                    URLEncoder.encode(gameLog.getGameURL(), "UTF-8"),
+                    gameLog.getWhoAmI());
             } catch (UnsupportedEncodingException e) {}
             if (gameLog.isWin()) {
                 wins++;

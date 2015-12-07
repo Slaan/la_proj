@@ -14,6 +14,8 @@ public class GameLog {
     private int gameID;
     @Column(name = "gameURL")
     private String gameURL;
+    @Column(name = "WhoAmI")
+    private int whoAmI;
     @Column(name = "win")
     private boolean win;
     @Column(name = "rounds")
@@ -30,10 +32,14 @@ public class GameLog {
     private int blockedWay;
     @Column(name = "startingTime")
     private Date startingTime;
+    @Column(name = "crashed")
+    private boolean crashed;
 
     protected GameLog(){
         this.gameURL ="";
         this.win = false;
+        this.crashed = false;
+        this.whoAmI = 5;
         this.rounds = 0;
         this.tavern = 0;
         this.mine = 0;
@@ -122,4 +128,20 @@ public class GameLog {
     }
 
     public void addBlockedWay() { blockedWay++; }
+
+    public boolean isCrashed() {
+        return crashed;
+    }
+
+    public void setCrashed(boolean crashed) {
+        this.crashed = crashed;
+    }
+
+    public int getWhoAmI() {
+        return whoAmI;
+    }
+
+    public void setWhoAmI(int whoAmI) {
+        this.whoAmI = whoAmI;
+    }
 }

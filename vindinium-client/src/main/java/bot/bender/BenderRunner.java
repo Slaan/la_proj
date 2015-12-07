@@ -86,8 +86,11 @@ public class BenderRunner extends Thread {
                 gameState = response.parseAs(GameState.class);
 
                 // URL console output.
-                logger.info("Game URL: {}", gameState.getViewUrl());
+                logger.info("Game URL: {}, wir sind Player: {}",
+                    gameState.getViewUrl(),
+                    gameState.getHero().getId());
                 gameLog.setGameURL(gameState.getViewUrl());
+                gameLog.setWhoAmI(gameState.getHero().getId());
 
                 // Game loop
                 while (!gameState.getGame().isFinished() && !gameState.getHero().isCrashed()) {
@@ -113,28 +116,14 @@ public class BenderRunner extends Thread {
                     logger.error(String.format("The game board (size %d) was:\n%s",
                         gameState.getGame().getBoard().getSize(),
                         gameState.getGame().getBoard().getTiles()));
+                gameLog.setCrashed(true);
             }
-/*
-                // Slack integration.
-                String url = URLEncoder.encode(gameState.getViewUrl(), "UTF-8");
-                String msg = String.format(
-                        "payload={\"text\": \"<%s> - %s (gestartet von: %s)\"}",
-                        url,
-                        isWinner(gameState) ? "Gewonnen. War ja klar." : "Verloren, die anderen cheaten. Ganz klar!",
-                        user);
-                content = new ByteArrayContent("application/x-www-form-urlencoded", msg.getBytes());
-                logger.debug("Sending to Slack with URL: " + slackUrl);
-                request = REQUEST_FACTORY.buildPostRequest(slackUrl, content);
-                request.setReadTimeout(120000);
-                request.setConnectTimeout(120000);
-                request.executeAsync();
-*/
-
 
 
             gameLog.setWin(isWinner(gameState));
             manageGameLog.updateGameLog(gameLog);
-            gameLogBuffer.addEntity(gameLog);
+            if (gameLogBuffer != null)
+                gameLogBuffer.addEntity(gameLog);
             logger.debug("Game over");
         }
     }

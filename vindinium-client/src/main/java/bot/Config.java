@@ -75,7 +75,9 @@ public class Config {
                 noOfRounds = 600;
             }
             noOfThreads = Integer.parseInt(prop.getProperty("threads","1"));
-            slackURL = new GenericUrl(prop.getProperty("slackurl",null));
+            slackURL=null;
+            if (prop.containsKey("slackurl"))
+                slackURL = new GenericUrl(prop.getProperty("slackurl",null));
             slackWait = Integer.parseInt(prop.getProperty("slackwait", "1"));
             DBUser = prop.getProperty("dbuser","root");
             DBPassword = prop.getProperty("dbpassword","root");
