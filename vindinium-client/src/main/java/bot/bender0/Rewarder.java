@@ -39,7 +39,7 @@ public class Rewarder implements IRewarder {
         currentState = (SimplifiedGState)state;
 
         if (checkForDeath()) {
-            gameLog.addDeath();
+            gameLog.addDeatbByMine();
             calcDeathReward();
         }
 

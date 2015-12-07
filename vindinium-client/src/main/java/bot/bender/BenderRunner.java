@@ -160,10 +160,4 @@ public class BenderRunner extends Thread {
             gl.setHeroForPlace(hero.getId(), hero.getUserId(), hero.getGold());
         }
     }
-
-    private int getMineCount(GameState gs){
-        int mineCount = 0;
-
-        return mineCount;
-    }
 }
