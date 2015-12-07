@@ -121,6 +121,7 @@ public class BenderRunner extends Thread {
 
 
             gameLog.setWin(isWinner(gameState));
+            setRanking(gameState, gameLog);
             manageGameLog.updateGameLog(gameLog);
             if (gameLogBuffer != null)
                 gameLogBuffer.addEntity(gameLog);
@@ -145,11 +146,17 @@ public class BenderRunner extends Thread {
         boolean isWinner = true;
         GameState.Hero benderHero = gs.getHero();
         for (GameState.Hero hero : gs.getGame().getHeroes()) {
-            if (hero.getId() == benderHero.getId())
+            if (hero.getUserId().equals(benderHero.getUserId()))
                 continue;
             if (hero.getGold() >= benderHero.getGold())
                 isWinner = false;
         }
         return isWinner;
+    }
+
+    private void setRanking(GameState gs, GameLog gl) {
+        for(GameState.Hero hero : gs.getGame().getHeroes()) {
+            gl.setHeroForPlace(hero.getId(), hero.getUserId(), hero.getGold());
+        }
     }
 }
