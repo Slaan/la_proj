@@ -1,0 +1,31 @@
+<script lang="javascript" type="text/javascript">
+    <!--
+    mydata.push(function() {
+        return {
+            labels: [
+                {% for item in bender.data -%}
+                    "{{ item.label }} Spiele",
+                {%- endfor %}
+            ],
+            datasets: [
+                {
+                    label: 'Nr. gespielter Spiele',
+                    data: [
+                        {% for item in bender.data -%}
+                            {{ item.losses + item.wins }},
+                        {%- endfor %}
+                    ],
+                    backgroundColor: '#FF0000'
+                }, {
+                    label: 'Nr. gewonnener Spiele',
+                    data: [
+                        {% for item in bender.data -%}
+                            {{ item.wins }},
+                        {%- endfor %}
+                    ],
+                    backgroundColor: '#00FF00'
+                }]
+        }
+    });
+    //-->
+</script>
