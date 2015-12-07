@@ -23,11 +23,6 @@ public class SessionBuilder {
                     setProperty("hibernate.hbm2ddl.auto", "update").
                     setProperty("hibernate.connection.username", Config.getDBUser()).
                     setProperty("hibernate.connection.password", Config.getDBPassword()).
-                    setProperty("hibernate.c3p0.min_size", "5").
-                    setProperty("hibernate.c3p0.max_size", "200").
-                    setProperty("hibernate.c3p0.max_statements", "10").
-                    setProperty("hibernate.c3p0.idle_test_period", "0").
-                    setProperty("hibernate.c3p0.timeout", "20").
                     addAnnotatedClass(State.class).
                     addAnnotatedClass(StateAction.class).
                     addAnnotatedClass(GameLog.class).
