@@ -98,7 +98,7 @@ public class BenderRunner extends Thread {
                     long startTime = System.currentTimeMillis();
                     BotMove direction = bender.move(gameState);
                     if (System.currentTimeMillis()-startTime>800) {
-                        System.out.println(System.currentTimeMillis()-startTime);
+                        logger.info(String.format("Time needed for move: %d", System.currentTimeMillis()-startTime));
                     }
                     Move move = new Move(apiKey.getKey(), direction.toString());
 
