@@ -32,6 +32,15 @@ public class BenderRunner extends Thread {
                 }
             });
     private static final Logger logger = LogManager.getLogger(BenderRunner.class);
+    private static final UncaughtExceptionHandler exceptionHandler =
+        new UncaughtExceptionHandler() {
+            @Override public void uncaughtException(Thread thread, Throwable throwable) {
+                String msg = "Thread" + thread.getId() + " DIED: " + thread.getName();
+                logger.fatal(msg, throwable);
+                System.err.println(msg);
+                throwable.printStackTrace();
+            }
+        };
 
     private final ApiKey apiKey;
     private final GenericUrl gameUrl;
@@ -46,6 +55,7 @@ public class BenderRunner extends Thread {
     private boolean run = true;
 
     public BenderRunner(String bender, ManageState manageState, ManageGameLog manageGameLog, SharedBuffer<GameLog> gameLogBuffer) {
+        this.setUncaughtExceptionHandler(exceptionHandler);
         this.bender = bender;
         this.apiKey = Config.getAPIKey(bender);
         this.gameUrl = Config.getGameURL();
@@ -53,6 +63,7 @@ public class BenderRunner extends Thread {
         this.manageGameLog = manageGameLog;
         this.gameLogBuffer = gameLogBuffer;
         this.manageState = manageState;
+        this.setName("Thread[" + this.getId() + "]<" + bender + "," + Config.getLearningAlgorithm() + ">");
     }
 
     public void end() { run = false; }
@@ -147,7 +158,7 @@ public class BenderRunner extends Thread {
         boolean isWinner = true;
         GameState.Hero benderHero = gs.getHero();
         for (GameState.Hero hero : gs.getGame().getHeroes()) {
-            if (hero.getUserId().equals(benderHero.getUserId()))
+            if (benderHero.getUserId().equals(hero.getUserId()))
                 continue;
             if (hero.getGold() >= benderHero.getGold())
                 isWinner = false;

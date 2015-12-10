@@ -70,7 +70,7 @@ public class Main extends Thread{
             for(BenderRunner runner: runners){
                 runner.join();
             }
-            if (!slackThread.equals(null)) {
+            if (slackThread != null) {
                 slackThread.interrupt();
                 slackThread.join();
             }

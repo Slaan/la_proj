@@ -15,8 +15,10 @@
 </head>
 <body>
     {% for bender in benders %}
-        <span id="wonTitle{{ bender.id }}">{{ bender.id }}:</span>
+        Gewonnen: <span id="wonTitle{{ bender.id }}">{{ bender.id }}:</span>
         <canvas id="wonTime{{ bender.id }}" width="100" height="15"></canvas>
+        Kill/Death: <span id="killDeath{{ bender.id }}">{{ bender.id }}</span>
+        <canvas id="killDeathCanvas{{ bender.id }}" width="100" height="15"></canvas>
         <hr />
     {% endfor %}
     <script type="text/javascript">
