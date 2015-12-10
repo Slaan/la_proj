@@ -35,8 +35,8 @@ public class SimpleHero {
     public SimpleHero init(GameState gameState) {
         for (GameState.Hero enemy : gameState.getGame().getHeroes()) {
             if (enemy.getId() == getHeroID()) {
-                this.lifeDifference = calcLifeDif(gameState.getHero().getLife(), enemy.getLife());
-                this.enemyMines = calcMineDif(gameState.getHero().getMineCount(), enemy.getMineCount());
+                this.lifeDifference = calcLife(enemy.getLife());
+                this.enemyMines = calcMine(enemy.getMineCount());
                 break;
             }
         }
@@ -81,14 +81,16 @@ public class SimpleHero {
     }
 
     /**
-     * Maps the absolute distance to a relative one configured by the RewardConfig.
+     *
+     * @param enemyLife
+     * @return Quantity.LOTS = don't attack, .MIDDLE = maybe attack, .FEW = good to attak
      */
-    private Quantity calcDistance(int distance) {
-        if (distance < RewardConfig.getDistantClose())
-            return Quantity.FEW;
-        else if (distance > RewardConfig.getDistantFar())
-            return  Quantity.LOTS;
-        return Quantity.MIDDLE;
+    private Quantity calcLife(int enemyLife){
+        if (enemyLife>=RewardConfig.getUpperLifeboundry()) {
+            return Quantity.LOTS;
+        } else if (enemyLife>=RewardConfig.getLowerLifeBoundry()){
+            return Quantity.MIDDLE;
+        } else {return Quantity.FEW; }
     }
 
     private Quantity calcMineDif(int benderMineCount, int enemyMineCount) {
@@ -96,6 +98,19 @@ public class SimpleHero {
         if (diff < RewardConfig.getLowerMineBoundryTotal())
             return Quantity.FEW;
         else if (diff > RewardConfig.getUpperMineBoundryTotal())
+            return Quantity.LOTS;
+        return Quantity.MIDDLE;
+    }
+
+    /**
+     *
+     * @param mineCount
+     * @return Quantity.LOTS = good to attak, .MIDDLE = maybe attack, .FEW = don't attack
+     */
+    private Quantity calcMine(int mineCount){
+        if (mineCount < RewardConfig.getLowerMineBoundryTotal())
+            return Quantity.FEW;
+        else if (mineCount > RewardConfig.getUpperMineBoundryTotal())
             return Quantity.LOTS;
         return Quantity.MIDDLE;
     }
