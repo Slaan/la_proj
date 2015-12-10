@@ -63,10 +63,13 @@ public class BenderRunner extends Thread {
         this.manageGameLog = manageGameLog;
         this.gameLogBuffer = gameLogBuffer;
         this.manageState = manageState;
-        this.setName("Thread[" + this.getId() + "]<" + bender + "," + Config.getLearningAlgorithm() + ">");
+        this.setName("Thread[" + this.getName() + "]<" + bender + "," + Config.getLearningAlgorithm() + ">");
     }
 
-    public void end() { run = false; }
+    public void end() {
+        logger.info("Will stop Thread " + this.toString());
+        run = false;
+    }
 
     @Override
     public void run() {
@@ -92,7 +95,7 @@ public class BenderRunner extends Thread {
                 logger.debug("Sending initial request...");
                 content = new UrlEncodedContent(apiKey);
                 request = REQUEST_FACTORY.buildPostRequest(gameUrl, content);
-                request.setReadTimeout(0); // Wait forever to be assigned to a game
+                request.setReadTimeout(1260 * 1000); // Wait 21min to be assigned to a game
                 response = request.execute();
                 gameState = response.parseAs(GameState.class);
 
@@ -139,6 +142,7 @@ public class BenderRunner extends Thread {
                 gameLogBuffer.addEntity(gameLog);
             logger.debug("Game over");
         }
+        logger.info("Stopped Thread " + this.toString());
     }
 
     public Bender getBender(ManageState manageState, GameLog gameLog){
@@ -149,10 +153,11 @@ public class BenderRunner extends Thread {
         } else if (bender.equals("bender2")) {
             return new Bender2(manageState, gameLog);
         }
-        return null;
+        throw new RuntimeException("Bender " + bender + " is not instantiable.");
     }
 
     public boolean isWinner(GameState gs) {
+        // Check if the game is finished.
         if (gs == null || !gs.getGame().isFinished())
             return false;
         boolean isWinner = true;
