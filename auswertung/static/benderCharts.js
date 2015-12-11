@@ -68,7 +68,8 @@ StackChart.prototype.reload_callback = function (start, stack_size, items) {
     var datasets = [];
 
     // Initialize datasets.
-    items.axe.forEach(function (axe) {
+    Object.keys(items.axe).forEach(function (key) {
+        var axe = items.axe[key];
         axe.data = [];
         datasets.push(axe);
     });
@@ -94,25 +95,19 @@ function reloadChart(chart, labels, datasets) {
 $(window).load(function () {
     Chart.defaults.scale.ticks.beginAtZero = true;
     benders.forEach(function (benderId, index) {
-        console.log('create bender StackChar: ' + benderId);
-        var chart = new StackChart(
-            'wins',
-            $('#wonTime' + benderId),
-            $('#wonTitle' + benderId),
-            index,
-            10,
-            20
-        );
-        chart.reload(start, 10);
+        canvas.forEach(function (can) {
+            console.log('create bender StackChar: #' + can + 'Canvas' + benderId);
 
-        var chart = new StackChart(
-            'kills',
-            $('#killDeathCanvas' + benderId),
-            $('#killDeath' + benderId),
-            index,
-            10,
-            20
-        );
-        chart.reload(start, 10);
+            var chart = new StackChart(
+                '/' + can,
+                $('#' + can + 'Canvas' + benderId),
+                $('#' + can + '' + benderId),
+                index,
+                10,
+                20
+            );
+            chart.reload(start, 10);
+
+        });
     });
 });

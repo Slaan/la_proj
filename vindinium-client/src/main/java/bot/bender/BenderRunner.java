@@ -124,7 +124,7 @@ public class BenderRunner extends Thread {
                     gameState = turnResponse.parseAs(GameState.class);
                     gameLog.addRound();
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 logger.error("Error during game play", e);
                 if (gameState != null && gameState.getGame() != null && gameState.getGame().getBoard() != null)
                     logger.error(String.format("The game board (size %d) was:\n%s",
