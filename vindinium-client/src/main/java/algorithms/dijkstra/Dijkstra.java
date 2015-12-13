@@ -41,6 +41,11 @@ public class Dijkstra {
         this.playerPosition = playerPosition;
     }
 
+    /**
+     * Starting method for Dijkstra which starts Dijkstra.
+     * Measures the time the Dijkstra algorithm needs.
+     * Throws RuntimeException if the time was to long.
+     */
     public void runDijkstra() {
         startTime = System.currentTimeMillis();
         _runDijkstra();
@@ -51,12 +56,17 @@ public class Dijkstra {
         }
     }
 
+    /**
+     * The Dijkstra method in which Dijkstra gets initialised and ran.
+     */
     private void _runDijkstra(){
         Queue<GameState.Position> queue = new LinkedList<>();
 
         previousFrom.put(playerPosition, playerPosition);
         costFrom.put(playerPosition, 0);
         queue.add(playerPosition);
+        // for loop for letting the algorithm only run for the specified steps or the other specified things
+        // every step empties the queue
         for(int steps = 0;
                 (steps < Config.getStepsToLook())
                 && ((mines.size() < Config.getNumberOfMinesToLook())
@@ -64,7 +74,10 @@ public class Dijkstra {
                 || (heroes.size() < Config.getNumberOfHerosToLook()))
                 && ((System.currentTimeMillis() - startTime) < Config.getTimeToRunInMS());
                 steps++){
+            // initialises a new queue which will be set as normal queue at the end oh the step
             Queue<GameState.Position> newQueue = new LinkedList<>();
+            // checks every step position in the given queue for this step
+            // or stops after the specified configurations
             while(  (queue.size() > 0)
                     && ((mines.size() < Config.getNumberOfMinesToLook())
                     || (tavern.size() < Config.getNumberOfTavernsToLook())
@@ -72,13 +85,18 @@ public class Dijkstra {
                     && ((System.currentTimeMillis() - startTime) < Config.getTimeToRunInMS())) {
                 GameState.Position currentPosition = queue.remove();
                 visited.put(currentPosition, true);
+                // checks the neighbors of the current position to check
                 for (GameState.Position position : neighborOf(currentPosition)) {
                     newQueue.add(position);
                     Integer newValue = costFrom.get(currentPosition) + 1;
                     Integer oldValue = Integer.MAX_VALUE;
+                    // if the position is in the map the old value will be change from max to the current value
                     if (costFrom.containsKey(position)) {
                         oldValue = costFrom.get(position);
                     }
+                    // checks the new and the old value
+                    // if the new Value is smaller the Dijkstra maps will be adjusted so that the current neighbors
+                    // previous position is the current position
                     if (newValue < oldValue) {
                         costFrom.put(position, newValue);
                         previousFrom.put(position, currentPosition);

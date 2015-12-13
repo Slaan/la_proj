@@ -35,6 +35,14 @@ public class SarsaLambda implements ILearning{
         this.sarsaQueue = new SarsaQueue(manageStateAction, gameLog);
     }
 
+    /**
+     * Is the first time the algorithm is executed.
+     * It will only select the next action and put it in the SarsaQueue
+     *
+     * @param currentState the current state the game is in
+     * @param possibleMoves the moves the agent is allowed to do
+     * @return the action the agent wants to do
+     */
     public StateAction init(State currentState, Set<BotMove> possibleMoves){
         StateAction currentStateAction = currentState.getStateActionForExplorationRate(epsilon, possibleMoves);
 
@@ -44,19 +52,33 @@ public class SarsaLambda implements ILearning{
         return currentStateAction;
     }
 
+    /**
+     * Method that is called for every new state.
+     * If it is called the first time init will be called.
+     *
+     * @param currentState the current state the game is in
+     * @param reward the reward the agent gets for his last action
+     * @param possibleMoves the moves the agent is allowed to do
+     * @return the action the agent wants to do
+     */
     public StateAction step(State currentState, int reward, Set<BotMove> possibleMoves){
         if (lastStateAction == null) {
             return init(currentState, possibleMoves);
         }
 
-
+        // gets the next action the agent wants to do
+        // mostly the best action but it is possible that he explores
         StateAction currentStateAction = currentState.getStateActionForExplorationRate(epsilon, possibleMoves);
-        logger.debug("delta: " + reward + " " + (gamma * currentStateAction.getQValue()) + " " + lastStateAction.getQValue());
+
+        // update the SarsaQueue with the reward for the last action and the QValue of the current action
+        logger.debug("delta: " + reward + " " + (gamma * currentStateAction.getQValue()) + " "
+                + lastStateAction.getQValue());
         sarsaQueue.updateStateActions(reward + (gamma * currentStateAction.getQValue()) - lastStateAction
                 .getQValue(), alpha, lambda, reward);
 
         lastStateAction = currentStateAction;
 
+        // adds the current action to the SarsaQueue
         sarsaQueue.putStateAction(currentStateAction);
         return currentStateAction;
     }
