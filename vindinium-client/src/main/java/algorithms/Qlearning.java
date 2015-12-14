@@ -17,7 +17,6 @@ import java.util.Set;
 public class Qlearning implements ILearning {
     private static final Logger logger = LogManager.getLogger(Qlearning.class);
     private double alpha; //Learning Rate
-    private double epsilon; //Exploration Rate
     private double gamma; //Discount factor
 
     private StateAction lastStateAction;
@@ -27,39 +26,33 @@ public class Qlearning implements ILearning {
 
     public Qlearning(ManageStateAction manageStateAction, GameLog gameLog) {
         this.alpha = Config.getLearningRate();
-        this.epsilon = Config.getExplorationRate();
         this.gamma = Config.getDiscountFactor();
         msa = manageStateAction;
         this.gameLog = gameLog;
     }
 
     @Override
-    public StateAction init(State currentState, Set<BotMove> possibleMoves) {
-        StateAction currentStateAction = currentState.getStateActionForExplorationRate(epsilon, possibleMoves);
+    public void init(StateAction currentStateAction) {
         lastStateAction = currentStateAction;
         logger.debug("Initialised! First state: " + lastStateAction);
-        return currentStateAction;
     }
 
     @Override
-    public StateAction step(State currentState, int reward, Set<BotMove> possibleMoves) {
+    public void step(StateAction currentStateAction, StateAction bestStateAction, int reward) {
         if (lastStateAction == null) {
-            return init(currentState, possibleMoves);
+            init(currentStateAction);
+            return;
         }
 
-        StateAction currentStateAction = currentState.getStateActionForExplorationRate(epsilon, possibleMoves);
         logger.debug("delta: " + reward + " " + (gamma * currentStateAction.getQValue()) + " "
                 + lastStateAction.getQValue());
 
         // calculation of difference for Q-Value
-        double delta = alpha*(reward + gamma*(currentState.getBestAction(possibleMoves))
-                .getQValue()-lastStateAction.getQValue());
+        double delta = alpha*(reward + gamma* bestStateAction.getQValue()-lastStateAction.getQValue());
 
         lastStateAction.updateQValue(delta);
         msa.updateStateAction(lastStateAction, reward, gameLog);
 
         lastStateAction = currentStateAction;
-
-        return currentStateAction;
     }
 }

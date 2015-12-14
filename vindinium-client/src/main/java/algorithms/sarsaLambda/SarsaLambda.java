@@ -19,7 +19,6 @@ public class SarsaLambda implements ILearning{
     private static final Logger logger = LogManager.getLogger(SarsaLambda.class);
 
     private double alpha; //Lerning Rate
-    private double epsilon; //Exploration Rate
     private double gamma; //Discount factor
     private double lambda; //Eligibility trace decay rate
 
@@ -29,7 +28,6 @@ public class SarsaLambda implements ILearning{
 
     public SarsaLambda(ManageStateAction manageStateAction, GameLog gameLog){
         this.alpha = Config.getLearningRate();
-        this.epsilon = Config.getExplorationRate();
         this.gamma = Config.getDiscountFactor();
         this.lambda = Config.getLambda();
         this.sarsaQueue = new SarsaQueue(manageStateAction, gameLog);
@@ -43,13 +41,11 @@ public class SarsaLambda implements ILearning{
      * @param possibleMoves the moves the agent is allowed to do
      * @return the action the agent wants to do
      */
-    public StateAction init(State currentState, Set<BotMove> possibleMoves){
-        StateAction currentStateAction = currentState.getStateActionForExplorationRate(epsilon, possibleMoves);
+    public void init(StateAction currentStateAction){
 
         lastStateAction = currentStateAction;
 
         sarsaQueue.putStateAction(currentStateAction);
-        return currentStateAction;
     }
 
     /**
@@ -61,25 +57,37 @@ public class SarsaLambda implements ILearning{
      * @param possibleMoves the moves the agent is allowed to do
      * @return the action the agent wants to do
      */
-    public StateAction step(State currentState, int reward, Set<BotMove> possibleMoves){
+    public void step(StateAction currentStateAction, StateAction bestStateAction, int reward){
         if (lastStateAction == null) {
-            return init(currentState, possibleMoves);
+            init(currentStateAction);
+            return;
         }
 
         // gets the next action the agent wants to do
         // mostly the best action but it is possible that he explores
-        StateAction currentStateAction = currentState.getStateActionForExplorationRate(epsilon, possibleMoves);
 
-        // update the SarsaQueue with the reward for the last action and the QValue of the current action
-        logger.debug("delta: " + reward + " " + (gamma * currentStateAction.getQValue()) + " "
-                + lastStateAction.getQValue());
-        sarsaQueue.updateStateActions(reward + (gamma * currentStateAction.getQValue()) - lastStateAction
-                .getQValue(), alpha, lambda, reward);
+        update(currentStateAction, reward);
 
         lastStateAction = currentStateAction;
 
         // adds the current action to the SarsaQueue
         sarsaQueue.putStateAction(currentStateAction);
-        return currentStateAction;
+    }
+
+    public void stepWithoutUpdate(StateAction currentStateAction){
+        if (lastStateAction == null) {
+            init(currentStateAction);
+            return;
+        }
+        // adds the current action to the SarsaQueue
+        sarsaQueue.putStateAction(currentStateAction);
+    }
+
+    public void update(StateAction currentStateAction, int reward){
+        // update the SarsaQueue with the reward for the last action and the QValue of the current action
+        logger.debug("delta: " + reward + " " + (gamma * currentStateAction.getQValue()) + " "
+                + lastStateAction.getQValue());
+        sarsaQueue.updateStateActions(reward + (gamma * currentStateAction.getQValue()) - lastStateAction
+                .getQValue(), alpha, lambda, reward);
     }
 }

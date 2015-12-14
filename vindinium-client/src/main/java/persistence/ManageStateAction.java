@@ -59,4 +59,19 @@ public class ManageStateAction {
             session.close();
         }
     }
+
+    public synchronized void updateStateAction(StateAction stateAction, double reward){
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            session.update(stateAction);
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+    }
 }

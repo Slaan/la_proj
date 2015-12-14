@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public interface ILearning {
 
-    StateAction init(State currentState, Set<BotMove> possibleMoves);
+    void init(StateAction currentStateAction);
 
-    StateAction step(State currentState, int reward, Set<BotMove> possibleMoves);
+    void step(StateAction currentStateAction, StateAction bestStateAction, int reward);
 }

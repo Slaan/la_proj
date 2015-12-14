@@ -4,6 +4,7 @@ import bot.bender0.Bender0;
 import bot.bender1.Bender1;
 import bot.Config;
 import bot.bender2.Bender2;
+import bot.bender3.Bender3;
 import bot.dto.ApiKey;
 import bot.dto.GameState;
 import bot.dto.Move;
@@ -133,6 +134,8 @@ public class BenderRunner extends Thread {
                 gameLog.setCrashed(true);
             }
 
+            bender.finishGame(isWinner(gameState), gameLog.isCrashed());
+
             GameMap gameMap = new GameMap(gameState);
             gameLog.setTotalMineCount(gameMap.getTotalMineCount());
             gameLog.setWin(isWinner(gameState));
@@ -152,6 +155,8 @@ public class BenderRunner extends Thread {
             return new Bender1(manageState, gameLog);
         } else if (bender.equals("bender2")) {
             return new Bender2(manageState, gameLog);
+        } else if (bender.equals("bender3")) {
+            return new Bender3(manageState, gameLog);
         }
         throw new RuntimeException("Bender " + bender + " is not instantiable.");
     }

@@ -10,20 +10,25 @@ import persistence.ManageState;
 import persistence.State;
 import persistence.StateAction;
 
+import java.util.Set;
+
 /**
  * Created by octavian on 19.10.15.
  */
 public abstract class Bender {
 
-    ManageState manageState;
-    private GameLog gameLog;
-    ILearning learningAlgorithm;
-    IRewarder rewarder;
+    protected ManageState manageState;
+    protected GameLog gameLog;
+    protected ILearning learningAlgorithm;
+    protected IRewarder rewarder;
+
+    protected double epsilon; //Exploration Rate
 
     public Bender(ManageState manageState, GameLog gameLog){
         this.manageState = manageState;
         this.gameLog = gameLog;
         rewarder = getRewarder(gameLog);
+        this.epsilon = Config.getExplorationRate();
         if (Config.getLearningAlgorithm().equals("SarsaLamda")) {
             learningAlgorithm = new SarsaLambda(manageState.getManageStateAction(), gameLog);
         } else if (Config.getLearningAlgorithm().equals("Qlearning")) {
@@ -32,7 +37,6 @@ public abstract class Bender {
             // default
             learningAlgorithm = new SarsaLambda(manageState.getManageStateAction(), gameLog);
         }
-
     }
     /**
      * Method that plays each move
@@ -44,14 +48,40 @@ public abstract class Bender {
         ISimplifiedGState simplifiedGState = getSimplifiedGState();
         simplifiedGState.init(gameState);
         State state = manageState.getStateOfId(simplifiedGState, gameLog);
-        StateAction action = learningAlgorithm.step(state,
-            rewarder.calculateReward(simplifiedGState),
-                simplifiedGState.getPossibleMoves());
+
+        Set<BotMove> possibleMoves = simplifiedGState.getPossibleMoves();
+
+        StateAction action = state.getStateActionForExplorationRate(epsilon, possibleMoves);
+
+        learningAlgorithm.step(action, state.getBestAction(possibleMoves), rewarder.calculateReward(simplifiedGState));
+
         rewarder.setLastMove(action.getAction());
         return action.getAction();
     }
 
+    public void finishGame(boolean isWinner, boolean isCrashed){}
+
     protected abstract ISimplifiedGState getSimplifiedGState();
 
     protected abstract IRewarder getRewarder(GameLog gameLog);
+
+    protected ManageState getManageState() {
+        return manageState;
+    }
+
+    protected GameLog getGameLog() {
+        return gameLog;
+    }
+
+    protected ILearning getLearningAlgorithm() {
+        return learningAlgorithm;
+    }
+
+    protected IRewarder getRewarder() {
+        return rewarder;
+    }
+
+    protected double getEpsilon() {
+        return epsilon;
+    }
 }
