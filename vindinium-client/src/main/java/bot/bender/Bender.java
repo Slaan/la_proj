@@ -15,6 +15,11 @@ import java.util.Set;
 /**
  * Created by octavian on 19.10.15.
  */
+
+
+/**
+ * Basic template for our Bender bots.
+ */
 public abstract class Bender {
 
     protected ManageState manageState;

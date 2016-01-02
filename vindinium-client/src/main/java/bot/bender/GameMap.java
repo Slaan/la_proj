@@ -8,6 +8,11 @@ import java.util.List;
 /**
  * Created by Daniel Hofmeister on 18.10.2015.
  */
+
+
+/**
+ * Our representation of the GameMap
+ */
 public class GameMap {
 
     private TileType[][] currentMap;

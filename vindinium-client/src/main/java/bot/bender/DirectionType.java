@@ -50,7 +50,7 @@ public enum DirectionType {
             case EAST: return BotMove.EAST;
             case NORTH: return BotMove.NORTH;
             case SOUTH: return BotMove.SOUTH;
-            default: throw new RuntimeException("not supportet dir");
+            default: throw new RuntimeException("not supported dir");
         }
     }
 }

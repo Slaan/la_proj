@@ -24,6 +24,7 @@ public class Rewarder implements IRewarder {
   private final int BLOCKEDOBJREWARD = -10;
   private int reward = TURNREWARD;
 
+
   public Rewarder(GameLog gameLog) {
     this.gameLog = gameLog;
   }

@@ -5,7 +5,13 @@ import bot.dto.GameState;
 import java.util.Set;
 
 /**
- * Created by slaan on 02.11.15.
+ * Created by Daniel Hofmeister on 02.11.15.
+ */
+
+
+/**
+ * All classes implementing this Interface abstract from the actual state to reduce information
+ * given to the bots.
  */
 public interface ISimplifiedGState {
 
