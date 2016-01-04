@@ -68,6 +68,8 @@ public class GameLog {
     private int maxSteps;
     @Column(name = "minSteps")
     private int minSteps;
+    @Column(name = "steps")
+    private int steps;
 
 
     protected GameLog(){
@@ -92,6 +94,7 @@ public class GameLog {
         this.hero4 = "";
         this.goldHero4 = 0;
         this.reward = 0;
+        this.steps = 0;
     }
 
     public int getGameID() {
@@ -294,5 +297,13 @@ public class GameLog {
         if(this.minSteps > minSteps) {
             this.minSteps = minSteps;
         }
+    }
+
+    public void stepsAdd(int steps){
+        this.steps += steps;
+    }
+
+    public void calculateAverage(){
+        steps = steps / rounds;
     }
 }

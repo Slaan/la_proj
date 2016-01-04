@@ -139,6 +139,7 @@ public class BenderRunner extends Thread {
             GameMap gameMap = new GameMap(gameState);
             gameLog.setTotalMineCount(gameMap.getTotalMineCount());
             gameLog.setWin(isWinner(gameState));
+            gameLog.calculateAverage();
             setRanking(gameState, gameLog);
             manageGameLog.updateGameLog(gameLog);
             if (gameLogBuffer != null)

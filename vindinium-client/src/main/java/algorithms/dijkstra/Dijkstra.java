@@ -114,6 +114,7 @@ public class Dijkstra {
         }
         gameLog.setMaxSteps(stepLog);
         gameLog.setMinSteps(stepLog);
+        gameLog.stepsAdd(stepLog);
     }
 
     /**

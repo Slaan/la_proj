@@ -3,6 +3,7 @@ package bot.bender0;
 import algorithms.IdShifter;
 import bot.bender.*;
 import bot.dto.GameState;
+import persistence.GameLog;
 import persistence.State;
 
 import java.util.HashSet;
@@ -27,7 +28,7 @@ public class SimplifiedGState implements ISimplifiedGState {
   public SimplifiedGState() {
   }
 
-  public void init(GameState gameState) {
+  public void init(GameState gameState, GameLog gameLog) {
     game = gameState;
     gameMap = new GameMap(gameState);
     life = gameState.getHero().getLife();

@@ -67,11 +67,11 @@ public class Bender3 extends Bender {
     @Override
     public void finishGame(boolean isWinner, boolean isCrashed){
         if(isWinner) {
-            updateActions(150);
+            updateActions(1000);
         } else if (isCrashed) {
 
         } else {
-            updateActions(-150);
+            updateActions(-1000);
         }
     }
 
