@@ -304,6 +304,11 @@ public class GameLog {
     }
 
     public void calculateAverage(){
-        steps = steps / rounds;
+        if(rounds != 0){
+            steps = steps / rounds;
+        } else {
+            rounds = 0;
+        }
+
     }
 }
