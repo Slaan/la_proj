@@ -64,6 +64,10 @@ public class GameLog {
     private int smalestReward;
     @Column(name = "smalestRewardRound")
     private int smalestRewardRound;
+    @Column(name = "maxSteps")
+    private int maxSteps;
+    @Column(name = "minSteps")
+    private int minSteps;
 
 
     protected GameLog(){
@@ -278,5 +282,17 @@ public class GameLog {
 
     public void setTotalMineCount(int totalMineCount) {
         this.totalMineCount = totalMineCount;
+    }
+
+    public void setMaxSteps(int maxSteps) {
+        if(this.maxSteps < maxSteps) {
+            this.maxSteps = maxSteps;
+        }
+    }
+
+    public void setMinSteps(int minSteps) {
+        if(this.minSteps > minSteps) {
+            this.minSteps = minSteps;
+        }
     }
 }

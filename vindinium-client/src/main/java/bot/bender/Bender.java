@@ -51,7 +51,7 @@ public abstract class Bender {
      */
     public BotMove move(GameState gameState) {
         ISimplifiedGState simplifiedGState = getSimplifiedGState();
-        simplifiedGState.init(gameState);
+        simplifiedGState.init(gameState, gameLog);
         State state = manageState.getStateOfId(simplifiedGState, gameLog);
 
         Set<BotMove> possibleMoves = simplifiedGState.getPossibleMoves();

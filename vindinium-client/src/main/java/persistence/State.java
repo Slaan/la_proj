@@ -8,6 +8,7 @@ import org.apache.logging.log4j.MarkerManager;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -29,11 +30,14 @@ public class State {
     private String stateComment;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "state")
     private List<StateAction> actions;
+    @Column(name = "discovery")
+    private Date discovery;
 
     private State(){}
     protected State(int stateId, String stateComment){
         this.setStateId(stateId);
         this.setStateComment(stateComment);
+        discovery = new Date();
     }
 
     public int getStateId() {

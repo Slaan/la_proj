@@ -34,6 +34,7 @@ public class SarsaQueue {
      */
     public void putStateAction(StateAction stateAction){
         stateActionsQueue.add(stateAction);
+        // if the size after adding a StateAction is bigger then max specified the last StateAction will be removed
         if(stateActionsQueue.size() > queueLength){
             stateActionsQueue.remove();
         }
@@ -51,7 +52,9 @@ public class SarsaQueue {
      */
     public void updateStateActions(double delta, double alpha, double lambda, double reward){
         int pos = stateActionsQueue.size()-1;
+        // is starting with the latest StateAction in the Queue
         for(StateAction stateAction : stateActionsQueue){
+            // calculates the actual value for the update of the actual SarsaState
             stateAction.updateQValue(delta * alpha * Math.pow(lambda,pos));
             manageStateAction.updateStateAction(stateAction, reward, gameLog);
             pos--;

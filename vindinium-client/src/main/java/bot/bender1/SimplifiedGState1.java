@@ -5,6 +5,7 @@ import algorithms.dijkstra.Dijkstra;
 import bot.bender.*;
 import bot.bender0.RewardConfig;
 import bot.dto.GameState;
+import persistence.GameLog;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class SimplifiedGState1 implements ISimplifiedGState {
     public SimplifiedGState1() {
     }
 
-    public void init(GameState gameState) {
+    public void init(GameState gameState, GameLog gameLog) {
         game = gameState;
         gameMap = new GameMap(gameState);
         spawn = new GameState.Position(gameState.getHero().getSpawnPos().getX()+1,
@@ -41,7 +42,7 @@ public class SimplifiedGState1 implements ISimplifiedGState {
         currentPos = new GameState.Position(gameState.getHero().getPos().getX()+1,
                 gameState.getHero().getPos().getY()+1);
 
-        dijkstra = new Dijkstra(gameMap, currentPos);
+        dijkstra = new Dijkstra(gameMap, currentPos, gameLog);
         dijkstra.runDijkstra();
 
         life = calcLife(gameState.getHero().getLife());

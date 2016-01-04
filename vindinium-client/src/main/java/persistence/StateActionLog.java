@@ -40,7 +40,7 @@ public class StateActionLog {
     private Date usedAt;
 
     private StateActionLog(){}
-    protected StateActionLog(StateAction stateAction,double reward, int gameID){
+    protected StateActionLog(StateAction stateAction, double reward, int gameID){
         this.stateActionID = stateAction.getStateActionID();
         this.state = stateAction.getState().getStateId();
         this.description = stateAction.getDescription();

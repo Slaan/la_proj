@@ -10,6 +10,7 @@ import bot.bender1.SimpleTavern;
 import bot.Config;
 import bot.dto.GameState;
 import com.google.api.client.util.ArrayMap;
+import persistence.GameLog;
 
 import java.util.*;
 
@@ -28,8 +29,9 @@ public class Dijkstra {
     private GameMap gameMap;
     private GameState.Position playerPosition;
     private long startTime;
+    private GameLog gameLog;
 
-    public Dijkstra(GameMap gameMap, GameState.Position playerPosition){
+    public Dijkstra(GameMap gameMap, GameState.Position playerPosition, GameLog gameLog){
         previousFrom = new HashMap<>();
         costFrom = new HashMap<>();
         visited = new HashMap<>();
@@ -39,6 +41,7 @@ public class Dijkstra {
         heroes = new ArrayList<>();
         this.gameMap = gameMap;
         this.playerPosition = playerPosition;
+        this.gameLog = gameLog;
     }
 
     /**
@@ -65,6 +68,8 @@ public class Dijkstra {
         previousFrom.put(playerPosition, playerPosition);
         costFrom.put(playerPosition, 0);
         queue.add(playerPosition);
+
+        int stepLog = 0;
         // for loop for letting the algorithm only run for the specified steps or the other specified things
         // every step empties the queue
         for(int steps = 0;
@@ -74,6 +79,7 @@ public class Dijkstra {
                 || (heroes.size() < Config.getNumberOfHerosToLook()))
                 && ((System.currentTimeMillis() - startTime) < Config.getTimeToRunInMS());
                 steps++){
+            stepLog = steps;
             // initialises a new queue which will be set as normal queue at the end oh the step
             Queue<GameState.Position> newQueue = new LinkedList<>();
             // checks every step position in the given queue for this step
@@ -106,6 +112,8 @@ public class Dijkstra {
             }
             queue = newQueue;
         }
+        gameLog.setMaxSteps(stepLog);
+        gameLog.setMinSteps(stepLog);
     }
 
     /**

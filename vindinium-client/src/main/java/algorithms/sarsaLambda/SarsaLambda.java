@@ -41,6 +41,13 @@ public class SarsaLambda implements ILearning{
      * @param possibleMoves the moves the agent is allowed to do
      * @return the action the agent wants to do
      */
+
+    /**
+     * Is the first time the Algorithm is executed.
+     * It will initialise the Algorithm.
+     *
+     * @param currentStateAction the StateAction that was chosen as next move
+     */
     public void init(StateAction currentStateAction){
 
         lastStateAction = currentStateAction;
@@ -49,13 +56,13 @@ public class SarsaLambda implements ILearning{
     }
 
     /**
-     * Method that is called for every new state.
-     * If it is called the first time init will be called.
+     * Method that is called for every step.
+     * It updates the SarsaQueue by the given reward and adds the current StateAction to the SarsaQueue.
+     * If it is called the first time an init will be called.
      *
-     * @param currentState the current state the game is in
+     * @param currentStateAction the StateAction that was chosen as next move
+     * @param bestStateAction
      * @param reward the reward the agent gets for his last action
-     * @param possibleMoves the moves the agent is allowed to do
-     * @return the action the agent wants to do
      */
     public void step(StateAction currentStateAction, StateAction bestStateAction, int reward){
         if (lastStateAction == null) {
@@ -63,9 +70,7 @@ public class SarsaLambda implements ILearning{
             return;
         }
 
-        // gets the next action the agent wants to do
-        // mostly the best action but it is possible that he explores
-
+        // updates the SarsaQueue of the SarsaLambda
         update(currentStateAction, reward);
 
         lastStateAction = currentStateAction;
@@ -83,6 +88,12 @@ public class SarsaLambda implements ILearning{
         sarsaQueue.putStateAction(currentStateAction);
     }
 
+    /**
+     * Updates the whole SarsaQueue for the given reward.
+     *
+     * @param currentStateAction the StateAction that was chosen as next move
+     * @param reward the reward the agent gets for his last action
+     */
     public void update(StateAction currentStateAction, int reward){
         // update the SarsaQueue with the reward for the last action and the QValue of the current action
         logger.debug("delta: " + reward + " " + (gamma * currentStateAction.getQValue()) + " "

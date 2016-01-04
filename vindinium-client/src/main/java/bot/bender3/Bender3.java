@@ -30,10 +30,17 @@ public class Bender3 extends Bender {
         this.visitedStateActions = new ArrayList<>();
     }
 
+    /**
+     * Method that plays each move.
+     * It saves each used StateAction for later purpose.
+     *
+     * @param gameState the current game state
+     * @return the decided move
+     */
     @Override
     public BotMove move(GameState gameState) {
         ISimplifiedGState simplifiedGState = getSimplifiedGState();
-        simplifiedGState.init(gameState);
+        simplifiedGState.init(gameState, gameLog);
         State state = manageState.getStateOfId(simplifiedGState, gameLog);
 
         Set<BotMove> possibleMoves = simplifiedGState.getPossibleMoves();
@@ -46,6 +53,17 @@ public class Bender3 extends Bender {
         return action.getAction();
     }
 
+
+    /**
+     * Calls an update of all visited StateActions with a specified Value.
+     * It depends on the result of the Game.
+     * If Bender won it adds the value.
+     * If Bender lost it subtracts the value.
+     * If the Game is crashed nothing happens.
+     *
+     * @param isWinner is this Bot the winner of the Game
+     * @param isCrashed is the Game crashed
+     */
     @Override
     public void finishGame(boolean isWinner, boolean isCrashed){
         if(isWinner) {
@@ -57,6 +75,11 @@ public class Bender3 extends Bender {
         }
     }
 
+    /**
+     * Updates all visited StateActions with the given value.
+     *
+     * @param value the value to update the StateActions with
+     */
     private void updateActions(double value){
         for(StateAction stateAction : visitedStateActions){
             manageState.getManageStateAction().updateStateAction(stateAction, value);

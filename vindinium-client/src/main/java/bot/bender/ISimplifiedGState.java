@@ -1,6 +1,7 @@
 package bot.bender;
 
 import bot.dto.GameState;
+import persistence.GameLog;
 
 import java.util.Set;
 
@@ -19,7 +20,7 @@ public interface ISimplifiedGState {
      *
      * @param gameState The gameState from which the simplified State abstracts
      */
-    public void init(GameState gameState);
+    public void init(GameState gameState, GameLog gameLog);
 
     public GameMap getGameMap();
 
