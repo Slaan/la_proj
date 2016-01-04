@@ -82,6 +82,7 @@ public class Bender3 extends Bender {
      */
     private void updateActions(double value){
         for(StateAction stateAction : visitedStateActions){
+            stateAction.updateQValue(value);
             manageState.getManageStateAction().updateStateAction(stateAction, value);
         }
     }
